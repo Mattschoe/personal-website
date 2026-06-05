@@ -4,11 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Apply the saved theme before first paint to avoid a flash of the wrong theme. -->
+    <!-- Apply the theme before first paint to avoid a flash of the wrong theme.
+         An explicit saved choice wins; otherwise fall back to the OS preference. -->
     <script>
       (function () {
         try {
-          if (localStorage.getItem('matt-theme') === 'dark') {
+          var saved = localStorage.getItem('matt-theme');
+          var dark =
+            saved === 'dark' ||
+            (saved !== 'light' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) {
             document.documentElement.setAttribute('data-theme', 'dark');
           }
         } catch (e) {}
