@@ -1,4 +1,5 @@
 import { recipes, projects, posts } from './loader';
+import { byDateDesc } from './derive';
 import type { Recipe, Project, Post, FeedItem } from './schema';
 
 export type { Recipe, Project, Post, FeedItem } from './schema';
@@ -76,6 +77,6 @@ export function getLatestFeed(limit?: number): FeedItem[] {
     ...recipes.map(recipeToFeed),
     ...projects.map(projectToFeed),
     ...posts.map(postToFeed),
-  ].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  ].sort(byDateDesc((item) => item.href));
   return limit === undefined ? merged : merged.slice(0, limit);
 }
