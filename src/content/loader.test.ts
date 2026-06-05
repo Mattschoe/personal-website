@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { _internals, recipes, projects, posts } from './loader';
+import { recipes, projects, posts } from './loader';
+import { slugFromPath, readingTime, excerptFromBody, byDateDesc } from './derive';
 
-const { slugFromPath, readingTime, excerptFromBody } = _internals;
-
-describe('loader helpers', () => {
+describe('derive helpers', () => {
   it('derives a slug from the filename', () => {
     expect(slugFromPath('/content/blog/my-first-post.md')).toBe('my-first-post');
     expect(slugFromPath('/content/recipes/weeknight-tomato-soup.md')).toBe(
@@ -20,6 +19,26 @@ describe('loader helpers', () => {
   it('derives an excerpt from the first real paragraph, de-marked', () => {
     const body = '# A Heading\n\n**First** real _paragraph_.\n\nSecond paragraph.';
     expect(excerptFromBody(body)).toBe('First real paragraph.');
+  });
+
+  it('unwraps links and drops images when de-marking an excerpt', () => {
+    const body = 'See ![chart](/a.png) the [docs](https://x.test) for more.';
+    expect(excerptFromBody(body)).toBe('See the docs for more.');
+  });
+});
+
+describe('byDateDesc comparator', () => {
+  it('sorts newest-first and breaks ties by the secondary key', () => {
+    const items = [
+      { date: '2024-01-01', slug: 'b' },
+      { date: '2024-03-01', slug: 'z' },
+      { date: '2024-01-01', slug: 'a' },
+    ];
+    expect([...items].sort(byDateDesc((i) => i.slug)).map((i) => i.slug)).toEqual([
+      'z',
+      'a',
+      'b',
+    ]);
   });
 });
 
