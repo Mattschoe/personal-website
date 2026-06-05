@@ -37,7 +37,7 @@ snippet go into the `index.html` `<head>` (currently a minimal shell). Route con
 
 ---
 
-## ☐ Phase 1 — Design tokens & global styles
+## ☑ Phase 1 — Design tokens & global styles
 **Goal:** the entire token system and theme machinery available app-wide, no components yet.
 **Scope:**
 - Port `design-reference/styles.css` **verbatim** into `src/styles/` (tokens, base, both theme blocks,
@@ -50,6 +50,22 @@ snippet go into the `index.html` `<head>` (currently a minimal shell). Route con
 **Done when:** a throwaway test page styled only with token classes matches the reference's typography,
 colors, and spacing in **both** Daylight and Twilight (toggled manually via `data-theme` on `<html>`).
 **Depends on:** Phase 0.
+
+**Done ✅** — Ported the full stylesheet **verbatim** into `src/styles/global.css` (byte-for-byte
+identical to `design-reference/styles.css` from the TOKENS block on; verified with `diff`). Only
+deviation: the Google Fonts `@import` was dropped from the CSS and the three families are loaded via
+`<link rel="preconnect">` + stylesheet in `index.html` `<head>` instead (non-blocking; per the Phase 0
+note). `global.css` is imported once at the top of `src/main.tsx`. A pre-paint inline `<script>` in
+`index.html` reads `localStorage["matt-theme"]` and sets `data-theme="dark"` before first paint (no
+flash). typecheck/lint/build clean; build bundles the CSS (tokens present) and emits the font links +
+theme snippet into the prerendered `dist/index.html` `<head>`. Verified visually with Playwright (app
+loads tokens/fonts and flips Daylight↔Twilight; reference `design-spec.html` matches in both themes at
+1280/390px).
+**For Phase 2:** global styles live in `src/styles/global.css` (single global import in `main.tsx` —
+add component CSS Modules alongside, but keep tokens here). The pre-paint applier is in `index.html`
+`<head>`; Phase 2 ports the **rest** of `design-reference/theme.js` (toggle wiring, sun/moon + label
+sync, re-sync on load) as a React provider/hook driving `[data-theme-toggle]` buttons — the inline
+snippet only applies the saved theme, it does not wire any toggle.
 
 ---
 
