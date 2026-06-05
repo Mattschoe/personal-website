@@ -6,10 +6,18 @@
   display: none;
 }
 
-/* Full-width dropdown panel that opens directly beneath the sticky header. */
+/* Full-width dropdown panel that opens directly beneath the sticky header.
+   Hidden above 640px (where the toggle that opens it disappears) so a panel
+   left open across a resize can't strand itself on desktop. */
 .panel {
   border-bottom: var(--border-w) solid var(--line-strong);
   background: var(--surface);
+}
+
+@media (min-width: 641px) {
+  .panel {
+    display: none;
+  }
 }
 
 .panel :global(.container) {

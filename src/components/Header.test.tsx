@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ThemeProvider } from './ThemeProvider';
 import { Header } from './Header';
 
@@ -55,5 +55,45 @@ describe('Header', () => {
     const mobileNav = screen.getByRole('navigation', { name: 'Mobile' });
     fireEvent.click(within(mobileNav).getByRole('link', { name: 'Blog' }));
     expect(screen.queryByRole('navigation', { name: 'Mobile' })).toBeNull();
+  });
+
+  describe('resize past the mobile breakpoint', () => {
+    const original = window.matchMedia;
+    let listeners: Set<(e: MediaQueryListEvent) => void>;
+
+    beforeEach(() => {
+      listeners = new Set();
+      window.matchMedia = ((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: (_: string, cb: (e: MediaQueryListEvent) => void) =>
+          listeners.add(cb),
+        removeEventListener: (_: string, cb: (e: MediaQueryListEvent) => void) =>
+          listeners.delete(cb),
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      })) as typeof window.matchMedia;
+    });
+
+    afterEach(() => {
+      window.matchMedia = original;
+    });
+
+    it('closes an open drawer when the viewport grows past 640px', () => {
+      renderHeader();
+      fireEvent.click(screen.getByRole('button', { name: /open menu/i }));
+      expect(
+        screen.getByRole('navigation', { name: 'Mobile' }),
+      ).toBeInTheDocument();
+
+      act(() => {
+        listeners.forEach((cb) =>
+          cb({ matches: true } as MediaQueryListEvent),
+        );
+      });
+      expect(screen.queryByRole('navigation', { name: 'Mobile' })).toBeNull();
+    });
   });
 });

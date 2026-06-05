@@ -90,12 +90,16 @@ and across routes with no flash; mobile menu opens/closes accessibly.
 with child routes `/`, `/recipes`, `/projects`, `/blog` and a `*` `NotFound`. **Theme** is a React
 port of `design-reference/theme.js`: `theme-context.ts` (context + `useTheme`), `ThemeProvider.tsx`
 (syncs from `data-theme` on `<html>` after mount — hydration-safe — and owns the flip + localStorage
-write), `ThemeToggle.tsx` (header sun/moon icon + footer "Theme: Daylight" label, both context-driven).
-The inline pre-paint snippet in `index.html` stays the source of truth for the *initial* theme. `Header`
-+ `Footer` port the reference markup/classes verbatim; footer socials wired to real GitHub/LinkedIn/email.
+write), `ThemeToggle.tsx` (header sun/moon icon button, context-driven). The inline pre-paint snippet in
+`index.html` stays the source of truth for the *initial* theme. `Header` + `Footer` port the reference
+markup/classes; footer socials wired to real GitHub/LinkedIn/email. **Deviations from the reference
+(approved by Matt, commit `6c9116d`):** the footer's bottom bar + its secondary "Theme: Daylight" toggle
+were dropped (the header toggle is the only one), and the wordmark `.dot` was removed — the
+`design-reference/*.html` still show both, so don't re-add them from the reference in a later phase.
 **Mobile nav** (≤640px): hamburger opens a **left-aligned dropdown panel under the header**
-(`Header.module.css`, tokens only) — Esc/route-change/link-select close it, focus trapped + returned to
-trigger, body-scroll locked, `aria-expanded`/`aria-controls` wired. The old `Placeholder` page is gone;
+(`Header.module.css`, tokens only) — Esc/route-change/link-select/resize-past-640px close it, focus
+trapped (incl. the close button) + returned to trigger, body-scroll locked, `aria-expanded`/
+`aria-controls` wired. The old `Placeholder` page is gone;
 each stream has a token-styled stub. typecheck/lint/test (9 tests) clean; `npm run build` prerenders
 `/`,`/recipes`,`/projects`,`/blog` to static HTML (each carries header/footer + the pre-paint snippet +
 font links). Verified visually with Playwright at 1280/390px in both themes (incl. open drawer + 404);

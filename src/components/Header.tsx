@@ -32,12 +32,16 @@ export function Header() {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    const focusables = () =>
-      Array.from(
+    // Trap cycles the close button (lives in the header, before the panel) plus
+    // the panel's links, so the control that dismisses the drawer is reachable.
+    const focusables = () => {
+      const links = Array.from(
         panelRef.current?.querySelectorAll<HTMLElement>('a[href]') ?? [],
       );
+      return buttonRef.current ? [buttonRef.current, ...links] : links;
+    };
 
-    focusables()[0]?.focus();
+    panelRef.current?.querySelector<HTMLElement>('a[href]')?.focus();
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -65,6 +69,18 @@ export function Header() {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = previousOverflow;
     };
+  }, [open]);
+
+  // Close if the viewport grows past the mobile breakpoint — above 640px the
+  // toggle is hidden, so an open panel would otherwise be stranded on desktop.
+  useEffect(() => {
+    if (!open) return;
+    const mq = window.matchMedia('(min-width: 641px)');
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setOpen(false);
+    };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, [open]);
 
   // Return focus to the trigger when the drawer closes.
