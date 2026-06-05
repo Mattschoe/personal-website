@@ -1,0 +1,42 @@
+/* Mobile nav chrome — not part of the token sheet. Built only from existing
+   design tokens. The hamburger appears only where the global stylesheet hides
+   .nav (<= 640px); above that it stays hidden and the desktop .nav shows. */
+
+.menuButton {
+  display: none;
+}
+
+/* Full-width dropdown panel that opens directly beneath the sticky header. */
+.panel {
+  border-bottom: var(--border-w) solid var(--line-strong);
+  background: var(--surface);
+}
+
+.panel :global(.container) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+  padding-block: var(--s-4);
+  height: auto;
+}
+
+.panel a {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--ink);
+  padding: var(--s-2) 0;
+}
+
+.panel a:hover,
+.panel a[aria-current='page'] {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .menuButton {
+    display: grid;
+  }
+}
