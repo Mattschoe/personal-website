@@ -88,6 +88,10 @@ nginx.conf
   4. Iterate until they match; capture a final set of screenshots as evidence the phase is done.
   - The repo `verify` / `run` skills can launch the app; use them if helpful.
 - Run `tsc --noEmit` and the linter before declaring a phase done.
+- **Plan tests as first-class tasks.** When planning a phase, identify the features in it that can be
+  tested (content loaders/queries, schema validation, theme logic, filters, route generation, etc.)
+  and write "add tests for X" into the plan as explicit, trackable to-dos — not an afterthought.
+  Anything with logic worth getting right is worth a test in the same phase that builds it.
 - **Commit your work as part of the phase, using [Conventional Commits](https://www.conventionalcommits.org).**
   A phase is not done until it lands as **one or more conventional commits** — don't leave a finished
   phase uncommitted. Group commits logically (e.g. one per coherent unit of work) rather than one
@@ -98,8 +102,12 @@ nginx.conf
     `feat(home): build hero and latest feed`, `ci(deploy): dockerize and add VPS workflow`.
   - End every commit message body with the trailer:
     `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
-  - Work on a branch off `main`, not directly on `main`. **Don't push unless asked** — pushing to
-    `main` triggers a deploy (Phase 10).
+  - Work on a branch off `main`, not directly on `main`. **Don't push to `main` unless asked** —
+    pushing to `main` triggers a deploy (Phase 10).
+- **Open a PR for every finished phase.** Once a phase's commits are in, push the phase branch and
+  open a pull request into `main` (`gh pr create`) summarizing what the phase delivered and how it
+  was verified (checks run, screenshots). Pushing the *branch* and opening the PR is fine — only
+  merging into `main` deploys, so leave the merge to Matt unless he says otherwise.
 - When a phase is finished, update `PLAN.md` to mark it done and note anything the next phase needs.
 
 ## Suggested first steps
