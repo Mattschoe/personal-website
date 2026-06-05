@@ -134,29 +134,34 @@ clear message.
 **Depends on:** Phase 0 (uses tokens from 1 only when rendered).
 
 **Done ✅** — Content layer lives in `src/content/`: `schema.ts` (strict zod schemas per SPEC §9 +
-inferred `Recipe`/`Project`/`Post` types + the `FeedItem` shape), `loader.ts` (`import.meta.glob`
-eager `?raw` + `gray-matter`, auto-derives `slug` from filename, posts' `readingTime` at 200 wpm, and
-an `excerpt` fallback from the first body paragraph; bad front-matter throws **naming the file** and
-fails the build), `index.ts` (typed query API: `getRecipes/Projects/Posts`, single getters,
-`getLatestFeed(limit?)` merging all three streams newest-first with tone/href mapping), and
-`Markdown.tsx` (`react-markdown` + `remark-gfm` wrapped in `.read`). Schemas are **strict** — unknown
-keys hard-fail. YAML ergonomics handled: an unquoted `date:` (parsed by YAML as a Date) is normalised
-to `YYYY-MM-DD`, and numeric `year`/ingredient `amount` are coerced to strings. **Dynamic routes** are
-content-driven via `getStaticPaths` in `src/routes.tsx` (no hand-registration; `*` `NotFound` stays
-last); minimal placeholder detail pages (`src/pages/{Recipe,Project,Post}Detail.tsx`) render title +
-`<Markdown>` body + a "full template in Phase N" note. **9 seed files** (3/stream, `sample: true`,
-neutral copy) + `content/README.md` authoring guide. 32 tests pass (schema strictness/coercion, loader
-derivations + sort, query/feed, route-path generation, Markdown SSR→hydrate). typecheck/lint clean;
+inferred `Recipe`/`Project`/`Post` types + the `FeedItem` shape), `derive.ts` (pure, dependency-free
+helpers — `slug` from filename, posts' `readingTime` at 200 wpm, `excerpt` fallback de-marked from the
+first body paragraph, and a `byDateDesc` comparator with a stable secondary-key tiebreak for
+deterministic ordering), `parse.ts` (build-only: `gray-matter` + zod; bad front-matter throws
+**naming the file** and fails the build), `loader.ts` (freezes + re-exports the pre-parsed arrays),
+`index.ts` (typed query API: `getRecipes/Projects/Posts`, single getters, `getLatestFeed(limit?)`
+merging all three streams newest-first with tone/href mapping), and `Markdown.tsx` (`react-markdown` +
+`remark-gfm` wrapped in `.read`). Schemas are **strict** — unknown keys hard-fail. YAML ergonomics
+handled: an unquoted `date:` (parsed by YAML as a Date) is normalised to `YYYY-MM-DD`, and numeric
+`year`/ingredient `amount` are coerced to strings. **Content is parsed once at build time** by a Vite
+plugin (`vite-plugin-content.ts`) that reads `content/`, validates it, and emits the `virtual:content`
+module — so the browser imports pre-parsed data and the YAML parser never enters the client bundle
+(app chunk ~256KB vs ~428KB if parsed client-side). **Dynamic routes** are content-driven via
+`getStaticPaths` in `src/routes.tsx` (no hand-registration; `*` `NotFound` stays last); minimal
+placeholder detail pages (`src/pages/{Recipe,Project,Post}Detail.tsx`) render title + `<Markdown>`
+body + a "full template in Phase N" note. **9 seed files** (3/stream, `sample: true`, neutral copy) +
+`content/README.md` authoring guide. 34 tests pass (schema strictness/coercion, derive helpers + sort
+determinism, query/feed, route-path generation, Markdown SSR→hydrate). typecheck/lint clean;
 `npm run build` prerenders all 13 pages incl. one HTML file per content item; invariant proven both
 ways (new file → new prerendered route with no code change; bad key → build fails naming the file).
 Verified visually with Playwright on `/blog/why-plain-text` at 1280/390 in both themes — markdown
 renders with `.read` styling, no hydration errors.
-**Gotcha for later phases:** `gray-matter` references Node `Buffer`, which doesn't exist in the
-browser where vite-react-ssg re-runs the loader during hydration — a guarded no-op stub in
-`src/content/buffer-shim.ts` (imported first in `loader.ts`) fixes it; don't remove it. Also: detail
-routes must be reached via **clean URLs** (`/blog/slug`), not `…/slug.html` — the `.html` suffix
-becomes part of `:slug` and renders NotFound (only matters for the dev/preview harness; nginx serves
-clean URLs in Phase 10).
+**Gotcha for later phases:** content is parsed in Node by the `virtual:content` plugin, not in the
+loader — so `gray-matter`/YAML stay server-side and there's **no Buffer shim** to worry about. New
+content streams or front-matter fields need the schema in `schema.ts` *and* a `parse*` function +
+`readStream` call in `vite-plugin-content.ts`. Also: detail routes must be reached via **clean URLs**
+(`/blog/slug`), not `…/slug.html` — the `.html` suffix becomes part of `:slug` and renders NotFound
+(only matters for the dev/preview harness; nginx serves clean URLs in Phase 10).
 **For Phase 4:** Home consumes `getLatestFeed(limit)` from `src/content` (featured = item 0, then the
 next 3); the detail pages are placeholders awaiting Phases 5–7. Reuse `<Markdown>` from
 `src/content/Markdown.tsx` for any rendered bodies. Delete the `sample: true` seed files once real
