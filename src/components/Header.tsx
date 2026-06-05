@@ -78,7 +78,7 @@ export function Header() {
     <header className="site-header">
       <div className="container">
         <Link className="wordmark" to="/">
-          Matt<span className="dot" />
+          Matt
         </Link>
 
         <nav className="nav" aria-label="Primary">
@@ -91,7 +91,7 @@ export function Header() {
         </nav>
 
         <div className="header-tools">
-          <ThemeToggle variant="icon" />
+          <ThemeToggle />
           <button
             ref={buttonRef}
             type="button"

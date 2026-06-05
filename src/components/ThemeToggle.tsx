@@ -1,28 +1,11 @@
 import { useTheme } from './theme-context';
 
-// Two presentations of the same toggle, matching the reference:
-//  - "icon"  → header .icon-btn with sun/moon svgs (svg paths copied verbatim
-//              from design-reference/index.html)
-//  - "label" → footer .arrow-link text button ("Theme: Daylight ↻")
+// Header theme toggle: .icon-btn with sun/moon svgs (svg paths copied verbatim
+// from design-reference/index.html), driven from theme context.
 
-export function ThemeToggle({ variant }: { variant: 'icon' | 'label' }) {
+export function ThemeToggle() {
   const { theme, toggle } = useTheme();
   const isDark = theme === 'dark';
-
-  if (variant === 'label') {
-    return (
-      <button
-        className="arrow-link"
-        data-theme-toggle
-        aria-pressed={isDark}
-        onClick={toggle}
-        style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0 }}
-      >
-        Theme: <span data-theme-label>{isDark ? 'Twilight' : 'Daylight'}</span>{' '}
-        <span className="ar">&#8635;</span>
-      </button>
-    );
-  }
 
   return (
     <button

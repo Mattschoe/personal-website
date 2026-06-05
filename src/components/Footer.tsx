@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { ThemeToggle } from './ThemeToggle';
 
 export function Footer() {
   return (
@@ -7,7 +6,7 @@ export function Footer() {
       <div className="container">
         <div>
           <Link className="wordmark" to="/">
-            Matt<span className="dot" />
+            Matt
           </Link>
           <p className="card-excerpt" style={{ maxWidth: '30ch' }}>
             Projects, recipes, and writing — all in one place.
@@ -36,12 +35,6 @@ export function Footer() {
             LinkedIn
           </a>
           <a href="mailto:matthias.s.nielsen@protonmail.com">Email</a>
-        </div>
-      </div>
-      <div className="foot-bottom">
-        <div className="container">
-          <span>© 2026 Matt</span>
-          <ThemeToggle variant="label" />
         </div>
       </div>
     </footer>

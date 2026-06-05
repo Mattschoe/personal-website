@@ -1,0 +1,12 @@
+/* App-shell structure (not part of the design-reference token sheet, which
+   stays verbatim in global.css). Pins the footer to the bottom of the viewport
+   on short pages while keeping normal flow on tall ones. */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#root > main {
+  flex: 1 0 auto;
+}
