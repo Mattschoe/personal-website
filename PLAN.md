@@ -85,6 +85,28 @@ snippet only applies the saved theme, it does not wire any toggle.
 and across routes with no flash; mobile menu opens/closes accessibly.
 **Depends on:** Phase 1.
 
+**Done ✅** — Built the persistent chrome. A single **layout route** (`src/routes.tsx` →
+`src/components/Layout.tsx`) wraps every page in `ThemeProvider` + `Header` + `<Outlet>` + `Footer`,
+with child routes `/`, `/recipes`, `/projects`, `/blog` and a `*` `NotFound`. **Theme** is a React
+port of `design-reference/theme.js`: `theme-context.ts` (context + `useTheme`), `ThemeProvider.tsx`
+(syncs from `data-theme` on `<html>` after mount — hydration-safe — and owns the flip + localStorage
+write), `ThemeToggle.tsx` (header sun/moon icon + footer "Theme: Daylight" label, both context-driven).
+The inline pre-paint snippet in `index.html` stays the source of truth for the *initial* theme. `Header`
++ `Footer` port the reference markup/classes verbatim; footer socials wired to real GitHub/LinkedIn/email.
+**Mobile nav** (≤640px): hamburger opens a **left-aligned dropdown panel under the header**
+(`Header.module.css`, tokens only) — Esc/route-change/link-select close it, focus trapped + returned to
+trigger, body-scroll locked, `aria-expanded`/`aria-controls` wired. The old `Placeholder` page is gone;
+each stream has a token-styled stub. typecheck/lint/test (9 tests) clean; `npm run build` prerenders
+`/`,`/recipes`,`/projects`,`/blog` to static HTML (each carries header/footer + the pre-paint snippet +
+font links). Verified visually with Playwright at 1280/390px in both themes (incl. open drawer + 404);
+matches `design-reference/index.html`.
+**For Phase 3:** dynamic content routes plug into `src/routes.tsx` as **children of the existing
+layout route** (so they inherit the chrome) — generate them from the content layer, don't hand-register.
+The `*` `NotFound` child must stay **last**. Note: vite-react-ssg only prerenders concrete paths, so the
+404 isn't emitted as a static file (nginx SPA fallback in Phase 10 handles unknown paths). New
+component-scoped CSS goes in co-located CSS Modules (see `Header.module.css`); reference global tokens
+with `:global(...)` when a rule needs to target a global class like `.container`.
+
 ---
 
 ## ☐ Phase 3 — Content pipeline  *(the core enabler — get this right)*
