@@ -3,6 +3,7 @@ import { byDateDesc } from './derive';
 import type { Recipe, Project, Post, FeedItem } from './schema';
 
 export type { Recipe, Project, Post, FeedItem } from './schema';
+export { formatDate } from './derive';
 
 // Typed query API over the content layer. All arrays are pre-sorted newest-first
 // by the loader. These are the only functions pages should reach for — they keep
