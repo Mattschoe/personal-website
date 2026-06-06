@@ -169,7 +169,7 @@ content exists.
 
 ---
 
-## ☐ Phase 4 — Home page
+## ☑ Phase 4 — Home page
 **Goal:** the Home page assembled from the content layer.
 **Scope:** Hero (eyebrow, title, lead, circular portrait placeholder, quick-links + GitHub/LinkedIn);
 **Latest** section = `.featured` card for the newest item across all streams + a 3-up mixed
@@ -178,6 +178,24 @@ content exists.
 **Done when:** Home renders real, date-sorted latest content from `content/`; matches the reference in
 both themes and at mobile/desktop widths.
 **Depends on:** Phases 2, 3.
+
+**Delivered:** `Home.tsx` rebuilt from `getLatestFeed(4)` (item 0 = featured, 1–3 = feed grid); the
+feed is generated, never hand-maintained (Rule 4). Added a deterministic `formatDate(iso, {withYear})`
+to `src/content/derive.ts` (splits `YYYY-MM-DD` on `-`, no `new Date(string)`, so build/hydration
+strings match and it's timezone-independent) and re-exported it from the content barrel. Home-only
+layout ported verbatim into `Home.module.css` (tokens only; global classes targeted via `:global()`).
+Hero lead + About body carry literal **TODO** copy markers; "Get in touch" → `mailto:`, socials reuse
+Footer's real URLs; `#about` anchor present for the header link; images stay `.ph` placeholders.
+Tests: `derive.test.ts` (formatDate incl. TZ-independence) and `Home.test.tsx` (featured = feed[0],
+3 cards, tag label/class per type, both date forms, hero TODO, `#about`, mailto). Verified: typecheck
++ lint clean, 48 tests green, `npm run build` bakes the real featured + 3 items and `class="featured"`
+into `dist/index.html`, and Playwright screenshots (1280/390px, both themes) match the reference.
+
+**For Phase 5:** the card / feed presentation (`.card`, `.tag--*`, `.card-meta`, `formatDate`) is now
+proven against real data and reusable for the Blog index rows. `formatDate` lives in the content
+barrel — reuse it for post dates rather than re-deriving. The `#about` link does not yet smooth-scroll
+from other routes (anchor only); add a hash handler later if wanted (noted out of scope here). Real
+imagery for the `.ph` placeholders remains Phase 8.
 
 ---
 
