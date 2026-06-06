@@ -8,12 +8,14 @@ yield: Serves 6
 effort: Easy
 sample: true
 ingredients:
+  - group: Salad
   - amount: 4 ears
     item: sweetcorn, kernels cut off
   - amount: 1
     item: red chilli, finely sliced
   - amount: 1 bunch
     item: coriander, roughly chopped
+  - group: Dressing
   - amount: 1
     item: lime, juiced
   - amount: 2 tbsp
