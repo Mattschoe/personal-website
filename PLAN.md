@@ -275,7 +275,7 @@ page-head convention. Real imagery for the `.ph` placeholders (hero/square photo
 
 ---
 
-## ☐ Phase 7 — Projects (index + project template)
+## ☑ Phase 7 — Projects (index + project template)
 **Goal:** the Projects stream end to end.
 **Scope:** Projects index = full-width **alternating rows** (status dot, year, title, summary, stack
 chips, "case study →"); single project = breadcrumb, title + action buttons (GitHub / demo / docs),
@@ -284,6 +284,39 @@ wide screenshot, article body + **sticky spec rail** (role, stack, status, metri
 **Done when:** projects list in alternating rows; each detail page renders body + spec rail + working
 external links from front-matter; matches reference in both themes.
 **Depends on:** Phases 2, 3.
+
+**Delivered:** `Projects.tsx` rebuilt from `getProjects()` (pre-sorted newest-first) as full-width
+**alternating rows** — the alternation is **pure CSS** (`:nth-child(even)` flips the columns + media
+order), so the JSX stays uniform and adding a project needs no code edit (Rule 4). `ProjectDetail.tsx`
+rebuilt as the full case-study template: `.crumb` → head (`Project` tag + mega title + summary lead +
+**action buttons**) → 16:8 `.ph` screenshot → 2-col `.proj-layout` with the rendered Markdown body in a
+`.read` article (widened to fill the column) beside a **sticky `.spec` rail** (Stack / Role / Status /
+Year / Numbers). Action buttons are **conditional** on `project.links` (repo→accent "View on GitHub",
+demo→"Live demo", docs→"Read the docs"), each `target="_blank" rel="noopener noreferrer"`; the whole
+`.proj-actions` wrapper and the `Numbers` block render only when their data is present. Page styles
+ported verbatim from the reference inline `<style>` blocks into co-located CSS Modules
+(`Projects.module.css`, `ProjectDetail.module.css`, tokens only, globals via `:global()`); `.ph`,
+`.btn`, `.tag--project`, `.card-meta`/`.card-excerpt`, `.arrow-link` reuse `global.css`.
+**Two conventions kept (per Matt, mirroring Blog/Recipes):** the index page-head is minimal (bare
+"Projects", no editorial headline/lead) and the case-study body renders **plain — no dropcap** (the
+`<Markdown dropcap>` prop stays blog-only). The detail page uses `<div className="container">` (no
+nested `<main>` — Layout owns that landmark). `routes.tsx` unchanged (`/projects` + `/projects/:slug`
+already wired in Phase 3). Tests: `Projects.test.tsx` (row-per-project, newest-first, hrefs, title/
+summary/status/year/stack, bare head/no lead, no `<main>`) and `ProjectDetail.test.tsx` (crumb/tag/
+title/lead, action buttons per present link + external attrs, conditional absence, spec rail fields,
+`Numbers` present/absent, body `.read` with no dropcap, no `<main>`, NotFound). 69 tests green;
+typecheck + lint clean; `npm run build` prerenders `/projects` + one HTML per project (verified the
+built HTML carries the spec rail + the right action buttons, `Numbers` only when metrics set, and **no
+dropcap**). Verified visually with Playwright at 1280/390 in both themes — index alternating rows +
+status dots + stack chips, detail head/buttons/16:8 shot/sticky spec rail, and the ≤880px collapse
+(rows → single column, spec rail → static wrapping row) all match the reference.
+
+**For Phase 8:** the `.ph` placeholders still to be replaced with real imagery are the project
+**screenshots** — the index row media (`Project screenshot`) and the detail **16:8** hero
+(`Primary screenshot · 16:8`). With Projects done, every content stream now has its real template, so
+Phase 8 can wire a shared image component across recipes/posts/projects/portrait at once. Note this
+phase branched off `main` (Phase 6/Recipes was still an unmerged PR); Projects and Recipes touch
+disjoint files, so the PRs merge independently.
 
 ---
 
