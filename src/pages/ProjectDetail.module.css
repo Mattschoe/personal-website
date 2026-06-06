@@ -1,0 +1,110 @@
+/* Single-project (case study) layout — ported from the inline <style> block in
+   design-reference/projects/project.html (these rules are NOT in global.css).
+   Tokens only; CSS-Module-scoped. The crumb matches RecipeDetail.module.css for
+   consistency. The Markdown body renders in the `.read` column but is widened to
+   fill the grid (max-width:none) so it sits beside the sticky spec rail. */
+
+.crumb {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  padding-block: var(--s-5) 0;
+  display: flex;
+  gap: 0.6em;
+  align-items: center;
+}
+.crumb a {
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+.crumb a:hover {
+  color: var(--accent);
+}
+
+.projHead {
+  padding-block: var(--s-6) var(--s-7);
+}
+.projHead h1 {
+  font-size: var(--fs-mega);
+  margin: var(--s-3) 0 var(--s-4);
+}
+.projHead :global(.lead) {
+  max-width: 54ch;
+}
+.projActions {
+  display: flex;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  margin-top: var(--s-5);
+}
+
+.shot {
+  aspect-ratio: 16 / 8;
+  margin-bottom: var(--s-7);
+}
+
+.projLayout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--s-8);
+  padding-bottom: var(--s-8);
+}
+/* Body fills the grid column rather than the 680px reading width (global .read);
+   the extra class specificity beats the global rule. */
+.projLayout .body {
+  margin: 0;
+  max-width: none;
+}
+
+.spec {
+  position: sticky;
+  top: 88px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+.specBlock h4 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  margin: 0 0 var(--s-2);
+}
+.specBlock .stack {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.specBlock .stack span {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.3em 0.55em;
+}
+.specBlock p {
+  margin: 0;
+  font-size: var(--fs-body);
+}
+.divider {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 0;
+}
+
+@media (max-width: 880px) {
+  .projLayout {
+    grid-template-columns: 1fr;
+  }
+  .spec {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--s-6);
+  }
+}
