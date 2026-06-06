@@ -4,6 +4,40 @@
 
 const WORDS_PER_MINUTE = 200;
 
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+] as const;
+
+/**
+ * Format a `YYYY-MM-DD` date string as `Mon D` (e.g. `May 28`) or, with
+ * `withYear`, `Mon D, YYYY` (e.g. `Jun 1, 2026`).
+ *
+ * Parses by splitting on `-` rather than `new Date(string)` on purpose: the
+ * Date constructor treats a bare ISO date as UTC midnight, which renders as the
+ * previous day in negative-offset timezones (the classic off-by-one). Splitting
+ * is timezone-agnostic, so the build (Node) and hydration (browser) always
+ * produce the identical string — no SSR/client mismatch.
+ */
+export function formatDate(
+  iso: string,
+  opts: { withYear?: boolean } = {},
+): string {
+  const [year, month, day] = iso.split('-').map(Number);
+  const label = `${MONTHS[month - 1]} ${day}`;
+  return opts.withYear ? `${label}, ${year}` : label;
+}
+
 /** `/content/blog/my-post.md` → `my-post` */
 export function slugFromPath(path: string): string {
   return path.split('/').pop()!.replace(/\.md$/, '');
