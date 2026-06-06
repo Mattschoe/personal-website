@@ -110,10 +110,11 @@ Headings: `letter-spacing:-.02em`, `line-height:1.02`, `text-wrap:balance`. Body
 - **Single post** — left-aligned header (tag, title, byline) → centered lead figure → 680px reading column w/ dropcap → tag row → "keep reading" 2-up.
 
 ## 9. Content model (front-matter)
-**Recipe:** `title, slug, date, excerpt, hero, category, time, yield, effort, ingredients[{amount,item}], steps[], note?`
-**Project:** `title, slug, date, summary, hero, status, year, stack[], role, metrics?, links{repo,demo,docs}, body`
-**Post:** `title, slug, date, readingTime(auto), excerpt, hero, tags[], body`
-**Home feed:** all three normalised to `{type, title, date, excerpt, href, tone}`, sorted by `date` desc, top 4–7.
+**Recipe:** `title, slug, date, excerpt, hero, heroAlt?, category, time, yield, effort, ingredients[{amount,item}], steps[], note?`
+**Project:** `title, slug, date, summary, hero, heroAlt?, status, year, stack[], role, metrics?, links{repo,demo,docs}, body`
+**Post:** `title, slug, date, readingTime(auto), excerpt, hero, heroAlt?, tags[], body`
+**Home feed:** all three normalised to `{type, title, date, excerpt, href, tone, hero?, heroAlt?}`, sorted by `date` desc, top 4–7.
+**Images:** `hero`/`heroAlt` are optional. Files live under `public/images/...` and are referenced by absolute URL path (e.g. `hero: /images/recipes/x.jpg`); when `hero` is unset the UI renders a toned `.ph` placeholder. `heroAlt` defaults to the item `title`.
 
 ## 10. Theming
 - Default Daylight. Twilight = `data-theme="dark"` on `<html>`; tokens remap via `[data-theme="dark"]`.
@@ -121,7 +122,7 @@ Headings: `letter-spacing:-.02em`, `line-height:1.02`, `text-wrap:balance`. Body
 - Optional: default to `prefers-color-scheme` when unset. All transitions disabled under `prefers-reduced-motion`.
 
 ## 11. Open items before ship
-- **Images:** every `.ph` is a placeholder → real `<img>` at labelled ratios. Supply: portrait (square + 3:4), recipe photos (4:3 / square), project screenshots (16:8), post lead images (16:8).
+- **Images:** ~~every `.ph` is a placeholder → real `<img>` at labelled ratios.~~ **Mechanism done (Phase 8):** the `<Image>` component renders a real `<img>` from an item's `hero` and falls back to the toned `.ph` placeholder when unset (drop a file in `public/images/` + set `hero:`). Still to supply as Matt has them: portrait (square + 3:4), recipe photos (4:3 / square), project screenshots (16:8), post lead images (16:8).
 - **Mobile nav:** hidden < 640px in reference → build a hamburger/drawer.
 - **Links:** social + email are `#` placeholders → wire real URLs.
 - ~~**Recipe filters** are visual only → make functional (filter by category).~~ **Done (Phase 6):** chips are derived from content categories, filter the grid client-side, and sync to `?category=`.
