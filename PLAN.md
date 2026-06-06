@@ -320,7 +320,7 @@ disjoint files, so the PRs merge independently.
 
 ---
 
-## ☐ Phase 8 — Real images & assets
+## ☑ Phase 8 — Real images & assets
 **Goal:** replace every `.ph` placeholder with real images, gracefully.
 **Scope:** a reusable image component that renders a real `<img>` at the labelled aspect ratio and
 falls back to the toned `.ph` placeholder when an item has no image yet (so the site never looks
@@ -330,6 +330,35 @@ portrait (square + 3:4), recipe photos (4:3 / square), project screenshots (16:8
 **Done when:** no raw `.ph` placeholders remain on pages that have real assets; missing images degrade
 to a tasteful toned placeholder; no layout shift.
 **Depends on:** Phases 4–7.
+
+**Delivered:** A reusable `<Image>` component (`src/components/Image.tsx` + `.module.css`) that renders
+a real `<img>` (`loading="lazy"`, `decoding="async"`, `object-fit:cover`) from an item's `hero` and
+**gracefully falls back to the existing toned `.ph` placeholder** when `hero` is unset — same caption,
+glyph and tone as before, so a page never looks broken. The component's root is always the `.ph`
+element, so every per-page `:global(.ph)` sizing/shape override (aspect ratios, circular crop,
+min-heights) keeps working unchanged; one global `.ph > img` rule (`global.css`) fills the box with
+**no layout shift** (the box's size still comes from CSS aspect-ratio). Every `.ph` slot across Home
+(portrait, featured, feed cards, about portrait), the recipe/project/blog index cards+rows, and the
+recipe/project/post detail heroes now goes through `<Image>` (the 32px byline avatar stays a bare
+`.ph` span — no per-post avatar field). **Decisions (with Matt):** storage = **`public/images/...`**
+(absolute URL paths in front-matter; zero build plumbing, preserves Rule 4 — drop a file + set
+`hero:`); **no real photos shipped yet** (Matt has none — every slot renders its placeholder until a
+`hero:` is added); **favicon + OG image deferred to Phase 9** with the rest of the SEO/meta work.
+Content layer: added optional `heroAlt` to the shared schema base and `hero?`/`heroAlt?` to `FeedItem`;
+the feed mappers pass both through (alt falls back to the item `title`; decorative portraits use empty
+alt). Docs updated (`content/README.md` Images section + `SPEC.md` §9 / open-items). **91 tests green**
+(new `Image.test.tsx`: img-vs-placeholder rendering, lazy/async, no caption/glyph when imaged, empty
+alt, className passthrough; + schema `hero/heroAlt` and feed pass-through). typecheck + lint clean;
+`npm run build` prerenders all 13 routes. **Invariant proven** by temporarily wiring a sample SVG +
+`hero:` onto one item per stream: the `<img>` rendered at the right ratio (16:10 featured, 4:3 cards,
+square/16:8 heroes) and covered the box with **no layout shift**, while un-imaged items kept their
+placeholders — verified with Playwright at 1280/390px in **both themes**, then fully reverted (no
+sample images ship).
+
+**For Phase 9:** `hero`/`heroAlt` are the OG-image + alt sources for per-page meta. Favicon + default
+OG image still to create. `public/images/.gitkeep` holds the documented image folder. When Matt
+supplies real photos, dropping a file in `public/images/` + setting `hero:` is all it takes — no code
+change.
 
 ---
 
