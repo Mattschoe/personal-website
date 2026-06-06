@@ -1,0 +1,197 @@
+/* Single-recipe layout — ported from the inline <style> block in
+   design-reference/recipes/recipe.html (these rules are NOT in global.css).
+   Tokens only; CSS-Module-scoped. Deviation from the mockup: the Markdown body
+   renders in a centered `.read` column between the hero and the ingredients/
+   method grid, matching the clean Blog post template. */
+
+.crumb {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  padding-block: var(--s-5) 0;
+  display: flex;
+  gap: 0.6em;
+  align-items: center;
+}
+.crumb a {
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+.crumb a:hover {
+  color: var(--accent);
+}
+
+.recipeHero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-7);
+  align-items: center;
+  padding-block: var(--s-6) var(--s-7);
+}
+.recipeHero h1 {
+  font-size: var(--fs-h1);
+  margin: var(--s-3) 0 var(--s-4);
+}
+.recipeHero :global(.ph) {
+  aspect-ratio: 1;
+}
+
+.statRow {
+  display: flex;
+  gap: 0;
+  border: var(--border-w) solid var(--line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: var(--s-5);
+  background: var(--surface);
+}
+.stat {
+  flex: 1;
+  padding: var(--s-4);
+  border-right: 1px solid var(--line);
+}
+.stat:last-child {
+  border-right: 0;
+}
+.k {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  display: block;
+  margin-bottom: 0.3em;
+}
+.v {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* The rendered Markdown intro sits in a centered reading column (global .read
+   supplies the 680px max-width); just give it vertical breathing room. */
+.intro {
+  margin-block: var(--s-2) var(--s-7);
+}
+
+.recipeBody {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--s-8);
+  padding-bottom: var(--s-8);
+  border-top: var(--border-w) solid var(--line-strong);
+  padding-top: var(--s-7);
+}
+.ingredients {
+  position: sticky;
+  top: 88px;
+  align-self: start;
+}
+.ingredients h2,
+.method h2 {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--s-4);
+}
+.ingList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ingList li {
+  display: flex;
+  gap: 0.7em;
+  padding: 0.55em 0;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-body);
+  align-items: baseline;
+}
+.ingList li::before {
+  content: '';
+  width: 0.55em;
+  height: 0.55em;
+  flex: 0 0 auto;
+  border: 1.5px solid var(--accent);
+  border-radius: 2px;
+  margin-top: 0.45em;
+}
+.amt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--accent);
+  flex: 0 0 auto;
+  min-width: 4.5em;
+}
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+  margin: 0;
+}
+.steps li {
+  position: relative;
+  padding: 0 0 var(--s-6) var(--s-7);
+}
+.steps li::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--fs-small);
+  color: var(--accent-ink);
+  background: var(--accent);
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.steps li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 1em;
+  top: 2.4em;
+  bottom: 0.4em;
+  width: 1.5px;
+  background: var(--line);
+}
+.steps p {
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+  margin: 0.2em 0 0;
+}
+
+.note {
+  background: var(--bg-2);
+  border-left: 3px solid var(--accent);
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--radius);
+  margin-top: var(--s-6);
+}
+.note :global(.kicker) {
+  margin-bottom: 0.4em;
+}
+.note p {
+  margin: 0;
+}
+
+@media (max-width: 880px) {
+  .recipeHero {
+    grid-template-columns: 1fr;
+  }
+  .recipeHero :global(.ph) {
+    order: -1;
+  }
+  .recipeBody {
+    grid-template-columns: 1fr;
+    gap: var(--s-7);
+  }
+  .ingredients {
+    position: static;
+  }
+}

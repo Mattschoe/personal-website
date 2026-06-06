@@ -235,7 +235,7 @@ imagery for the `.ph` placeholders (byline portrait, lead figure) remains Phase 
 
 ---
 
-## ☐ Phase 6 — Recipes (index + recipe template + functional filters)
+## ☑ Phase 6 — Recipes (index + recipe template + functional filters)
 **Goal:** the Recipes stream end to end, with working filters (SPEC §11 open item).
 **Scope:** Recipes index = 3-up `card` grid + **functional category filter chips** (visual-only in the
 reference → make them filter the grid client-side); single recipe = breadcrumb, split hero
@@ -245,6 +245,33 @@ Match `design-reference/recipes/index.html` and `recipe.html`.
 **Done when:** recipes list, filter correctly by category, and each detail page renders ingredients +
 numbered steps from front-matter/body; matches reference in both themes.
 **Depends on:** Phases 2, 3.
+
+**Delivered:** `Recipes.tsx` rebuilt from `getRecipes()` as a 3-up `.card` grid with **functional
+filter chips** — the chip list is *derived* from the `category` values present in content (Rule 4;
+adding a recipe needs no code edit) and the active filter **syncs to `?category=`** via
+`useSearchParams`. To stay hydration-safe the page prerenders unfiltered (all cards in the static
+HTML, `All` pressed) and adopts the query only in a post-mount `useEffect` (same "sync after mount"
+trick as `ThemeProvider`); chips are `<button aria-pressed>` (a11y over the mockup's `<a>`).
+`RecipeDetail.tsx` rebuilt as the full template: `.crumb` → split `.recipe-hero` (tag/title/lead
++ stat strip + square `.ph`) → **rendered Markdown body in a centered `.read` column** → 2-col
+`.recipe-body` with a **sticky `.ing-list`** (checkbox bullets, mono amount) + numbered `.steps`
+timeline + optional `.note` callout (rendered only when `note` is set). Page styles ported verbatim
+from the reference inline `<style>` blocks into co-located CSS Modules (`Recipes.module.css`,
+`RecipeDetail.module.css`, tokens only, globals via `:global()`); `.card`/`.tag--recipe`/`.ph`
+reuse `global.css`. **Two intentional deviations** (per Matt, mirroring Blog): the index page-head
+is minimal (bare "Recipes", no editorial lead) and the detail renders the Markdown body in a
+post-style reading column rather than the body-less mockup — `SPEC.md` §8/§11 updated to record
+this. Tests: `Recipes.test.tsx` (card-per-recipe, derived chips, filtering, `All` reset,
+`?category=` on load, no `<main>`) and `RecipeDetail.test.tsx` (tag/crumb/title, stat strip,
+ingredients, ordered steps, note present/absent, body `.read` column, NotFound). 71 tests green;
+typecheck + lint clean; `npm run build` prerenders `/recipes` + one HTML per recipe. Verified
+visually with Playwright at 1280/390 in both themes (incl. the filter interaction 3→1 + URL update)
+— matches the reference minus the two intended differences.
+
+**For Phase 7:** the derived-filter + URL-sync pattern and the crumb/split-hero/stat-strip
+scaffolding are now proven, but Projects use **alternating full-width rows** (not a card grid) and a
+**sticky spec rail** — little recipe markup carries over beyond the `.crumb` and the clean
+page-head convention. Real imagery for the `.ph` placeholders (hero/square photos) remains Phase 8.
 
 ---
 
