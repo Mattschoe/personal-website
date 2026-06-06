@@ -26,7 +26,9 @@ export function Home() {
   const rest = feed.slice(1);
 
   return (
-    <main>
+    // Layout already provides the <main> landmark, so this page is just its
+    // sections — wrapping them in another <main> would nest landmarks.
+    <>
       {/* ============ HERO ============ */}
       <section className={`hero container ${styles.hero}`}>
         <div className={styles.heroGrid}>
@@ -163,7 +165,7 @@ export function Home() {
               irure dolor in reprehenderit in voluptate velit esse cillum dolore
               eu fugiat nulla pariatur.
             </p>
-            <div className={styles.quick} style={{ marginTop: 'var(--s-4)' }}>
+            <div className={`${styles.quick} ${styles.aboutActions}`}>
               <Link className="btn btn--accent" to="/projects">
                 See my work <span>&#8599;</span>
               </Link>
@@ -174,6 +176,6 @@ export function Home() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }
