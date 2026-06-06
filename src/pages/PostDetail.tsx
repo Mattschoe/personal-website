@@ -1,30 +1,47 @@
 import { Link, useParams } from 'react-router-dom';
-import { getPost } from '../content';
+import { getPost, formatDate } from '../content';
 import { Markdown } from '../content/Markdown';
 import { NotFound } from './NotFound';
+import styles from './PostDetail.module.css';
 
-// Minimal placeholder detail page (Phase 3): proves content-driven routing and
-// renders the Markdown body. The full reading-column / dropcap template lands in
-// Phase 5.
+// Single post: left-aligned header (tag, title, byline), centered lead figure,
+// then the 680px reading column with a drop-capped first paragraph and a tag
+// row. Per Matt, there is no reading-time and no "keep reading" 2-up — the post
+// ends cleanly after its tags. The lead figure stays a `.ph` placeholder until
+// real imagery lands in Phase 8.
 export function PostDetail() {
   const { slug } = useParams();
   const post = slug ? getPost(slug) : undefined;
   if (!post) return <NotFound />;
 
   return (
-    <article className="section">
-      <div className="container">
-        <p>
-          <Link className="arrow-link" to="/blog">
-            <span className="ar">&#8599;</span> Blog
-          </Link>
-        </p>
-        <span className="kicker">Essay · {post.readingTime}</span>
+    <div className="container">
+      <nav className={styles.crumb}>
+        <Link to="/blog">Blog</Link> <span>/</span> <span>Essay</span>
+      </nav>
+
+      <header className={styles.postHeader}>
+        <span className="tag tag--essay">Essay</span>
         <h1>{post.title}</h1>
-        <p className="lead">{post.excerpt}</p>
-        <Markdown>{post.body}</Markdown>
-        <p className="kicker">Full post template lands in Phase 5.</p>
+        <div className={styles.byline}>
+          <span className="ph" data-tone="sage" data-ph=""></span>
+          <span>{formatDate(post.date, { withYear: true })}</span>
+        </div>
+      </header>
+
+      <figure className={`${styles.leadFigure} read`}>
+        <div className="ph" data-tone="beeswax" data-ph="Lead image · 16:8"></div>
+      </figure>
+
+      <Markdown dropcap>{post.body}</Markdown>
+
+      <div className={styles.postFoot}>
+        <div className={styles.tagRow}>
+          {post.tags.map((tag) => (
+            <span key={tag}>#{tag}</span>
+          ))}
+        </div>
       </div>
-    </article>
+    </div>
   );
 }

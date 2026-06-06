@@ -1,0 +1,63 @@
+/* Blog index layout — ported from the inline <style> block in
+   design-reference/blog/index.html (these rules are NOT in global.css). Tokens
+   only; CSS-Module-scoped. Per Matt, the reference's read-time column is dropped,
+   so .postRow is a 2-column grid (date · main) instead of 3. */
+
+.pageHead {
+  padding-block: var(--s-8) var(--s-6);
+}
+.pageHead h1 {
+  font-size: var(--fs-h1);
+  margin: 0;
+  max-width: 16ch;
+}
+
+.postList {
+  margin-top: var(--s-6);
+}
+.postRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: var(--s-6);
+  align-items: baseline;
+  padding: var(--s-6) 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+  transition: padding 0.18s var(--ease);
+}
+.postRow:hover {
+  padding-inline: var(--s-3);
+  background: var(--surface);
+}
+.postRow:hover h3 {
+  color: var(--accent);
+}
+.postDate {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.postMain h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.3em;
+  transition: color 0.18s;
+}
+.postMain p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--fs-small);
+  max-width: 60ch;
+}
+
+@media (max-width: 880px) {
+  .postRow {
+    grid-template-columns: 1fr;
+    gap: var(--s-2);
+  }
+}

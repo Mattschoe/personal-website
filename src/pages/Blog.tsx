@@ -1,12 +1,39 @@
-// Stub — the real Blog index (editorial post rows) lands in Phase 5.
+import { Link } from 'react-router-dom';
+import { getPosts, formatDate } from '../content';
+import styles from './Blog.module.css';
+
+// Blog index: editorial post rows (date · title + excerpt), whole row hovers.
+// Rows are generated from getPosts() (pre-sorted newest-first) — drop a Markdown
+// file in content/blog and it appears here on the next build (Rule 4). Per Matt,
+// reading time is intentionally not shown.
 export function Blog() {
+  const posts = getPosts();
+
   return (
-    <section className="section">
-      <div className="container">
-        <span className="kicker">Blog</span>
-        <h1>Coming soon</h1>
-        <p className="lead">Posts will appear here once the content pipeline is wired up.</p>
-      </div>
-    </section>
+    <>
+      <section className={`container ${styles.pageHead}`}>
+        <h1>Blog</h1>
+      </section>
+
+      <section className="container">
+        <div className={styles.postList}>
+          {posts.map((post) => (
+            <Link
+              className={styles.postRow}
+              to={`/blog/${post.slug}`}
+              key={post.slug}
+            >
+              <span className={styles.postDate}>
+                {formatDate(post.date, { withYear: true })}
+              </span>
+              <div className={styles.postMain}>
+                <h3>{post.title}</h3>
+                <p>{post.excerpt}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
