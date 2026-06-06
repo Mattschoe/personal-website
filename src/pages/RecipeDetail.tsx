@@ -56,12 +56,18 @@ export function RecipeDetail() {
         <aside className={styles.ingredients}>
           <h2>Ingredients</h2>
           <ul className={styles.ingList}>
-            {recipe.ingredients.map((ing, i) => (
-              <li key={i}>
-                <span className={styles.amt}>{ing.amount}</span>
-                <span>{ing.item}</span>
-              </li>
-            ))}
+            {recipe.ingredients.map((ing, i) =>
+              'group' in ing ? (
+                <li key={i} className={styles.ingGroup}>
+                  {ing.group}
+                </li>
+              ) : (
+                <li key={i}>
+                  <span className={styles.amt}>{ing.amount}</span>
+                  <span>{ing.item}</span>
+                </li>
+              ),
+            )}
           </ul>
         </aside>
 

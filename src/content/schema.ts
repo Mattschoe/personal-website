@@ -44,8 +44,16 @@ export const recipeFrontmatter = z.strictObject({
   time: z.string().min(1),
   yield: z.string().min(1),
   effort: z.string().min(1),
+  // A flat list where most entries are `{amount, item}` rows; a `{group}`
+  // entry is a section label (e.g. "Sauce") — everything below it, until the
+  // next group or the end of the list, reads as belonging to that group.
   ingredients: z
-    .array(z.strictObject({ amount: text, item: z.string().min(1) }))
+    .array(
+      z.union([
+        z.strictObject({ amount: text, item: z.string().min(1) }),
+        z.strictObject({ group: z.string().min(1) }),
+      ]),
+    )
     .min(1),
   steps: z.array(z.string().min(1)).min(1),
   note: z.string().min(1).optional(),

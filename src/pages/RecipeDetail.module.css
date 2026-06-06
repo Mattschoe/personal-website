@@ -104,10 +104,10 @@
   gap: 0.7em;
   padding: 0.55em 0;
   border-bottom: 1px solid var(--line);
-  font-size: var(--fs-body);
+  font-size: var(--fs-small);
   align-items: baseline;
 }
-.ingList li::before {
+.ingList li:not(.ingGroup)::before {
   content: '';
   width: 0.55em;
   height: 0.55em;
@@ -122,6 +122,24 @@
   color: var(--accent);
   flex: 0 0 auto;
   min-width: 4.5em;
+}
+
+/* Section label inside the ingredient list (e.g. "Sauce") — small, gray,
+   mono-uppercase, matching .kicker / .k elsewhere on this page. The checkbox
+   box (.ingList li::before) is skipped for these via :not(.ingGroup), so the
+   row reads as a label, not an item. */
+.ingGroup {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  padding: var(--s-6) 0 0.3em;
+  border-bottom: none;
+}
+.ingGroup:first-child {
+  padding-top: 0;
 }
 
 .steps {

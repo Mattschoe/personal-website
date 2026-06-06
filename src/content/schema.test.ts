@@ -96,4 +96,29 @@ describe('content schemas', () => {
     expect(recipe.success).toBe(true);
     if (recipe.success) expect(recipe.data.ingredients[0].amount).toBe('1');
   });
+
+  it('accepts ingredient lists that mix group labels with items', () => {
+    const result = recipeFrontmatter.safeParse({
+      ...validRecipe,
+      ingredients: [
+        { group: 'Sauce' },
+        { amount: '2 tbsp', item: 'soy sauce' },
+        { group: 'Salad' },
+        { amount: '1', item: 'lime, juiced' },
+      ],
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.ingredients[0]).toEqual({ group: 'Sauce' });
+      expect(result.data.ingredients[1]).toEqual({ amount: '2 tbsp', item: 'soy sauce' });
+    }
+  });
+
+  it('rejects an ingredient entry that mixes group and item fields', () => {
+    const result = recipeFrontmatter.safeParse({
+      ...validRecipe,
+      ingredients: [{ group: 'Sauce', amount: '1', item: 'lime' }],
+    });
+    expect(result.success).toBe(false);
+  });
 });
