@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { getPost, formatDate } from '../content';
 import { Markdown } from '../content/Markdown';
+import { Image } from '../components/Image';
 import { NotFound } from './NotFound';
 import styles from './PostDetail.module.css';
 
@@ -30,7 +31,12 @@ export function PostDetail() {
       </header>
 
       <figure className={`${styles.leadFigure} read`}>
-        <div className="ph" data-tone="beeswax" data-ph="Lead image · 16:8"></div>
+        <Image
+          src={post.hero}
+          alt={post.heroAlt ?? post.title}
+          tone="beeswax"
+          label="Lead image · 16:8"
+        />
       </figure>
 
       <Markdown dropcap>{post.body}</Markdown>

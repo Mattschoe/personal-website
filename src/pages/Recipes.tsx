@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getRecipes } from '../content';
+import { Image } from '../components/Image';
 import styles from './Recipes.module.css';
 
 // Tones cycle through the placeholder palette so the grid has visual variety
@@ -61,11 +62,12 @@ export function Recipes() {
         <div className={styles.recipeGrid}>
           {visible.map((recipe, i) => (
             <Link className="card" to={`/recipes/${recipe.slug}`} key={recipe.slug}>
-              <div
-                className="ph"
-                data-tone={TONES[i % TONES.length]}
-                data-ph="Hero photo · 4:3"
-              ></div>
+              <Image
+                src={recipe.hero}
+                alt={recipe.heroAlt ?? recipe.title}
+                tone={TONES[i % TONES.length]}
+                label="Hero photo · 4:3"
+              />
               <div className="card-top">
                 <span className="card-meta">{recipe.category}</span>
                 <span className="card-meta">{recipe.time}</span>

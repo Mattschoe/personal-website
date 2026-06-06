@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { getProject } from '../content';
 import { Markdown } from '../content/Markdown';
+import { Image } from '../components/Image';
 import { NotFound } from './NotFound';
 import styles from './ProjectDetail.module.css';
 
@@ -65,11 +66,13 @@ export function ProjectDetail() {
         )}
       </section>
 
-      <div
-        className={`ph ${styles.shot}`}
-        data-tone="sage"
-        data-ph="Primary screenshot · 16:8"
-      ></div>
+      <Image
+        src={project.hero}
+        alt={project.heroAlt ?? project.title}
+        tone="sage"
+        label="Primary screenshot · 16:8"
+        className={styles.shot}
+      />
 
       <div className={styles.projLayout}>
         <Markdown className={styles.body}>{project.body}</Markdown>
