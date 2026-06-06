@@ -43,6 +43,8 @@ function recipeToFeed(r: Recipe): FeedItem {
     excerpt: r.excerpt,
     href: `/recipes/${r.slug}`,
     tone: 'grenadine',
+    hero: r.hero,
+    heroAlt: r.heroAlt,
   };
 }
 
@@ -54,6 +56,8 @@ function projectToFeed(p: Project): FeedItem {
     excerpt: p.summary,
     href: `/projects/${p.slug}`,
     tone: 'sage',
+    hero: p.hero,
+    heroAlt: p.heroAlt,
   };
 }
 
@@ -65,6 +69,8 @@ function postToFeed(p: Post): FeedItem {
     excerpt: p.excerpt,
     href: `/blog/${p.slug}`,
     tone: 'beeswax',
+    hero: p.hero,
+    heroAlt: p.heroAlt,
   };
 }
 

@@ -69,6 +69,21 @@ describe('content schemas', () => {
     expect(result.success).toBe(false);
   });
 
+  it('accepts optional hero + heroAlt and rejects empty strings', () => {
+    const withImage = recipeFrontmatter.safeParse({
+      ...validRecipe,
+      hero: '/images/recipes/x.jpg',
+      heroAlt: 'A finished dish',
+    });
+    expect(withImage.success).toBe(true);
+    if (withImage.success) {
+      expect(withImage.data.hero).toBe('/images/recipes/x.jpg');
+      expect(withImage.data.heroAlt).toBe('A finished dish');
+    }
+    // An empty hero string is a mistake, not "no image" — reject it.
+    expect(recipeFrontmatter.safeParse({ ...validRecipe, hero: '' }).success).toBe(false);
+  });
+
   it('coerces numeric year and ingredient amounts to strings', () => {
     const project = projectFrontmatter.safeParse({ ...validProject, year: 2025 });
     expect(project.success).toBe(true);

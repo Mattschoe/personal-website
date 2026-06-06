@@ -28,7 +28,10 @@ const base = {
   title: z.string().min(1),
   date: isoDate,
   slug: z.string().min(1).optional(),
+  // Image path (absolute `/images/...` URL under `public/`) + its alt text.
+  // Both optional: when `hero` is unset the UI shows a toned `.ph` placeholder.
   hero: z.string().min(1).optional(),
+  heroAlt: z.string().min(1).optional(),
   // Marks seed/sample content so it's easy to find and delete. Allowed on every
   // stream so the strict schemas don't reject our development fixtures.
   sample: z.boolean().optional(),
@@ -107,4 +110,8 @@ export interface FeedItem {
   excerpt: string;
   href: string;
   tone: FeedTone;
+  // Carried through from the source item so Home's featured + feed cards can
+  // show a real image; absent → the card keeps its toned placeholder.
+  hero?: string;
+  heroAlt?: string;
 }

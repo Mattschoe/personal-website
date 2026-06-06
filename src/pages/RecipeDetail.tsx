@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { getRecipe } from '../content';
 import { Markdown } from '../content/Markdown';
+import { Image } from '../components/Image';
 import { NotFound } from './NotFound';
 import styles from './RecipeDetail.module.css';
 
@@ -41,11 +42,13 @@ export function RecipeDetail() {
             </div>
           </div>
         </div>
-        <div
-          className="ph"
-          data-tone="grenadine"
-          data-ph="Finished dish · square"
-        ></div>
+        <Image
+          src={recipe.hero}
+          alt={recipe.heroAlt ?? recipe.title}
+          tone="grenadine"
+          label="Finished dish · square"
+          eager
+        />
       </section>
 
       <Markdown className={styles.intro}>{recipe.body}</Markdown>

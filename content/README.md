@@ -9,8 +9,25 @@ content/
   recipes/*.md     one file per recipe
   projects/*.md    one file per project / case study
   blog/*.md        one file per post
-  assets/          images referenced by content (Phase 8)
 ```
+
+## Images
+
+Images live under **`public/images/...`** and are referenced from front-matter by their absolute URL
+path. To add one: drop the file in (e.g.) `public/images/recipes/`, then set `hero:` on the item —
+no code change needed.
+
+```yaml
+hero: /images/recipes/charred-corn-salad.jpg
+heroAlt: A platter of blistered sweetcorn with herbs and lime   # optional
+```
+
+- **`hero`** is the image; when omitted the page shows a tasteful toned placeholder, so it's always
+  safe to leave off until you have a photo.
+- **`heroAlt`** is the alt text; if omitted it falls back to the item's `title`. Use `''`-style intent
+  only for purely decorative imagery (the portraits on Home use empty alt).
+- Use the labelled aspect ratios from the design (portrait square/3:4, recipe 4:3/square, project
+  16:8, post lead 16:8) — the box is fixed, so an off-ratio image is cropped to `cover`.
 
 Each file is YAML front-matter (between `---` lines) followed by a Markdown **body**. Front-matter is
 validated at build time: an unknown or malformed field **fails the build** with a message naming the
@@ -20,7 +37,7 @@ file, so typos can't slip through silently.
 
 - **`slug`** is optional — it defaults to the filename (`weeknight-tomato-soup.md` → `/recipes/weeknight-tomato-soup`). Set it explicitly only to override.
 - **`date`** must be `YYYY-MM-DD`. Streams sort newest-first, and the Home "Latest" feed merges all three by date.
-- **`hero`** (optional) is an image path; real images arrive in Phase 8, so it's safe to omit for now.
+- **`hero`** / **`heroAlt`** (optional) point at an image under `public/images/` — see **Images** above.
 - **`sample: true`** marks development seed content. Delete those files when real content lands.
 
 ## Recipes (`content/recipes/`)
@@ -37,7 +54,7 @@ file, so typos can't slip through silently.
 | `steps` | yes | list of strings (the method) |
 | `excerpt` | no | one-line summary; derived from the body if omitted |
 | `note` | no | a closing tip/callout |
-| `slug`, `hero`, `sample` | no | see conventions above |
+| `slug`, `hero`, `heroAlt`, `sample` | no | see conventions above |
 
 The body is the recipe's intro prose.
 
@@ -54,7 +71,7 @@ The body is the recipe's intro prose.
 | `stack` | yes | list of strings (tech chips) |
 | `metrics` | no | e.g. `2.1k stars · 40k installs` |
 | `links` | no | object with optional `repo`, `demo`, `docs` URLs |
-| `slug`, `hero`, `sample` | no | see conventions above |
+| `slug`, `hero`, `heroAlt`, `sample` | no | see conventions above |
 
 The body is the case-study article.
 
@@ -66,7 +83,7 @@ The body is the case-study article.
 | `date` | yes | `YYYY-MM-DD` |
 | `tags` | yes | list of strings |
 | `excerpt` | no | one-line summary; derived from the body if omitted |
-| `slug`, `hero`, `sample` | no | see conventions above |
+| `slug`, `hero`, `heroAlt`, `sample` | no | see conventions above |
 
 Reading time is **computed automatically** from the body — don't set it. The body is the post
 article.

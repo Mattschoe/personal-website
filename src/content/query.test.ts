@@ -48,4 +48,20 @@ describe('getLatestFeed', () => {
     expect(getLatestFeed(3)).toHaveLength(3);
     expect(getLatestFeed(0)).toHaveLength(0);
   });
+
+  it('carries hero + heroAlt through from the source item', () => {
+    // The keys are always mapped (value may be undefined when an item has no
+    // image) — this guards against the pass-through being dropped, and that the
+    // value matches the source for any item that does set a hero.
+    const byHref = new Map<string, string | undefined>();
+    for (const r of getRecipes()) byHref.set(`/recipes/${r.slug}`, r.hero);
+    for (const p of getProjects()) byHref.set(`/projects/${p.slug}`, p.hero);
+    for (const p of getPosts()) byHref.set(`/blog/${p.slug}`, p.hero);
+
+    for (const item of getLatestFeed()) {
+      expect('hero' in item).toBe(true);
+      expect('heroAlt' in item).toBe(true);
+      expect(item.hero).toBe(byHref.get(item.href));
+    }
+  });
 });
