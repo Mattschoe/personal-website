@@ -1,0 +1,124 @@
+/* Projects index layout — ported from the inline <style> block in
+   design-reference/projects/index.html (these rules are NOT in global.css).
+   Tokens only; CSS-Module-scoped. The page-head is minimal (bare "Projects"
+   headline), consistent with the clean Blog/Recipes indexes — see
+   Blog.module.css. The alternating row layout is pure CSS (:nth-child(even)
+   flips the columns + media order), so the JSX stays uniform per row. */
+
+.pageHead {
+  padding-block: var(--s-8) var(--s-6);
+}
+.pageHead h1 {
+  font-size: var(--fs-h1);
+  margin: 0;
+  max-width: 16ch;
+}
+
+.projList {
+  margin-top: var(--s-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+}
+
+.proj {
+  display: grid;
+  grid-template-columns: 1.1fr 1.3fr;
+  gap: var(--s-6);
+  align-items: stretch;
+  background: var(--surface);
+  border: var(--border-w) solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.proj:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow);
+}
+.proj:nth-child(even) {
+  grid-template-columns: 1.3fr 1.1fr;
+}
+.proj:nth-child(even) .projMedia {
+  order: 2;
+}
+
+.projMedia {
+  min-height: 280px;
+  display: flex;
+}
+.projMedia :global(.ph) {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  border: 0;
+  border-radius: 0;
+}
+
+.projBody {
+  padding: var(--s-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.projBody h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-h2);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.stack {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.stack span {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.3em 0.55em;
+}
+
+.projTop {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  color: var(--c-project);
+}
+.status::before {
+  content: '';
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+@media (max-width: 880px) {
+  .proj,
+  .proj:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+  .proj:nth-child(even) .projMedia {
+    order: 0;
+  }
+  .projMedia {
+    min-height: 200px;
+  }
+}
