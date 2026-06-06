@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { getLatestFeed, formatDate, type FeedItem } from '../content';
+import { Image } from '../components/Image';
 import styles from './Home.module.css';
 
 // Real social URLs, matching Footer.tsx.
@@ -75,9 +76,7 @@ export function Home() {
             </div>
           </div>
           <div className={styles.heroPhoto}>
-            <div className="ph" data-tone="sage" data-ph="Portrait · square">
-              <span className="ph-glyph">M</span>
-            </div>
+            <Image tone="sage" label="Portrait · square" glyph="M" alt="" eager />
           </div>
         </div>
       </section>
@@ -97,13 +96,14 @@ export function Home() {
             to={featured.href}
             aria-label={`Read featured ${TYPE_META[featured.type].label.toLowerCase()}`}
           >
-            <div
-              className="ph"
-              data-tone={featured.tone}
-              data-ph="Featured image · 16:10"
-            >
-              <span className="ph-glyph">✶</span>
-            </div>
+            <Image
+              src={featured.hero}
+              alt={featured.heroAlt ?? featured.title}
+              tone={featured.tone}
+              label="Featured image · 16:10"
+              glyph="✶"
+              eager
+            />
             <div className={styles.featuredBody}>
               <div className="card-top">
                 <span className={`tag ${TYPE_META[featured.type].tagClass}`}>
@@ -130,7 +130,12 @@ export function Home() {
             const meta = TYPE_META[item.type];
             return (
               <Link className="card" to={item.href} key={item.href}>
-                <div className="ph" data-tone={item.tone} data-ph={meta.phLabel}></div>
+                <Image
+                  src={item.hero}
+                  alt={item.heroAlt ?? item.title}
+                  tone={item.tone}
+                  label={meta.phLabel}
+                />
                 <div className="card-top">
                   <span className={`tag ${meta.tagClass}`}>{meta.label}</span>
                   <span className="card-meta">{formatDate(item.date)}</span>
@@ -146,9 +151,7 @@ export function Home() {
       {/* ============ ABOUT STRIP ============ */}
       <section className={`about-strip ${styles.aboutStrip}`} id="about">
         <div className={`container ${styles.aboutGrid}`}>
-          <div className="ph" data-tone="latte" data-ph="Portrait · 3:4">
-            <span className="ph-glyph">M</span>
-          </div>
+          <Image tone="latte" label="Portrait · 3:4" glyph="M" alt="" />
           <div>
             <span className="kicker"></span>
             <h2>About me</h2>

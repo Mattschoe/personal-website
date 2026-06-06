@@ -1,0 +1,7 @@
+/* When a real image fills the box, drop the placeholder border so the photo
+   sits flush. Sizing/shape still come from the global `.ph` rules and the
+   call-site `:global(.ph)` overrides; the `.ph > img` cover rule lives in
+   global.css alongside the other placeholder styles. */
+.filled {
+  border: 0;
+}

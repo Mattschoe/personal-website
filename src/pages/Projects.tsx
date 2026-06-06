@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { getProjects } from '../content';
+import { Image } from '../components/Image';
 import styles from './Projects.module.css';
 
 // Tones cycle through the placeholder palette so the rows have visual variety
@@ -29,11 +30,12 @@ export function Projects() {
               key={project.slug}
             >
               <div className={styles.projMedia}>
-                <div
-                  className="ph"
-                  data-tone={TONES[i % TONES.length]}
-                  data-ph="Project screenshot"
-                ></div>
+                <Image
+                  src={project.hero}
+                  alt={project.heroAlt ?? project.title}
+                  tone={TONES[i % TONES.length]}
+                  label="Project screenshot"
+                />
               </div>
               <div className={styles.projBody}>
                 <div className={styles.projTop}>

@@ -192,6 +192,11 @@ p{ margin:0 0 1em; text-wrap:pretty; }
 .ph[data-tone="latte"]{ background:color-mix(in srgb, var(--latte) 45%, var(--bg)); }
 .ph .ph-glyph{ font-family:var(--font-display); font-weight:800; font-size:2rem;
   color:var(--ink); opacity:.32; }
+/* A real image fills the placeholder box (which is position:relative;
+   overflow:hidden), so it inherits the box's aspect-ratio/shape — no layout
+   shift — and clips to any border-radius (e.g. circular portraits). */
+.ph > img{ position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block; }
 
 /* =====================================================================
    HEADER / NAV
