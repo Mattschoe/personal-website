@@ -102,8 +102,8 @@ Headings: `letter-spacing:-.02em`, `line-height:1.02`, `text-wrap:balance`. Body
 
 ## 8. Page anatomy
 - **Home** `/` — Hero ("Hi! I'm Matt" eyebrow, title, lead, circular portrait, quick-links + GitHub/LinkedIn) → **Latest** (one featured newest item + 3-up mixed grid across all streams, each card tagged) → About strip.
-- **Recipes index** — page head + filter chips → 3-up card grid.
-- **Single recipe** — breadcrumb → split hero (intro + square photo) → stat strip (time/yield/effort) → 2-col: sticky ingredients + numbered method + "note" callout.
+- **Recipes index** — minimal page head (bare "Recipes" headline, no editorial lead — matches the clean Blog index) + filter chips → 3-up card grid. The chips are derived from the categories present in content and filter the grid client-side, syncing the active filter to a `?category=` query.
+- **Single recipe** — breadcrumb → split hero (intro + square photo) → stat strip (time/yield/effort) → **rendered Markdown body in a centered 680px reading column** (the clean, blog-aligned approach — the `recipe.html` mockup has no body area; we render the post-style `.read` column instead) → 2-col: sticky ingredients + numbered method + "note" callout.
 - **Projects index** — page head → full-width alternating rows: status dot, year, title, summary, stack chips, "case study →".
 - **Single project** — breadcrumb → title + actions (GitHub/demo/docs) → wide screenshot → article + sticky spec rail.
 - **Blog index** — page head → editorial post rows: date · title + excerpt · read-time; whole row hovers.
@@ -124,7 +124,7 @@ Headings: `letter-spacing:-.02em`, `line-height:1.02`, `text-wrap:balance`. Body
 - **Images:** every `.ph` is a placeholder → real `<img>` at labelled ratios. Supply: portrait (square + 3:4), recipe photos (4:3 / square), project screenshots (16:8), post lead images (16:8).
 - **Mobile nav:** hidden < 640px in reference → build a hamburger/drawer.
 - **Links:** social + email are `#` placeholders → wire real URLs.
-- **Recipe filters** are visual only → make functional (filter by category).
+- ~~**Recipe filters** are visual only → make functional (filter by category).~~ **Done (Phase 6):** chips are derived from content categories, filter the grid client-side, and sync to `?category=`.
 - **Body copy** in the About section and elsewhere is Lorem Ipsum / placeholder → Matt to write.
 - **SEO:** per-page meta description + OG image (use the hero); RSS for the blog.
 - **A11y:** keep visible focus styles when templatising; contrast pairs are already chosen.

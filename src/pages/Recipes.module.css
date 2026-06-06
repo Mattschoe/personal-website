@@ -1,0 +1,60 @@
+/* Recipes index layout — ported from the inline <style> block in
+   design-reference/recipes/index.html (these rules are NOT in global.css).
+   Tokens only; CSS-Module-scoped. The page-head is minimal (bare "Recipes"
+   headline), consistent with the clean Blog index — see Blog.module.css. */
+
+.pageHead {
+  padding-block: var(--s-8) var(--s-6);
+}
+.pageHead h1 {
+  font-size: var(--fs-h1);
+  margin: 0;
+  max-width: 16ch;
+}
+
+.filters {
+  display: flex;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  margin-top: var(--s-5);
+}
+.chip {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-decoration: none;
+  color: var(--ink);
+  padding: 0.45em 0.9em;
+  border: var(--border-w) solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.chip[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--bg);
+}
+.chip:hover {
+  background: var(--bg-2);
+}
+.chip[aria-pressed='true']:hover {
+  background: var(--ink);
+}
+
+.recipeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-6) var(--s-5);
+  margin-top: var(--s-7);
+}
+
+@media (max-width: 880px) {
+  .recipeGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .recipeGrid {
+    grid-template-columns: 1fr;
+  }
+}
