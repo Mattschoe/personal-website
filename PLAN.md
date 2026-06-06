@@ -199,7 +199,7 @@ imagery for the `.ph` placeholders remains Phase 8.
 
 ---
 
-## ☐ Phase 5 — Blog (index + post template)
+## ☑ Phase 5 — Blog (index + post template)
 **Goal:** the Blog stream end to end.
 **Scope:** Blog index as editorial post rows (date · title + excerpt · read-time, whole row hovers);
 single post = left-aligned header (tag, title, byline), centered lead figure, 680px reading column
@@ -208,6 +208,30 @@ Match `design-reference/blog/index.html` and `post.html`.
 **Done when:** all posts list and link correctly; each post renders its Markdown body in the reading
 column with correct article styling; reading time is accurate.
 **Depends on:** Phases 2, 3.
+
+**Delivered:** `Blog.tsx` rebuilt from `getPosts()` (pre-sorted newest-first) as editorial
+`.postRow` links → `/blog/<slug>`; `PostDetail.tsx` rebuilt as the full reading template (crumb →
+`Essay` tag + title + byline → 16:8 lead `.ph` → `.read` body → `#tag` row), falling back to
+`NotFound` for unknown slugs. Page-specific styles ported verbatim from the reference inline
+`<style>` blocks into co-located CSS Modules (`Blog.module.css`, `PostDetail.module.css`, tokens
+only, global classes via `:global()`); the core `.read`/`.dropcap`/`.card` etc. already live in
+`global.css`. Drop-cap added as an opt-in `dropcap` prop on the shared `<Markdown>` component
+(`src/content/Markdown.tsx`) — tags only the first rendered `<p>` with the global `.dropcap` class,
+reusing `.dropcap::first-letter`. **Two deviations from the reference, requested by Matt:** no
+reading time anywhere (the `.post-read` column + byline read-time are dropped; the `readingTime`
+helper stays, just unused in the UI), and no "keep reading" 2-up (the `.next-read` section is omitted
+— the post ends cleanly after its tag row). `routes.tsx` unchanged (`/blog` + `/blog/:slug` already
+wired in Phase 3). Tests: `Blog.test.tsx` (row-per-post, newest-first, hrefs, dates, no read-time)
+and `PostDetail.test.tsx` (tag/crumb/byline, dropcap on first paragraph only, `#`-tag row, no
+read-time / no keep-reading, NotFound for bad slug). 64 tests green; typecheck + lint clean;
+`npm run build` prerenders `/blog` + one HTML file per post (dropcap baked in, no read-time/keep-
+reading markup). Verified visually with Playwright on `/blog` and `/blog/why-plain-text` at 1280/390
+in both themes — matches the reference minus the two intended differences.
+
+**For Phase 6/7:** the `.crumb` + detail-page scaffolding (a `.container`-wrapped fragment, no nested
+`<main>`; `getX(slug)` → `NotFound` fallback) is now established and reusable for the recipe/project
+templates. The `<Markdown dropcap>` prop is blog-only; other streams call `<Markdown>` plain. Real
+imagery for the `.ph` placeholders (byline portrait, lead figure) remains Phase 8.
 
 ---
 

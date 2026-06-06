@@ -1,0 +1,85 @@
+/* Single-post layout — ported from the inline <style> block in
+   design-reference/blog/post.html (these rules are NOT in global.css). Tokens
+   only; CSS-Module-scoped. The reference's .next-read "keep reading" block is
+   intentionally omitted (Matt wants a clean ending). */
+
+.crumb {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  padding-block: var(--s-5) 0;
+  display: flex;
+  gap: 0.6em;
+  align-items: center;
+}
+.crumb a {
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+.crumb a:hover {
+  color: var(--accent);
+}
+
+.postHeader {
+  max-width: var(--maxw-read);
+  margin-inline: auto;
+  padding-block: var(--s-6);
+  text-align: left;
+}
+.postHeader h1 {
+  font-size: var(--fs-h1);
+  margin: var(--s-4) 0;
+}
+
+.byline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  justify-content: flex-start;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.byline :global(.ph) {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.leadFigure {
+  margin: var(--s-6) auto var(--s-7);
+}
+.leadFigure :global(.ph) {
+  aspect-ratio: 16/8;
+}
+
+.postFoot {
+  max-width: var(--maxw-read);
+  margin: var(--s-8) auto 0;
+  padding-top: var(--s-6);
+  border-top: var(--border-w) solid var(--line-strong);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+.tagRow {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.tagRow span {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.3em 0.7em;
+}
