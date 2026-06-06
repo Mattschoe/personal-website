@@ -110,7 +110,7 @@ Headings: `letter-spacing:-.02em`, `line-height:1.02`, `text-wrap:balance`. Body
 - **Single post** — left-aligned header (tag, title, byline) → centered lead figure → 680px reading column w/ dropcap → tag row → "keep reading" 2-up.
 
 ## 9. Content model (front-matter)
-**Recipe:** `title, slug, date, excerpt, hero, heroAlt?, category, time, yield, effort, ingredients[{amount,item}], steps[], note?`
+**Recipe:** `title, slug, date, excerpt, hero, heroAlt?, category, time, yield, effort, ingredients[{amount,item}|{group}], steps[], note?`
 **Project:** `title, slug, date, summary, hero, heroAlt?, status, year, stack[], role, metrics?, links{repo,demo,docs}, body`
 **Post:** `title, slug, date, readingTime(auto), excerpt, hero, heroAlt?, tags[], body`
 **Home feed:** all three normalised to `{type, title, date, excerpt, href, tone, hero?, heroAlt?}`, sorted by `date` desc, top 4–7.
