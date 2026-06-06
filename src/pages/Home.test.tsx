@@ -72,4 +72,11 @@ describe('Home', () => {
     const cta = screen.getByRole('link', { name: /get in touch/i });
     expect(cta).toHaveAttribute('href', 'mailto:matthias.s.nielsen@protonmail.com');
   });
+
+  it('renders no <main> of its own — Layout owns that landmark', () => {
+    // Home is a child of Layout's <main>; adding another here would nest the
+    // main landmark (invalid + an a11y violation).
+    const { container } = renderHome();
+    expect(container.querySelector('main')).toBeNull();
+  });
 });

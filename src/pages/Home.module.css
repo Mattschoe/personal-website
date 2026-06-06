@@ -159,6 +159,9 @@
   font-size: var(--fs-h2);
   margin-bottom: var(--s-4);
 }
+.aboutActions {
+  margin-top: var(--s-4);
+}
 
 @media (max-width: 880px) {
   .heroGrid {
