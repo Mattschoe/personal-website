@@ -15,9 +15,9 @@ export function absoluteUrl(path: string): string {
   return siteConfig.url + rel;
 }
 
-/** `"<title> — Matt"`, or the bare site title for Home (no `title`). */
+/** The bare page title (subpages), or the site title for Home (no `title`). */
 export function pageTitle(title?: string): string {
-  return title ? `${title} — ${siteConfig.name}` : siteConfig.title;
+  return title ?? siteConfig.title;
 }
 
 export type SeoType = 'website' | 'article';

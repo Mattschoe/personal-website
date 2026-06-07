@@ -19,7 +19,7 @@ describe('Seo', () => {
   it('lands title, description and canonical in document.head', async () => {
     renderSeo(<Seo title="Blog" description="The blog." />, '/blog');
 
-    await waitFor(() => expect(document.title).toBe('Blog — Matt'));
+    await waitFor(() => expect(document.title).toBe('Blog'));
     expect(
       head().querySelector('meta[name="description"]')?.getAttribute('content'),
     ).toBe('The blog.');

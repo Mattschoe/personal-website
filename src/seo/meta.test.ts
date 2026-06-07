@@ -31,8 +31,8 @@ describe('absoluteUrl', () => {
 });
 
 describe('pageTitle', () => {
-  it('suffixes a page title with the site name', () => {
-    expect(pageTitle('Recipes')).toBe('Recipes — Matt');
+  it('uses the bare page title for subpages', () => {
+    expect(pageTitle('Recipes')).toBe('Recipes');
   });
 
   it('uses the bare site title for Home (no title)', () => {
