@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getRecipe } from '../content';
 import { Markdown } from '../content/Markdown';
 import { Image } from '../components/Image';
+import { useRecipeChecklist } from '../components/useRecipeChecklist';
 import { Seo } from '../seo/Seo';
 import { recipeJsonLd } from '../seo/meta';
 import { NotFound } from './NotFound';
@@ -15,7 +16,19 @@ import styles from './RecipeDetail.module.css';
 export function RecipeDetail() {
   const { slug } = useParams();
   const recipe = slug ? getRecipe(slug) : undefined;
+  // Hooks must run unconditionally; pass a stable empty slug for the not-found
+  // case (its checklist is never rendered).
+  const { isChecked, toggle } = useRecipeChecklist(recipe?.slug ?? '');
   if (!recipe) return <NotFound />;
+
+  const groups = recipe.ingredientGroups ?? [{ items: recipe.ingredients }];
+  // Running offset so each ingredient gets a stable flat index across groups —
+  // the index the checklist persists, independent of how items are grouped.
+  const groupOffsets: number[] = [];
+  groups.reduce((acc, g, i) => {
+    groupOffsets[i] = acc;
+    return acc + g.items.length;
+  }, 0);
 
   return (
     <div className="container">
@@ -64,33 +77,54 @@ export function RecipeDetail() {
       <section className={styles.recipeBody}>
         <aside className={styles.ingredients}>
           <h2>Ingredients</h2>
-          {(recipe.ingredientGroups ?? [{ items: recipe.ingredients }]).map(
-            (group, gi) => (
-              <div key={gi}>
-                {group.heading && (
-                  <h3 className={styles.ingGroup}>{group.heading}</h3>
-                )}
-                <ul className={styles.ingList}>
-                  {group.items.map((ing, i) => (
-                    <li key={i}>
-                      <span className={styles.amt}>{ing.amount}</span>
-                      <span>{ing.item}</span>
+          {groups.map((group, gi) => (
+            <div key={gi}>
+              {group.heading && (
+                <h3 className={styles.ingGroup}>{group.heading}</h3>
+              )}
+              <ul className={styles.ingList}>
+                {group.items.map((ing, i) => {
+                  const idx = groupOffsets[gi] + i;
+                  const checked = isChecked('ingredients', idx);
+                  return (
+                    <li key={i} className={checked ? styles.checked : undefined}>
+                      <label className={styles.ingLabel}>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggle('ingredients', idx)}
+                        />
+                        <span className={styles.ingText}>
+                          <span className={styles.amt}>{ing.amount}</span>
+                          {ing.item}
+                        </span>
+                      </label>
                     </li>
-                  ))}
-                </ul>
-              </div>
-            ),
-          )}
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </aside>
 
         <div className={styles.method}>
           <h2>Method</h2>
           <ol className={styles.steps}>
-            {recipe.steps.map((step, i) => (
-              <li key={i}>
-                <p>{step}</p>
-              </li>
-            ))}
+            {recipe.steps.map((step, i) => {
+              const checked = isChecked('steps', i);
+              return (
+                <li key={i} className={checked ? styles.checked : undefined}>
+                  <button
+                    type="button"
+                    className={styles.stepBtn}
+                    aria-pressed={checked}
+                    onClick={() => toggle('steps', i)}
+                  >
+                    <span className={styles.stepText}>{step}</span>
+                  </button>
+                </li>
+              );
+            })}
           </ol>
           {recipe.note && (
             <div className={styles.note}>
