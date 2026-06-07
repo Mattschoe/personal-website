@@ -115,6 +115,45 @@ Body.
     const typo = recipeMd.replace('effort: Easy', 'effort: Easy\nbogus: nope');
     expect(() => parseRecipes({ '/content/recipes/typo.md': typo })).toThrow(/bogus/);
   });
+
+  it('throws naming the file on malformed YAML (not just invalid fields)', () => {
+    // An unterminated quote makes gray-matter/js-yaml throw before zod runs.
+    const badYaml = recipeMd.replace('title: Test Skewers', 'title: "Unterminated');
+    expect(() => parseRecipes({ '/content/recipes/bad-yaml.md': badYaml })).toThrow(
+      /\/content\/recipes\/bad-yaml\.md/,
+    );
+  });
+
+  it('hints about tabs when YAML indentation is bad', () => {
+    // A tab before a nested key is the canonical "bad indentation" mistake.
+    const tabbed = recipeMd.replace('  - amount: 2\n', '\t- amount: 2\n');
+    expect(() => parseRecipes({ '/content/recipes/tabs.md': tabbed })).toThrow(
+      /indent with spaces, not tabs/,
+    );
+  });
+
+  it('labels a missing required field as missing, not a cryptic type error', () => {
+    const bad = recipeMd.replace('category: Grilling\n', '');
+    expect(() => parseRecipes({ '/content/recipes/no-cat.md': bad })).toThrow(
+      /category: required, but missing/,
+    );
+  });
+
+  it('names the actual type when a field is the wrong type', () => {
+    const bad = recipeMd.replace('steps:\n  - Grill.\n', 'steps: nope\n');
+    expect(() => parseRecipes({ '/content/recipes/wrong-type.md': bad })).toThrow(
+      /steps: should be a list, but got text/,
+    );
+  });
+
+  it('leads with a structural cause when no fields parse at all', () => {
+    // Empty front-matter block → gray-matter yields {} → every field "missing".
+    const empty = `---\n\n---\n\nBody.\n`;
+    expect(() => parseRecipes({ '/content/recipes/empty.md': empty })).toThrow(
+      /no fields were found/,
+    );
+    expect(() => parseRecipes({ '/content/recipes/empty.md': empty })).toThrow(/tabs/);
+  });
 });
 
 describe('parseProjects', () => {
