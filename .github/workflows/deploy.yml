@@ -1,23 +1,24 @@
-name: Build & Deploy
+name: Build & Publish
 
-# Push to main → checks → build image → push to GHCR → deploy to the VPS.
+# Push to main → checks → build image → push to GHCR. Deployment is pull-based:
+# the VPS runs podman-auto-update on a timer and rolls to the new :latest digest
+# itself (see deploy/personal-website.container). CI never touches the VPS.
 # Also runnable manually from the Actions tab.
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# Serialize deploys but never cancel one mid-flight: cancelling between the
-# image push and the SSH `pull && up -d` could leave the VPS half-updated. A
-# newer push queues and runs after the current deploy finishes.
+# Serialize image publishes but never cancel one mid-flight; a newer push queues
+# and runs after the current one finishes.
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: publish-${{ github.ref }}
   cancel-in-progress: false
 
 env:
   # Must be lowercase for a valid Docker ref — hardcoded rather than derived from
   # ${{ github.repository_owner }} (which is mixed-case) so the pushed tag always
-  # matches the image referenced in docker-compose.yml.
+  # matches the image referenced in deploy/personal-website.container.
   IMAGE: ghcr.io/mattschoe/personal-website
   SITE_URL: https://mattschoe.dev
 
@@ -27,8 +28,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      image_ref: ${{ steps.meta.outputs.tags }}
     steps:
       - uses: actions/checkout@v4
 
@@ -73,42 +72,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-  deploy:
-    needs: build-test-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Copy compose file to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_SSH_PORT || 22 }}
-          source: docker-compose.yml
-          target: projects/personal-website
-
-      - name: Pull image & restart on VPS
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_SSH_PORT || 22 }}
-          script: |
-            set -euo pipefail
-            cd ~/projects/personal-website
-            # Pick whichever compose front-end this host has for Podman.
-            if podman compose version >/dev/null 2>&1; then
-              compose="podman compose"
-            elif command -v podman-compose >/dev/null 2>&1; then
-              compose="podman-compose"
-            else
-              echo "No podman compose / podman-compose found on host" >&2
-              exit 1
-            fi
-            $compose pull
-            $compose up -d
-            podman image prune -f
