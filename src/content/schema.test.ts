@@ -94,6 +94,28 @@ describe('content schemas', () => {
       ingredients: [{ amount: 1, item: 'lime' }],
     });
     expect(recipe.success).toBe(true);
-    if (recipe.success) expect(recipe.data.ingredients[0].amount).toBe('1');
+    if (recipe.success) expect(recipe.data.ingredients[0]).toMatchObject({ amount: '1' });
+  });
+
+  it('accepts grouped ingredients and rejects a mixed flat/grouped list', () => {
+    const grouped = recipeFrontmatter.safeParse({
+      ...validRecipe,
+      ingredients: [
+        { heading: 'Marinade', items: [{ amount: '2 tbsp', item: 'soy' }] },
+        { heading: 'Skewers', items: [{ amount: '600 g', item: 'chicken' }] },
+      ],
+    });
+    expect(grouped.success).toBe(true);
+
+    // A list mixing a flat ingredient with a group matches neither array
+    // variant of the union, so it must fail.
+    const mixed = recipeFrontmatter.safeParse({
+      ...validRecipe,
+      ingredients: [
+        { amount: '1', item: 'lime' },
+        { heading: 'Sauce', items: [{ amount: '2 tbsp', item: 'soy' }] },
+      ],
+    });
+    expect(mixed.success).toBe(false);
   });
 });

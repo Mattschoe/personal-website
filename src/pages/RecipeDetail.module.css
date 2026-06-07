@@ -94,6 +94,18 @@
   font-size: var(--fs-h3);
   margin-bottom: var(--s-4);
 }
+.ingGroup {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  margin: var(--s-5) 0 var(--s-1);
+}
+/* First group heading sits tight under the "Ingredients" h2. */
+.ingredients > div:first-of-type .ingGroup {
+  margin-top: 0;
+}
 .ingList {
   list-style: none;
   padding: 0;

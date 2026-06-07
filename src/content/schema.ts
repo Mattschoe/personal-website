@@ -38,6 +38,15 @@ const base = {
   sample: z.boolean().optional(),
 };
 
+// A single ingredient. `amount` may arrive as a YAML number (e.g. `amount: 1`).
+const ingredient = z.strictObject({ amount: text, item: z.string().min(1) });
+
+// A headed group of ingredients (e.g. "Marinade", "Sauce").
+const ingredientGroup = z.strictObject({
+  heading: z.string().min(1),
+  items: z.array(ingredient).min(1),
+});
+
 export const recipeFrontmatter = z.strictObject({
   ...base,
   excerpt: z.string().min(1).optional(),
@@ -45,9 +54,15 @@ export const recipeFrontmatter = z.strictObject({
   time: z.string().min(1),
   yield: z.string().min(1),
   effort: z.string().min(1),
-  ingredients: z
-    .array(z.strictObject({ amount: text, item: z.string().min(1) }))
-    .min(1),
+  // Either a flat list of ingredients (the common case) or a list of headed
+  // groups. The parser normalises both into `ingredientGroups` on the loaded
+  // Recipe while keeping a flattened `ingredients` for JSON-LD/feeds. The two
+  // array variants are unambiguous: a flat item has `amount`/`item`, a group
+  // has `heading`/`items`, and strict objects reject the other's keys.
+  ingredients: z.union([
+    z.array(ingredient).min(1),
+    z.array(ingredientGroup).min(1),
+  ]),
   steps: z.array(z.string().min(1)).min(1),
   note: z.string().min(1).optional(),
 });
@@ -79,13 +94,27 @@ export type RecipeFrontmatter = z.infer<typeof recipeFrontmatter>;
 export type ProjectFrontmatter = z.infer<typeof projectFrontmatter>;
 export type PostFrontmatter = z.infer<typeof postFrontmatter>;
 
+// A single ingredient and a (possibly headed) group, in their loaded shape.
+// `heading` is optional here because a flat list normalises to one unheaded
+// group. The raw front-matter union lives on `RecipeFrontmatter['ingredients']`.
+export type Ingredient = z.infer<typeof ingredient>;
+export interface IngredientGroup {
+  heading?: string;
+  items: Ingredient[];
+}
+
 // Final, loaded item types: front-matter + the loader's derived fields. `slug`,
 // `excerpt` and `body` are always present after loading; posts also get an
 // auto-derived `readingTime`.
-export type Recipe = RecipeFrontmatter & {
+export type Recipe = Omit<RecipeFrontmatter, 'ingredients'> & {
   slug: string;
   excerpt: string;
   body: string;
+  // Flattened ingredient list (across all groups) — used by JSON-LD and feeds.
+  ingredients: Ingredient[];
+  // Normalised groups for rendering. Always set by the parser; optional so
+  // hand-written fixtures/mocks may omit it and fall back to a flat list.
+  ingredientGroups?: IngredientGroup[];
 };
 
 export type Project = ProjectFrontmatter & {

@@ -64,14 +64,23 @@ export function RecipeDetail() {
       <section className={styles.recipeBody}>
         <aside className={styles.ingredients}>
           <h2>Ingredients</h2>
-          <ul className={styles.ingList}>
-            {recipe.ingredients.map((ing, i) => (
-              <li key={i}>
-                <span className={styles.amt}>{ing.amount}</span>
-                <span>{ing.item}</span>
-              </li>
-            ))}
-          </ul>
+          {(recipe.ingredientGroups ?? [{ items: recipe.ingredients }]).map(
+            (group, gi) => (
+              <div key={gi}>
+                {group.heading && (
+                  <h3 className={styles.ingGroup}>{group.heading}</h3>
+                )}
+                <ul className={styles.ingList}>
+                  {group.items.map((ing, i) => (
+                    <li key={i}>
+                      <span className={styles.amt}>{ing.amount}</span>
+                      <span>{ing.item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ),
+          )}
         </aside>
 
         <div className={styles.method}>
