@@ -414,7 +414,7 @@ is set only from an item `hero`). `VITE_SITE_URL` is wired and ready for the dep
 
 ---
 
-## ☐ Phase 10 — Dockerize & CI/CD deploy to VPS
+## ☑ Phase 10 — Dockerize & CI/CD deploy to VPS — **Done**
 **Goal:** push Markdown to `main` → it's live, with no manual steps.
 **Scope:** multi-stage `Dockerfile` (Node build → nginx serving `dist/`); `nginx.conf` (gzip/brotli,
 long-cache hashed assets, correct routing for prerendered pages + SPA fallback for unknown paths,
@@ -426,6 +426,16 @@ in the README.
 the pipeline runs, with no other action. Theme, routes, and feeds all work in the deployed container.
 **Depends on:** all prior phases (can be bootstrapped earlier as a walking skeleton if desired —
 deploying a stub after Phase 2 is a reasonable optional early win).
+**Delivered:** multi-stage `Dockerfile` (`node:22-alpine` build → `nginx:1.27-alpine`); `nginx.conf`
+(clean-URL `try_files`, immutable long-cache for `/assets`, no-cache HTML/XML, gzip, security
+headers — brotli skipped, no module in `nginx:alpine`); `docker-compose.yml` wired to the existing
+Traefik stack (external `traefik-net`, `websecure`, certresolver `myresolver`, `Host(mattschoe.dev)`);
+`.github/workflows/deploy.yml` (push to `main`: npm ci → typecheck → lint → test → build & push image
+to GHCR → SCP compose + SSH `podman compose pull && up -d`, compose-cmd auto-detected). README
+documents the add-a-post workflow, required secrets, and one-time setup. Verified locally: image built
+with Podman, all routes/feeds/headers correct, both themes render at 1280/390px.
+**One-time setup (Matt):** add secrets `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY` (+ optional `VPS_SSH_PORT`);
+set the GHCR package visibility to Public after first push; ensure podman linger + DNS.
 
 ---
 
