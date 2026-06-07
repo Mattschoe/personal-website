@@ -54,9 +54,20 @@ file, so typos can't slip through silently.
 | `steps` | yes | list of strings (the method) |
 | `excerpt` | no | one-line summary; derived from the body if omitted |
 | `note` | no | a closing tip/callout |
+| `pairsWith` | no | list of other recipe slugs to surface under "Goes well with" |
 | `slug`, `hero`, `heroAlt`, `sample` | no | see conventions above |
 
 The body is the recipe's intro prose.
+
+`pairsWith` lists the **slugs** of other recipes (a recipe's slug is its
+filename without `.md`, unless overridden by a `slug` field). Each must resolve
+to a real recipe — a typo or a recipe pairing with itself fails the build:
+
+```yaml
+pairsWith:
+  - charred-corn-salad
+  - weeknight-tomato-soup
+```
 
 `ingredients` can be a flat list:
 

@@ -140,7 +140,7 @@ function parseAll(modules: Record<string, string>): Parsed[] {
 }
 
 export function parseRecipes(modules: Record<string, string>): Recipe[] {
-  return parseAll(modules)
+  const recipes = parseAll(modules)
     .map(({ path, data, body }) => {
       const result = recipeFrontmatter.safeParse(data);
       if (!result.success) fail(path, result.error, data);
@@ -156,6 +156,25 @@ export function parseRecipes(modules: Record<string, string>): Recipe[] {
       } satisfies Recipe;
     })
     .sort(byDateDesc((r) => r.slug));
+
+  // Cross-reference check: every `pairsWith` slug must resolve to a real
+  // recipe (and not the recipe itself). A typo fails the build loudly rather
+  // than rendering a dead "Goes well with" link.
+  const slugs = new Set(recipes.map((r) => r.slug));
+  for (const recipe of recipes) {
+    for (const ref of recipe.pairsWith ?? []) {
+      if (ref === recipe.slug) {
+        throw new Error(`Recipe "${recipe.slug}" lists itself in pairsWith.`);
+      }
+      if (!slugs.has(ref)) {
+        throw new Error(
+          `Recipe "${recipe.slug}" pairs with unknown recipe slug "${ref}".`,
+        );
+      }
+    }
+  }
+
+  return recipes;
 }
 
 export function parseProjects(modules: Record<string, string>): Project[] {

@@ -65,6 +65,9 @@ export const recipeFrontmatter = z.strictObject({
   ]),
   steps: z.array(z.string().min(1)).min(1),
   note: z.string().min(1).optional(),
+  // Slugs of other recipes this one pairs with. Validated at parse time:
+  // every slug must resolve to a real recipe (see parse.ts).
+  pairsWith: z.array(z.string().min(1)).min(1).optional(),
 });
 
 export const projectFrontmatter = z.strictObject({
