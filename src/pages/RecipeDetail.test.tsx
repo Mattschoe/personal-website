@@ -22,11 +22,10 @@ const withoutNote = recipes.find((r) => !r.note);
 const recipe = withNote ?? recipes[0];
 
 describe('RecipeDetail', () => {
-  it('renders the Recipe tag, crumb (with category) and title', () => {
+  it('renders the crumb (with category) and title — no "Recipe" badge', () => {
     renderRecipe(recipe.slug);
 
-    const tag = screen.getByText('Recipe', { selector: '.tag' });
-    expect(tag).toHaveClass('tag', 'tag--recipe');
+    expect(screen.queryByText('Recipe', { selector: '.tag' })).toBeNull();
 
     expect(screen.getByRole('link', { name: 'Recipes' })).toHaveAttribute(
       'href',

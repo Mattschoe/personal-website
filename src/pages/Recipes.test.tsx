@@ -92,6 +92,68 @@ describe('Recipes index', () => {
     );
   });
 
+  it('narrows the grid to recipes whose title matches the search query', () => {
+    const target = recipes[0];
+    // A distinctive slice of the first recipe's title that the others are
+    // unlikely to share.
+    const term = target.title.slice(0, 4);
+    const expected = recipes.filter((r) =>
+      r.title.toLowerCase().includes(term.toLowerCase()),
+    );
+    const { container } = renderRecipes();
+
+    fireEvent.change(screen.getByRole('searchbox', { name: /search recipes/i }), {
+      target: { value: term },
+    });
+
+    expect(cards(container)).toHaveLength(expected.length);
+    expect(screen.getByText(target.title)).toBeInTheDocument();
+  });
+
+  it('shows an empty state when nothing matches the search', () => {
+    const { container } = renderRecipes();
+    fireEvent.change(screen.getByRole('searchbox', { name: /search recipes/i }), {
+      target: { value: 'zzzznotarealrecipe' },
+    });
+    expect(cards(container)).toHaveLength(0);
+    expect(screen.getByText(/no recipes match/i)).toBeInTheDocument();
+  });
+
+  it('combines the category filter with the search query', () => {
+    const category = categories[0];
+    const inCategory = recipes.filter((r) => r.category === category);
+    const target = inCategory[0];
+    const term = target.title.slice(0, 4);
+    const expected = inCategory.filter((r) =>
+      r.title.toLowerCase().includes(term.toLowerCase()),
+    );
+    const { container } = renderRecipes();
+
+    fireEvent.click(screen.getByRole('button', { name: category }));
+    fireEvent.change(screen.getByRole('searchbox', { name: /search recipes/i }), {
+      target: { value: term },
+    });
+
+    expect(cards(container)).toHaveLength(expected.length);
+    expect(screen.getByRole('button', { name: category })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+  });
+
+  it('honours a ?q= query on load (after mount, hydration-safe)', () => {
+    const target = recipes[0];
+    const term = target.title.slice(0, 4);
+    const expected = recipes.filter((r) =>
+      r.title.toLowerCase().includes(term.toLowerCase()),
+    );
+    const { container } = renderRecipes(`/recipes?q=${encodeURIComponent(term)}`);
+    expect(cards(container)).toHaveLength(expected.length);
+    expect(screen.getByRole('searchbox', { name: /search recipes/i })).toHaveValue(
+      term,
+    );
+  });
+
   it('renders no <main> of its own — Layout owns that landmark', () => {
     const { container } = renderRecipes();
     expect(container.querySelector('main')).toBeNull();
