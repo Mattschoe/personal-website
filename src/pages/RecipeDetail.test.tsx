@@ -1,7 +1,7 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { RecipeDetail } from './RecipeDetail';
 import { getRecipes } from '../content';
 
@@ -22,6 +22,8 @@ const withoutNote = recipes.find((r) => !r.note);
 const recipe = withNote ?? recipes[0];
 
 describe('RecipeDetail', () => {
+  beforeEach(() => localStorage.clear());
+
   it('renders the crumb (with category) and title — no "Recipe" badge', () => {
     renderRecipe(recipe.slug);
 
@@ -114,6 +116,39 @@ describe('RecipeDetail', () => {
   it('renders the Markdown body in a .read column', () => {
     const { container } = renderRecipe(recipe.slug);
     expect(container.querySelector('.read')).not.toBeNull();
+  });
+
+  it('ticks an ingredient checkbox and restores it on remount (persisted)', () => {
+    const { unmount } = renderRecipe(recipe.slug);
+    const aside = screen
+      .getByRole('heading', { name: 'Ingredients' })
+      .closest('aside') as HTMLElement;
+
+    const box = within(aside).getAllByRole('checkbox')[0];
+    expect(box).not.toBeChecked();
+    fireEvent.click(box);
+    expect(box).toBeChecked();
+
+    // Remount from a fresh tree — state comes back from localStorage.
+    unmount();
+    renderRecipe(recipe.slug);
+    const aside2 = screen
+      .getByRole('heading', { name: 'Ingredients' })
+      .closest('aside') as HTMLElement;
+    expect(within(aside2).getAllByRole('checkbox')[0]).toBeChecked();
+  });
+
+  it('toggles a method step by clicking its text (no checkbox)', () => {
+    renderRecipe(recipe.slug);
+    const method = screen
+      .getByRole('heading', { name: 'Method' })
+      .closest('div') as HTMLElement;
+    // Steps have no checkbox — the step text itself is the toggle button.
+    expect(within(method).queryByRole('checkbox')).toBeNull();
+    const stepBtn = within(method).getAllByRole('button')[0];
+    expect(stepBtn).toHaveAttribute('aria-pressed', 'false');
+    fireEvent.click(stepBtn);
+    expect(stepBtn).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('renders NotFound for an unknown slug', () => {

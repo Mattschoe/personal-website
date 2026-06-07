@@ -112,28 +112,60 @@
   margin: 0;
 }
 .ingList li {
-  display: flex;
-  gap: 0.7em;
   padding: 0.55em 0;
   border-bottom: 1px solid var(--line);
   font-size: var(--fs-body);
-  align-items: baseline;
 }
-.ingList li::before {
-  content: '';
-  width: 0.55em;
-  height: 0.55em;
+.ingLabel {
+  display: flex;
+  gap: 0.7em;
+  align-items: center;
+  cursor: pointer;
+}
+/* Transparent accent-outline square (matches the original decorative marker),
+   now a real checkbox; fills with accent once ticked. */
+.ingLabel input {
+  appearance: none;
+  -webkit-appearance: none;
   flex: 0 0 auto;
+  width: 0.85em;
+  height: 0.85em;
+  margin: 0;
   border: 1.5px solid var(--accent);
   border-radius: 2px;
-  margin-top: 0.45em;
+  background: transparent;
+  cursor: pointer;
+}
+.ingLabel input:checked {
+  background: var(--accent);
+}
+/* amt + item live in one inline run (.ingText) so the strike can span both. */
+.ingText {
+  position: relative;
 }
 .amt {
   font-family: var(--font-mono);
   font-size: var(--fs-small);
   color: var(--accent);
-  flex: 0 0 auto;
+  display: inline-block;
   min-width: 4.5em;
+  padding-right: 0.7em;
+}
+/* Checked ingredient: muted, with a single continuous strike drawn as a line
+   across the whole run — CSS line-through skips inline-block interiors (the amt
+   column) and the gap, so we draw it ourselves. */
+.ingList li.checked .amt,
+.ingList li.checked .ingText {
+  color: var(--ink-soft);
+}
+.ingList li.checked .ingText::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: currentColor;
 }
 
 .steps {
@@ -166,16 +198,38 @@
 .steps li:not(:last-child)::after {
   content: '';
   position: absolute;
+  /* Match the circle's font-size so 1em == its 2em-wide centre (the circle
+     sizes in fs-small, not the inherited body size). */
+  font-size: var(--fs-small);
   left: 1em;
+  transform: translateX(-50%);
   top: 2.4em;
   bottom: 0.4em;
   width: 1.5px;
   background: var(--line);
 }
-.steps p {
+/* No checkbox on steps — the whole step text is the toggle. */
+.stepBtn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.stepText {
+  display: block;
   font-size: var(--fs-lead);
   line-height: 1.6;
   margin: 0.2em 0 0;
+}
+.steps li.checked .stepText {
+  color: var(--ink-soft);
+  text-decoration: line-through;
 }
 
 .note {
