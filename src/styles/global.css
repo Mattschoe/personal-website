@@ -6,8 +6,9 @@
    Both themes are built from ONE palette (Darlington sage, Beeswax,
    Grenadine, Café Latte) applied light vs. dark.
 
-   Ported verbatim from design-reference/styles.css. The Google Fonts
-   @import lives in index.html <head> as <link> tags instead.
+   This is the design token sheet — the source of truth for colors, type,
+   spacing, radii and the .ph placeholder palette. The Google Fonts @import
+   lives in index.html <head> as <link> tags instead.
    ===================================================================== */
 
 /* =====================================================================

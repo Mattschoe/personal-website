@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
-// Zod schemas for the three content streams (SPEC §9). These validate the raw
-// front-matter of each Markdown file. They are `strictObject` — any unknown key
+// Zod schemas for the three content streams (fields documented in
+// content/README.md). These validate the raw front-matter of each Markdown
+// file. They are `strictObject` — any unknown key
 // (e.g. a typo'd field) hard-fails the build with a clear message, which keeps
 // the "drop a file → it just works" workflow honest.
 //
@@ -99,7 +100,7 @@ export type Post = PostFrontmatter & {
   body: string;
 };
 
-// One item from any stream, normalised for the Home "Latest" feed (SPEC §9).
+// One item from any stream, normalised for the Home "Latest" feed.
 export type FeedType = 'recipe' | 'project' | 'essay';
 export type FeedTone = 'grenadine' | 'sage' | 'beeswax';
 

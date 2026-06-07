@@ -37,7 +37,7 @@ export interface AllContent {
 }
 
 /** Read, parse and validate every content stream. Throws (naming the file) on
- *  invalid front-matter, failing the build loudly (CLAUDE.md Rule 4). */
+ *  invalid front-matter, failing the build loudly so typos can't ship. */
 export function readAllContent(): AllContent {
   return {
     recipes: parseRecipes(readStream('recipes')),
