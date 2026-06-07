@@ -10,3 +10,10 @@
 #root > main {
   flex: 1 0 auto;
 }
+
+/* The Home "about strip" is a full-bleed bordered panel that ends the page, so
+   the footer's usual top margin leaves an odd band of background between them.
+   When the strip is the last thing in <main>, sit the footer flush against it. */
+#root > main:has(> .about-strip:last-child) + .site-footer {
+  margin-top: 0;
+}

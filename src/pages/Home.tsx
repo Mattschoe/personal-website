@@ -88,7 +88,6 @@ export function Home() {
       <section className="section container">
         <div className="section-head">
           <div>
-            <span className="kicker">Across projects, recipes &amp; the blog</span>
             <h2>Latest</h2>
           </div>
         </div>
@@ -155,8 +154,7 @@ export function Home() {
       <section className={`about-strip ${styles.aboutStrip}`} id="about">
         <div className={`container ${styles.aboutGrid}`}>
           <Image tone="latte" label="Portrait · 3:4" glyph="M" alt="" />
-          <div>
-            <span className="kicker"></span>
+          <div className={styles.aboutText}>
             <h2>About me</h2>
             {/* TODO(copy): placeholder bio — replace the Lorem Ipsum below with
                 Matt's real about copy. */}
