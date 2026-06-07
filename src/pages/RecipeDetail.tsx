@@ -12,11 +12,12 @@ import styles from './RecipeDetail.module.css';
 // photo still get visual variety (matches the Recipes index grid).
 const PAIR_TONES = ['grenadine', 'beeswax', 'latte', 'sage'] as const;
 
-// Single recipe: breadcrumb → split hero (intro + square photo) → stat strip
-// (time / yield) → the rendered Markdown body in a `.read` column
-// (clean, blog-aligned) → 2-column layout with a sticky ingredients checklist,
-// a numbered method timeline, and an optional "note" callout. The hero photo
-// stays a `.ph` placeholder until real imagery lands in Phase 8.
+// Single recipe: breadcrumb → split hero (square photo on the right; left column
+// reads top-down: title flush with the photo top → stat strip (time / yield) →
+// the rendered Markdown body article-style in a `.read` column) → 2-column layout
+// with a sticky ingredients checklist, a numbered method timeline, and an
+// optional "note" callout. The hero photo stays a `.ph` placeholder until real
+// imagery lands in Phase 8.
 export function RecipeDetail() {
   const { slug } = useParams();
   const recipe = slug ? getRecipe(slug) : undefined;
@@ -57,7 +58,6 @@ export function RecipeDetail() {
       <section className={styles.recipeHero}>
         <div>
           <h1>{recipe.title}</h1>
-          <p className="lead">{recipe.excerpt}</p>
           <div className={styles.statRow}>
             <div className={styles.stat}>
               <span className={styles.k}>Time</span>
@@ -68,6 +68,7 @@ export function RecipeDetail() {
               <span className={styles.v}>{recipe.yield}</span>
             </div>
           </div>
+          <Markdown className={styles.heroBody}>{recipe.body}</Markdown>
         </div>
         <Image
           src={recipe.hero}
@@ -77,8 +78,6 @@ export function RecipeDetail() {
           eager
         />
       </section>
-
-      <Markdown className={styles.intro}>{recipe.body}</Markdown>
 
       <section className={styles.recipeBody}>
         <aside className={styles.ingredients}>

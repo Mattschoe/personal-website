@@ -13,7 +13,7 @@
 }
 
 .postList {
-  margin-top: var(--s-6);
+  margin-top: var(--s-3);
 }
 .postRow {
   display: grid;

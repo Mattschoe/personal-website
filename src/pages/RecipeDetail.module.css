@@ -27,12 +27,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--s-7);
-  align-items: center;
+  align-items: start;
   padding-block: var(--s-6) var(--s-7);
 }
 .recipeHero h1 {
   font-size: var(--fs-h1);
-  margin: var(--s-3) 0 var(--s-4);
+  margin: 0 0 var(--s-4);
 }
 .recipeHero :global(.ph) {
   aspect-ratio: 1;
@@ -70,10 +70,16 @@
   font-size: 1.25rem;
 }
 
-/* The rendered Markdown intro sits in a centered reading column (global .read
-   supplies the 680px max-width); just give it vertical breathing room. */
-.intro {
-  margin-block: var(--s-2) var(--s-7);
+/* The recipe's Markdown body renders article-style in the hero's left column,
+   under the stat card. It keeps the global `.read` prose styles but drops to
+   body-size text so the half-width column reads as a tidy description rather
+   than full lead-size article prose. */
+.heroBody {
+  margin-top: var(--s-5);
+}
+.heroBody p {
+  font-size: var(--fs-body);
+  line-height: 1.7;
 }
 
 .recipeBody {
