@@ -8,9 +8,6 @@ export function Footer() {
           <Link className="wordmark" to="/">
             Matt
           </Link>
-          <p className="card-excerpt" style={{ maxWidth: '30ch' }}>
-            Projects, recipes, and writing — all in one place.
-          </p>
         </div>
         <div className="foot-col">
           <h4>Explore</h4>
