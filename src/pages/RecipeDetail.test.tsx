@@ -39,14 +39,12 @@ describe('RecipeDetail', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders the stat strip with time, yield and effort', () => {
+  it('renders the stat strip with time and yield', () => {
     renderRecipe(recipe.slug);
     expect(screen.getByText('Time')).toBeInTheDocument();
     expect(screen.getByText('Makes')).toBeInTheDocument();
-    expect(screen.getByText('Effort')).toBeInTheDocument();
     expect(screen.getByText(recipe.time)).toBeInTheDocument();
     expect(screen.getByText(recipe.yield)).toBeInTheDocument();
-    expect(screen.getByText(recipe.effort)).toBeInTheDocument();
   });
 
   it('lists every ingredient with its amount and item', () => {

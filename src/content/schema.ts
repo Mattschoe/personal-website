@@ -53,7 +53,6 @@ export const recipeFrontmatter = z.strictObject({
   category: z.string().min(1),
   time: z.string().min(1),
   yield: z.string().min(1),
-  effort: z.string().min(1),
   // Either a flat list of ingredients (the common case) or a list of headed
   // groups. The parser normalises both into `ingredientGroups` on the loaded
   // Recipe while keeping a flattened `ingredients` for JSON-LD/feeds. The two

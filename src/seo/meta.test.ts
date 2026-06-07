@@ -94,7 +94,6 @@ const recipe: Recipe = {
   category: 'Dinner',
   time: '30 min',
   yield: '4 skewers',
-  effort: 'Easy',
   ingredients: [{ amount: '2', item: 'chicken thighs' }],
   steps: ['Skewer.', 'Grill.'],
 };

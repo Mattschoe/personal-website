@@ -13,7 +13,7 @@ import styles from './RecipeDetail.module.css';
 const PAIR_TONES = ['grenadine', 'beeswax', 'latte', 'sage'] as const;
 
 // Single recipe: breadcrumb → split hero (intro + square photo) → stat strip
-// (time / yield / effort) → the rendered Markdown body in a `.read` column
+// (time / yield) → the rendered Markdown body in a `.read` column
 // (clean, blog-aligned) → 2-column layout with a sticky ingredients checklist,
 // a numbered method timeline, and an optional "note" callout. The hero photo
 // stays a `.ph` placeholder until real imagery lands in Phase 8.
@@ -66,10 +66,6 @@ export function RecipeDetail() {
             <div className={styles.stat}>
               <span className={styles.k}>Makes</span>
               <span className={styles.v}>{recipe.yield}</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.k}>Effort</span>
-              <span className={styles.v}>{recipe.effort}</span>
             </div>
           </div>
         </div>

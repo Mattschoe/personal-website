@@ -38,7 +38,6 @@ export const recipes: Recipe[] = [
     category: 'Grilling',
     time: '40 min',
     yield: 'Serves 3',
-    effort: 'Easy',
     ingredients: [
       { amount: '600 g', item: 'chicken thigh' },
       { amount: '100 g', item: 'soy sauce' },
@@ -61,7 +60,6 @@ export const recipes: Recipe[] = [
     category: 'Salads',
     time: '25 min',
     yield: 'Serves 4',
-    effort: 'Relaxed',
     ingredients: [
       { amount: '4 ears', item: 'sweetcorn' },
       { amount: '1', item: 'lime' },
@@ -77,7 +75,6 @@ export const recipes: Recipe[] = [
     category: 'Soups',
     time: '30 min',
     yield: 'Serves 2',
-    effort: 'Simple',
     ingredients: soupGroups.flatMap((g) => g.items),
     ingredientGroups: soupGroups,
     steps: ['Soften the onion.', 'Add tomatoes and simmer.', 'Blend smooth.'],

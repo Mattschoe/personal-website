@@ -6,7 +6,6 @@ heroAlt: a platter of skewers with grilled chicken thigh and vegetables
 category: Grilling
 yield: Serves 2-3
 time: 2 hours
-effort: SHOULD NOT BE MANDATORY
 ingredients:
   - heading: Marinade
     items: 

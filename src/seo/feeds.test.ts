@@ -14,7 +14,6 @@ const recipes: Recipe[] = [
     category: 'Dinner',
     time: '30 min',
     yield: '4',
-    effort: 'Easy',
     ingredients: [{ amount: '2', item: 'thighs' }],
     steps: ['Grill.'],
   },

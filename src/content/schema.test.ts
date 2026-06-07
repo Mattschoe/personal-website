@@ -7,7 +7,6 @@ const validRecipe = {
   category: 'Soups',
   time: '35 min',
   yield: 'Serves 4',
-  effort: 'Easy',
   ingredients: [{ amount: '2 tins', item: 'tomatoes' }],
   steps: ['Roast.', 'Blend.'],
 };

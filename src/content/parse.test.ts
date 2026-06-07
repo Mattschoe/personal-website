@@ -13,7 +13,6 @@ date: 2025-01-02
 category: Grilling
 time: 30 min
 yield: Serves 4
-effort: Easy
 ingredients:
   - amount: 2
     item: chicken thighs
@@ -77,7 +76,6 @@ date: 2025-01-03
 category: Grilling
 time: 30 min
 yield: Serves 4
-effort: Easy
 ingredients:
   - heading: Marinade
     items:
@@ -112,7 +110,7 @@ Body.
   });
 
   it('rejects an unknown front-matter field (strict schema)', () => {
-    const typo = recipeMd.replace('effort: Easy', 'effort: Easy\nbogus: nope');
+    const typo = recipeMd.replace('yield: Serves 4', 'yield: Serves 4\nbogus: nope');
     expect(() => parseRecipes({ '/content/recipes/typo.md': typo })).toThrow(/bogus/);
   });
 
