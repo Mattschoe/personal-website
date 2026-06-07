@@ -18,9 +18,11 @@ const envUrl =
 export const siteConfig = {
   // Production origin, no trailing slash.
   url: (envUrl ?? 'https://mattschoe.dev').replace(/\/+$/, ''),
-  name: 'Matt',
-  // Matches the static <title> in index.html (the pre-hydration fallback).
-  title: 'Matt — essays, recipes & software',
+  // Site brand: used for og:site_name and the RSS feed titles.
+  name: 'Matthias Nielsen',
+  // Home <title> / SEO bare title. Matches the static <title> in index.html
+  // (the pre-hydration fallback).
+  title: 'Matthias Nielsen',
   // TODO(copy): replace with Matt's real one-line site blurb.
   description:
     'Matt builds software, cooks, and writes — essays, recipes, and project case studies in one place.',
