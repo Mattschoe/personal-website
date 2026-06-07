@@ -308,6 +308,9 @@ p{ margin:0 0 1em; text-wrap:pretty; }
 }
 @media (max-width:640px){
   .nav{ display:none; }            /* build note: collapse to menu button */
+  /* .nav owns the auto margin on desktop; with it hidden, push the tools
+     (theme toggle + menu button) to the right edge themselves. */
+  .header-tools{ margin-left:auto; }
   .grid-3, .grid-2{ grid-template-columns:1fr; }
   .site-footer .container{ grid-template-columns:1fr; }
   .section{ padding-block:var(--s-7); }
