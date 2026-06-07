@@ -1,0 +1,114 @@
+name: Build & Deploy
+
+# Push to main → checks → build image → push to GHCR → deploy to the VPS.
+# Also runnable manually from the Actions tab.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Serialize deploys but never cancel one mid-flight: cancelling between the
+# image push and the SSH `pull && up -d` could leave the VPS half-updated. A
+# newer push queues and runs after the current deploy finishes.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # Must be lowercase for a valid Docker ref — hardcoded rather than derived from
+  # ${{ github.repository_owner }} (which is mixed-case) so the pushed tag always
+  # matches the image referenced in docker-compose.yml.
+  IMAGE: ghcr.io/mattschoe/personal-website
+  SITE_URL: https://mattschoe.dev
+
+jobs:
+  build-test-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_ref: ${{ steps.meta.outputs.tags }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=sha-
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          build-args: |
+            VITE_SITE_URL=${{ env.SITE_URL }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build-test-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy compose file to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT || 22 }}
+          source: docker-compose.yml
+          target: projects/personal-website
+
+      - name: Pull image & restart on VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT || 22 }}
+          script: |
+            set -euo pipefail
+            cd ~/projects/personal-website
+            # Pick whichever compose front-end this host has for Podman.
+            if podman compose version >/dev/null 2>&1; then
+              compose="podman compose"
+            elif command -v podman-compose >/dev/null 2>&1; then
+              compose="podman-compose"
+            else
+              echo "No podman compose / podman-compose found on host" >&2
+              exit 1
+            fi
+            $compose pull
+            $compose up -d
+            podman image prune -f

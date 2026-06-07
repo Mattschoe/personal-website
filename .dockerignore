@@ -1,0 +1,16 @@
+node_modules
+dist
+.git
+.github
+.vscode
+.idea
+*.log
+npm-debug.log*
+.DS_Store
+# Local verification artifacts
+playwright-report
+test-results
+screenshots
+*.local
+.env
+.env.*

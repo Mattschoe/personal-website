@@ -1,0 +1,25 @@
+# Deployed on the VPS at ~/projects/personal-website/docker-compose.yml (SCP'd by
+# the GitHub Actions deploy job). The image is built in CI and pulled from GHCR —
+# no source tree on the host. Routing/TLS is handled by the existing Traefik stack
+# (see ~/projects/traefik): external network `traefik-net`, HTTPS entrypoint
+# `websecure`, certresolver `myresolver`, exposedbydefault=false.
+services:
+  personal-website:
+    image: ghcr.io/mattschoe/personal-website:latest
+    container_name: personal-website
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.personal-website.rule=Host(`mattschoe.dev`)"
+      - "traefik.http.routers.personal-website.entrypoints=websecure"
+      - "traefik.http.routers.personal-website.tls.certresolver=myresolver"
+      - "traefik.http.services.personal-website.loadbalancer.server.port=80"
+      # To also serve www.mattschoe.dev, change the rule above to
+      #   Host(`mattschoe.dev`) || Host(`www.mattschoe.dev`)
+      # and add a redirect middleware if you want www → apex.
+
+networks:
+  traefik-net:
+    external: true
