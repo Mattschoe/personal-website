@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { getLatestFeed, formatDate, type FeedItem } from '../content';
 import { Image } from '../components/Image';
+import { Seo } from '../seo/Seo';
 import styles from './Home.module.css';
 
 // Real social URLs, matching Footer.tsx.
@@ -30,6 +31,8 @@ export function Home() {
     // Layout already provides the <main> landmark, so this page is just its
     // sections — wrapping them in another <main> would nest landmarks.
     <>
+      <Seo />
+
       {/* ============ HERO ============ */}
       <section className={`hero container ${styles.hero}`}>
         <div className={styles.heroGrid}>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { getPosts, formatDate } from '../content';
+import { Seo } from '../seo/Seo';
 import styles from './Blog.module.css';
 
 // Blog index: editorial post rows (date · title + excerpt), whole row hovers.
@@ -11,6 +12,10 @@ export function Blog() {
 
   return (
     <>
+      <Seo
+        title="Blog"
+        description="Essays and notes on software, cooking, and whatever I'm thinking through."
+      />
       <section className={`container ${styles.pageHead}`}>
         <h1>Blog</h1>
       </section>

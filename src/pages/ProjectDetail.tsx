@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getProject } from '../content';
 import { Markdown } from '../content/Markdown';
 import { Image } from '../components/Image';
+import { Seo } from '../seo/Seo';
 import { NotFound } from './NotFound';
 import styles from './ProjectDetail.module.css';
 
@@ -21,6 +22,12 @@ export function ProjectDetail() {
 
   return (
     <div className="container">
+      <Seo
+        title={project.title}
+        description={project.summary}
+        image={project.hero}
+        type="article"
+      />
       <nav className={styles.crumb}>
         <Link to="/projects">Projects</Link> <span>/</span>{' '}
         <span>{project.title}</span>

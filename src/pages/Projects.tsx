@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { getProjects } from '../content';
 import { Image } from '../components/Image';
+import { Seo } from '../seo/Seo';
 import styles from './Projects.module.css';
 
 // Tones cycle through the placeholder palette so the rows have visual variety
@@ -17,6 +18,10 @@ export function Projects() {
 
   return (
     <>
+      <Seo
+        title="Projects"
+        description="Software I've designed and built — case studies on what I made, how, and why."
+      />
       <section className={`container ${styles.pageHead}`}>
         <h1>Projects</h1>
       </section>

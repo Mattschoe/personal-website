@@ -2,6 +2,8 @@ import { Link, useParams } from 'react-router-dom';
 import { getRecipe } from '../content';
 import { Markdown } from '../content/Markdown';
 import { Image } from '../components/Image';
+import { Seo } from '../seo/Seo';
+import { recipeJsonLd } from '../seo/meta';
 import { NotFound } from './NotFound';
 import styles from './RecipeDetail.module.css';
 
@@ -17,6 +19,13 @@ export function RecipeDetail() {
 
   return (
     <div className="container">
+      <Seo
+        title={recipe.title}
+        description={recipe.excerpt}
+        image={recipe.hero}
+        type="article"
+        jsonLd={recipeJsonLd(recipe)}
+      />
       <nav className={styles.crumb}>
         <Link to="/recipes">Recipes</Link> <span>/</span>{' '}
         <span>{recipe.category}</span>
