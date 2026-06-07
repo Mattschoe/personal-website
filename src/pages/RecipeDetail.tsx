@@ -33,7 +33,6 @@ export function RecipeDetail() {
 
       <section className={styles.recipeHero}>
         <div>
-          <span className="tag tag--recipe">Recipe</span>
           <h1>{recipe.title}</h1>
           <p className="lead">{recipe.excerpt}</p>
           <div className={styles.statRow}>
