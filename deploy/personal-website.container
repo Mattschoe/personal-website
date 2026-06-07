@@ -1,0 +1,45 @@
+# Quadlet unit for the production VPS (rootless Podman, user `mattschoe`).
+#
+# Install once: copy to ~/.config/containers/systemd/personal-website.container
+# then `systemctl --user daemon-reload && systemctl --user start personal-website.service`.
+#
+# Deployment is pull-based: `podman-auto-update` (see ../deploy/podman-auto-update.timer.d/
+# override.conf) polls GHCR every 5 min and rolls this unit to the new :latest digest.
+# CI only builds and pushes the image — it never connects to the VPS.
+#
+# Mirrors docker-compose.yml: same external traefik-net network and Traefik labels.
+
+[Unit]
+Description=Matt's personal website (nginx, static)
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=ghcr.io/mattschoe/personal-website:latest
+ContainerName=personal-website
+# Opt this container into `podman auto-update` (compares the running digest
+# against :latest in the registry and rolls forward, rolling back on failure).
+AutoUpdate=registry
+Network=traefik-net
+Label=traefik.enable=true
+Label=traefik.http.routers.personal-website.rule=Host(`mattschoe.dev`)
+Label=traefik.http.routers.personal-website.entrypoints=websecure
+Label=traefik.http.routers.personal-website.tls.certresolver=myresolver
+Label=traefik.http.services.personal-website.loadbalancer.server.port=80
+# Healthcheck so auto-update can detect a bad image and roll back to the previous
+# one. wget ships in the nginx:1.27-alpine (busybox) runtime image.
+HealthCmd=wget -q --spider http://localhost/ || exit 1
+HealthInterval=30s
+HealthRetries=3
+HealthStartPeriod=10s
+# Treat the service as "started" only once the container is healthy, so a bad new
+# image leaves the unit in a failed state and auto-update rolls back. Needs
+# Podman 5.0+; on older Podman drop this line — auto-update still rolls back when
+# the new container fails to start, just not on a healthcheck-only failure.
+Notify=healthy
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

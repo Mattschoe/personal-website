@@ -32,47 +32,65 @@ This is the whole point — **no code changes required**:
 3. Commit and push to `main`.
 
 The next pipeline run prerenders the new page, regenerates the Home "Latest" feed, sitemap, and RSS,
-builds a fresh image, and deploys it. The post is live with no manual steps.
+and builds a fresh image. The VPS picks it up within ~5 minutes — the post is live with no manual steps.
 
 ## Deployment
 
-CI builds a Docker image and the VPS pulls it — the source tree never lands on the host.
+Deployment is **pull-based**: CI only builds and publishes the image to GHCR; the VPS pulls it itself
+via `podman-auto-update`. CI never connects to the VPS, so no inbound SSH (or firewall opening) is
+needed.
 
 ```
 push to main
   └─ GitHub Actions (.github/workflows/deploy.yml)
-       ├─ build-test-push: npm ci → typecheck → lint → test
-       │                   → build image → push to ghcr.io/mattschoe/personal-website
-       └─ deploy: SCP docker-compose.yml to the VPS
-                  → SSH: podman compose pull && up -d
+       └─ build-test-push: npm ci → typecheck → lint → test
+                           → build image → push to ghcr.io/mattschoe/personal-website:latest
+
+VPS (rootless Podman, user `mattschoe`)
+  └─ podman-auto-update.timer (every 5 min)
+       └─ podman auto-update: new :latest digest? → pull → restart the unit
+                              (rolls back to the previous image if it fails health)
 ```
 
-On the VPS the image runs under **rootless Podman** behind the existing **Traefik** stack. Traefik
-terminates TLS and routes `mattschoe.dev` to the container over the external `traefik-net` network
-(entrypoint `websecure`, certresolver `myresolver`). The container itself is plain nginx serving the
-prerendered `dist/` on port 80 — see [`Dockerfile`](./Dockerfile), [`nginx.conf`](./nginx.conf), and
-[`docker-compose.yml`](./docker-compose.yml).
+On the VPS the image runs as a **Quadlet systemd unit** ([`deploy/personal-website.container`](./deploy/personal-website.container))
+under **rootless Podman**, behind the existing **Traefik** stack. Traefik terminates TLS and routes
+`mattschoe.dev` to the container over the external `traefik-net` network (entrypoint `websecure`,
+certresolver `myresolver`). The container itself is plain nginx serving the prerendered `dist/` on
+port 80 — see [`Dockerfile`](./Dockerfile) and [`nginx.conf`](./nginx.conf).
+([`docker-compose.yml`](./docker-compose.yml) is kept for local runs only, not for production.)
 
-### Required GitHub secrets
+### GitHub secrets
 
-| Secret         | Description                                                            |
-| -------------- | --------------------------------------------------------------------- |
-| `VPS_HOST`     | VPS hostname or IP                                                     |
-| `VPS_USER`     | SSH user (`mattschoe`) — owns `~/projects/personal-website`           |
-| `VPS_SSH_KEY`  | Private SSH key whose public half is in the VPS `authorized_keys`     |
-| `VPS_SSH_PORT` | Optional — SSH port if not `22`                                        |
+None required for deployment. `GITHUB_TOKEN` is provided automatically and is used to push the image
+to GHCR. (The old `VPS_HOST` / `VPS_USER` / `VPS_SSH_KEY` / `VPS_SSH_PORT` secrets are no longer used
+and can be deleted.)
 
-`GITHUB_TOKEN` is provided automatically and is used to push the image to GHCR.
+### One-time VPS setup
 
-### One-time setup
+Run as `mattschoe` on the VPS. Requires Podman ≥ 4.4 (Quadlet); health-based rollback needs ≥ 5.0
+(otherwise drop the `Notify=healthy` line from the unit — see its comment).
 
-- Add the secrets above (Settings → Secrets and variables → Actions).
-- After the first successful run, set the GHCR package
-  **`personal-website` visibility to Public** (Packages → Package settings) so the VPS pulls without
-  authenticating.
-- On the VPS: ensure `~/projects/personal-website/` exists and that rootless-podman lingering is on
-  (`loginctl enable-linger mattschoe`) so the container survives logout. Point DNS for
-  `mattschoe.dev` at the VPS.
+1. Make the GHCR package **`personal-website` Public** (Packages → Package settings) so pulls need no
+   auth. *(To keep it private instead: `podman login ghcr.io -u mattschoe` with a `read:packages` PAT
+   so `podman auto-update` has credentials.)*
+2. Stop any old compose-managed container: `cd ~/projects/personal-website && podman compose down`.
+3. Install the unit and the 5-minute timer override:
+   ```bash
+   mkdir -p ~/.config/containers/systemd ~/.config/systemd/user/podman-auto-update.timer.d
+   cp deploy/personal-website.container          ~/.config/containers/systemd/
+   cp deploy/podman-auto-update.timer.d/override.conf \
+      ~/.config/systemd/user/podman-auto-update.timer.d/
+   ```
+4. Enable lingering so user services run without a login session: `loginctl enable-linger mattschoe`.
+5. Load and start everything:
+   ```bash
+   systemctl --user daemon-reload
+   systemctl --user start personal-website.service
+   systemctl --user enable --now podman-auto-update.timer
+   ```
+6. Point DNS for `mattschoe.dev` at the VPS, then check `https://mattschoe.dev` loads.
+
+**Force a deploy now** (skip the ≤5-min wait): `systemctl --user start podman-auto-update.service`.
 
 ### Local image check
 

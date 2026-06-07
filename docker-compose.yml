@@ -1,8 +1,12 @@
-# Deployed on the VPS at ~/projects/personal-website/docker-compose.yml (SCP'd by
-# the GitHub Actions deploy job). The image is built in CI and pulled from GHCR —
-# no source tree on the host. Routing/TLS is handled by the existing Traefik stack
-# (see ~/projects/traefik): external network `traefik-net`, HTTPS entrypoint
-# `websecure`, certresolver `myresolver`, exposedbydefault=false.
+# LOCAL / REFERENCE ONLY — no longer the production deploy mechanism.
+# Production runs the Quadlet systemd unit at deploy/personal-website.container and
+# pulls new images itself via podman-auto-update (see README §Deployment). This
+# compose file is kept for local runs (`podman compose up`) and as a readable
+# mirror of the container's Traefik wiring.
+#
+# Routing/TLS is handled by the existing Traefik stack (see ~/projects/traefik):
+# external network `traefik-net`, HTTPS entrypoint `websecure`, certresolver
+# `myresolver`, exposedbydefault=false.
 services:
   personal-website:
     image: ghcr.io/mattschoe/personal-website:latest
