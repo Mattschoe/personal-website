@@ -32,6 +32,13 @@ export default defineConfig({
           import.meta.url,
         ),
       ),
+      // Route the content layer at the fixed test dataset instead of the real
+      // `content/` folder, so the suite stays green regardless of what author
+      // content is present. Dev/build still use the real `virtual:content`
+      // plugin — this alias applies to tests only.
+      'virtual:content': fileURLToPath(
+        new URL('./src/test/fixtures.ts', import.meta.url),
+      ),
     },
   },
 });

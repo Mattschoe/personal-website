@@ -43,7 +43,7 @@ describe('byDateDesc comparator', () => {
 });
 
 describe('loaded streams', () => {
-  it('load the seed content for every stream', () => {
+  it('expose a non-empty array for every stream', () => {
     expect(recipes.length).toBeGreaterThan(0);
     expect(projects.length).toBeGreaterThan(0);
     expect(posts.length).toBeGreaterThan(0);
