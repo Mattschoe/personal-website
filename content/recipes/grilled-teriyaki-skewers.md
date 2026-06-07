@@ -7,8 +7,6 @@ category: Grilling
 yield: Serves 2-3
 time: 2 hours
 effort: SHOULD NOT BE MANDATORY
-pairsWith: 
-  - grilled-shrimp-skewers
 ingredients:
   - heading: Marinade
     items: 
