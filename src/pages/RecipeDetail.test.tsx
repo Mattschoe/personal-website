@@ -62,6 +62,29 @@ describe('RecipeDetail', () => {
     });
   });
 
+  it('renders ingredient group headings and every grouped item', () => {
+    const grouped = recipes.find(
+      (r) => r.ingredientGroups && r.ingredientGroups.length > 1,
+    );
+    expect(grouped).toBeDefined();
+    renderRecipe(grouped!.slug);
+
+    const aside = screen
+      .getByRole('heading', { name: 'Ingredients' })
+      .closest('aside') as HTMLElement;
+
+    grouped!.ingredientGroups!.forEach((group) => {
+      if (group.heading) {
+        expect(
+          within(aside).getByRole('heading', { name: group.heading }),
+        ).toBeInTheDocument();
+      }
+      group.items.forEach((ing) => {
+        expect(within(aside).getByText(ing.item)).toBeInTheDocument();
+      });
+    });
+  });
+
   it('renders the method steps in order', () => {
     renderRecipe(recipe.slug);
     const steps = within(

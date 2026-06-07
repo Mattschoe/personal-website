@@ -8,7 +8,13 @@ import {
   type Project,
   type Post,
 } from './schema';
-import { slugFromPath, readingTime, excerptFromBody, byDateDesc } from './derive';
+import {
+  slugFromPath,
+  readingTime,
+  excerptFromBody,
+  byDateDesc,
+  normalizeIngredients,
+} from './derive';
 
 // Build-time content parser. This module imports gray-matter + zod, so it must
 // only ever run in Node at build time (it's pulled in by the `virtual:content`
@@ -48,8 +54,11 @@ export function parseRecipes(modules: Record<string, string>): Recipe[] {
       const result = recipeFrontmatter.safeParse(data);
       if (!result.success) fail(path, result.error);
       const fm = result.data;
+      const { flat, groups } = normalizeIngredients(fm.ingredients);
       return {
         ...fm,
+        ingredients: flat,
+        ingredientGroups: groups,
         slug: fm.slug ?? slugFromPath(path),
         excerpt: fm.excerpt ?? excerptFromBody(body),
         body,

@@ -61,6 +61,49 @@ describe('parseRecipes', () => {
     expect(recipe.ingredients[0].amount).toBe('2'); // YAML number → string
   });
 
+  it('keeps a flat ingredient list as one unheaded group', () => {
+    const [recipe] = parseRecipes({ '/content/recipes/test-skewers.md': recipeMd });
+    expect(recipe.ingredientGroups).toEqual([
+      { items: [{ amount: '2', item: 'chicken thighs' }] },
+    ]);
+    // Flattened list mirrors the single group.
+    expect(recipe.ingredients).toEqual([{ amount: '2', item: 'chicken thighs' }]);
+  });
+
+  it('normalises grouped ingredients into groups + a flattened list', () => {
+    const groupedMd = `---
+title: Grouped
+date: 2025-01-03
+category: Grilling
+time: 30 min
+yield: Serves 4
+effort: Easy
+ingredients:
+  - heading: Marinade
+    items:
+      - amount: 2 tbsp
+        item: soy
+  - heading: Skewers
+    items:
+      - amount: 600 g
+        item: chicken
+steps:
+  - Grill.
+---
+
+Body.
+`;
+    const [recipe] = parseRecipes({ '/content/recipes/grouped.md': groupedMd });
+    expect(recipe.ingredientGroups).toEqual([
+      { heading: 'Marinade', items: [{ amount: '2 tbsp', item: 'soy' }] },
+      { heading: 'Skewers', items: [{ amount: '600 g', item: 'chicken' }] },
+    ]);
+    expect(recipe.ingredients).toEqual([
+      { amount: '2 tbsp', item: 'soy' },
+      { amount: '600 g', item: 'chicken' },
+    ]);
+  });
+
   it('throws naming the file on invalid front-matter', () => {
     const bad = recipeMd.replace('category: Grilling\n', '');
     expect(() => parseRecipes({ '/content/recipes/broken.md': bad })).toThrow(

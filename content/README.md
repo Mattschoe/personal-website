@@ -50,13 +50,38 @@ file, so typos can't slip through silently.
 | `time` | yes | e.g. `35 min` |
 | `yield` | yes | e.g. `Serves 4` |
 | `effort` | yes | e.g. `Easy` |
-| `ingredients` | yes | list of `{ amount, item }` |
+| `ingredients` | yes | list of `{ amount, item }`, or a list of headed groups (see below) |
 | `steps` | yes | list of strings (the method) |
 | `excerpt` | no | one-line summary; derived from the body if omitted |
 | `note` | no | a closing tip/callout |
 | `slug`, `hero`, `heroAlt`, `sample` | no | see conventions above |
 
 The body is the recipe's intro prose.
+
+`ingredients` can be a flat list:
+
+```yaml
+ingredients:
+  - amount: 600 g
+    item: chicken thigh
+  - amount: 100 g
+    item: soy sauce
+```
+
+…or split into headed groups (e.g. a marinade and the skewers). Use one form or
+the other — don't mix flat items and groups in the same list:
+
+```yaml
+ingredients:
+  - heading: Marinade
+    items:
+      - amount: 100 g
+        item: soy sauce
+  - heading: Skewers
+    items:
+      - amount: 600 g
+        item: chicken thigh
+```
 
 ## Projects (`content/projects/`)
 

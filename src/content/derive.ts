@@ -2,7 +2,32 @@
 // the client-safe query layer (`index.ts`). Nothing here imports gray-matter or
 // touches the filesystem, so it's safe in both the Node build and the browser.
 
+import type {
+  Ingredient,
+  IngredientGroup,
+  RecipeFrontmatter,
+} from './schema';
+
 const WORDS_PER_MINUTE = 200;
+
+/**
+ * Normalise the recipe `ingredients` front-matter union into a flat list (for
+ * JSON-LD/feeds) plus headed groups (for rendering). A flat list becomes a
+ * single unheaded group; a grouped list is carried through. Detection keys off
+ * the first entry: a group has `items`, a flat ingredient does not.
+ */
+export function normalizeIngredients(
+  input: RecipeFrontmatter['ingredients'],
+): { flat: Ingredient[]; groups: IngredientGroup[] } {
+  const grouped = input.length > 0 && 'items' in input[0];
+  const groups: IngredientGroup[] = grouped
+    ? (input as IngredientGroup[]).map((g) => ({
+        heading: g.heading,
+        items: g.items,
+      }))
+    : [{ items: input as Ingredient[] }];
+  return { flat: groups.flatMap((g) => g.items), groups };
+}
 
 const MONTHS = [
   'Jan',

@@ -11,7 +11,20 @@
 // tags + a real opening paragraph for the drop-cap. All three arrays are
 // newest-first, matching the loader's contract.
 
-import type { Recipe, Project, Post } from '../content/schema';
+import type { Recipe, Project, Post, IngredientGroup } from '../content/schema';
+
+// One recipe carries headed ingredient groups; its flat `ingredients` is
+// derived from them so the two stay in lock-step (mirrors the parser).
+const soupGroups: IngredientGroup[] = [
+  { heading: 'Base', items: [{ amount: '1', item: 'onion' }] },
+  {
+    heading: 'Simmer',
+    items: [
+      { amount: '2 tins', item: 'plum tomatoes' },
+      { amount: '500 ml', item: 'stock' },
+    ],
+  },
+];
 
 export const recipes: Recipe[] = [
   {
@@ -64,10 +77,8 @@ export const recipes: Recipe[] = [
     time: '30 min',
     yield: 'Serves 2',
     effort: 'Simple',
-    ingredients: [
-      { amount: '2 tins', item: 'plum tomatoes' },
-      { amount: '1', item: 'onion' },
-    ],
+    ingredients: soupGroups.flatMap((g) => g.items),
+    ingredientGroups: soupGroups,
     steps: ['Soften the onion.', 'Add tomatoes and simmer.', 'Blend smooth.'],
   },
 ];
