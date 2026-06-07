@@ -50,6 +50,7 @@ export const recipes: Recipe[] = [
       'Skewer and grill, turning to char on all sides.',
     ],
     note: 'Thigh is forgiving on the grill — don’t fear a little char.',
+    pairsWith: ['charred-corn-salad', 'weeknight-tomato-soup'],
   },
   {
     title: 'Charred Corn Salad',

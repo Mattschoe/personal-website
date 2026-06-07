@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { getRecipe } from '../content';
+import { getRecipe, type Recipe } from '../content';
 import { Markdown } from '../content/Markdown';
 import { Image } from '../components/Image';
 import { useRecipeChecklist } from '../components/useRecipeChecklist';
@@ -7,6 +7,10 @@ import { Seo } from '../seo/Seo';
 import { recipeJsonLd } from '../seo/meta';
 import { NotFound } from './NotFound';
 import styles from './RecipeDetail.module.css';
+
+// Tones cycle through the placeholder palette so pairing cards without a real
+// photo still get visual variety (matches the Recipes index grid).
+const PAIR_TONES = ['grenadine', 'beeswax', 'latte', 'sage'] as const;
 
 // Single recipe: breadcrumb → split hero (intro + square photo) → stat strip
 // (time / yield / effort) → the rendered Markdown body in a `.read` column
@@ -20,6 +24,12 @@ export function RecipeDetail() {
   // case (its checklist is never rendered).
   const { isChecked, toggle } = useRecipeChecklist(recipe?.slug ?? '');
   if (!recipe) return <NotFound />;
+
+  // Resolve pairings to real recipes (parse-time validation guarantees they
+  // exist, but guard anyway so a stale reference never renders a dead card).
+  const pairs = (recipe.pairsWith ?? [])
+    .map((s) => getRecipe(s))
+    .filter((r): r is Recipe => Boolean(r));
 
   const groups = recipe.ingredientGroups ?? [{ items: recipe.ingredients }];
   // Running offset so each ingredient gets a stable flat index across groups —
@@ -134,6 +144,34 @@ export function RecipeDetail() {
           )}
         </div>
       </section>
+
+      {pairs.length > 0 && (
+        <section className={styles.pairs}>
+          <h2>Goes well with</h2>
+          <div className={styles.pairGrid}>
+            {pairs.map((p, i) => (
+              <Link
+                key={p.slug}
+                to={`/recipes/${p.slug}`}
+                className={styles.pairCard}
+              >
+                <Image
+                  src={p.hero}
+                  alt={p.heroAlt ?? p.title}
+                  tone={PAIR_TONES[i % PAIR_TONES.length]}
+                  label="Hero photo · 4:3"
+                />
+                <span className={styles.pairBody}>
+                  <span className={styles.pairTitle}>{p.title}</span>
+                  <span className={styles.pairMeta}>
+                    {p.category} · {p.time}
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

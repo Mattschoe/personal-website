@@ -151,6 +151,29 @@ describe('RecipeDetail', () => {
     expect(stepBtn).toHaveAttribute('aria-pressed', 'true');
   });
 
+  it('renders a "Goes well with" section linking to each paired recipe', () => {
+    const paired = recipes.find((r) => r.pairsWith && r.pairsWith.length > 0);
+    expect(paired).toBeDefined();
+    renderRecipe(paired!.slug);
+
+    const section = screen
+      .getByRole('heading', { name: 'Goes well with' })
+      .closest('section') as HTMLElement;
+
+    paired!.pairsWith!.forEach((slug) => {
+      const target = recipes.find((r) => r.slug === slug)!;
+      const link = within(section).getByRole('link', { name: new RegExp(target.title) });
+      expect(link).toHaveAttribute('href', `/recipes/${slug}`);
+    });
+  });
+
+  it('omits "Goes well with" when the recipe has no pairings', () => {
+    const unpaired = recipes.find((r) => !r.pairsWith || r.pairsWith.length === 0);
+    expect(unpaired).toBeDefined();
+    renderRecipe(unpaired!.slug);
+    expect(screen.queryByRole('heading', { name: 'Goes well with' })).toBeNull();
+  });
+
   it('renders NotFound for an unknown slug', () => {
     renderRecipe('does-not-exist');
     expect(
