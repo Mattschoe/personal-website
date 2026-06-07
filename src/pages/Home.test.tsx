@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { describe, it, expect } from 'vitest';
 import { Home } from './Home';
 import { getLatestFeed, formatDate } from '../content';
@@ -9,6 +10,7 @@ function renderHome() {
     <MemoryRouter>
       <Home />
     </MemoryRouter>,
+    { wrapper: HelmetProvider },
   );
 }
 

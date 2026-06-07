@@ -2,6 +2,8 @@ import { Link, useParams } from 'react-router-dom';
 import { getPost, formatDate } from '../content';
 import { Markdown } from '../content/Markdown';
 import { Image } from '../components/Image';
+import { Seo } from '../seo/Seo';
+import { articleJsonLd } from '../seo/meta';
 import { NotFound } from './NotFound';
 import styles from './PostDetail.module.css';
 
@@ -17,6 +19,13 @@ export function PostDetail() {
 
   return (
     <div className="container">
+      <Seo
+        title={post.title}
+        description={post.excerpt}
+        image={post.hero}
+        type="article"
+        jsonLd={articleJsonLd(post)}
+      />
       <nav className={styles.crumb}>
         <Link to="/blog">Blog</Link> <span>/</span> <span>Essay</span>
       </nav>

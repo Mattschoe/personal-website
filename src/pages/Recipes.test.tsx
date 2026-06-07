@@ -1,5 +1,6 @@
 import { render, screen, within, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { describe, it, expect } from 'vitest';
 import { Recipes } from './Recipes';
 import { getRecipes } from '../content';
@@ -9,6 +10,7 @@ function renderRecipes(entry = '/recipes') {
     <MemoryRouter initialEntries={[entry]}>
       <Recipes />
     </MemoryRouter>,
+    { wrapper: HelmetProvider },
   );
 }
 

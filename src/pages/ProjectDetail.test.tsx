@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { describe, it, expect } from 'vitest';
 import { ProjectDetail } from './ProjectDetail';
 import { getProjects } from '../content';
@@ -11,6 +12,7 @@ function renderProject(slug: string) {
         <Route path="/projects/:slug" element={<ProjectDetail />} />
       </Routes>
     </MemoryRouter>,
+    { wrapper: HelmetProvider },
   );
 }
 

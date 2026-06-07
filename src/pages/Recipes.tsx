@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getRecipes } from '../content';
 import { Image } from '../components/Image';
+import { Seo } from '../seo/Seo';
 import styles from './Recipes.module.css';
 
 // Tones cycle through the placeholder palette so the grid has visual variety
@@ -37,6 +38,10 @@ export function Recipes() {
 
   return (
     <>
+      <Seo
+        title="Recipes"
+        description="Recipes I cook and come back to — straightforward food with the notes that make it work."
+      />
       <section className={`container ${styles.pageHead}`}>
         <h1>Recipes</h1>
         <div
