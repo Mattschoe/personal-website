@@ -363,7 +363,7 @@ change.
 
 ---
 
-## ☐ Phase 9 — SEO, RSS, sitemap & a11y pass
+## ☑ Phase 9 — SEO, RSS, sitemap & a11y pass
 **Goal:** the site is discoverable, syndicated, and accessible.
 **Scope:** per-page `<title>` + meta description + Open Graph/Twitter tags (OG image = item hero),
 generated during SSG; `sitemap.xml`; **RSS feed for the blog** (and optionally a combined feed);
@@ -372,6 +372,45 @@ landmark roles, heading order, alt text, color-contrast spot check, reduced-moti
 **Done when:** view-source on each route shows correct prerendered meta; RSS validates; sitemap lists
 all routes; a quick Lighthouse/axe pass is clean on SEO + a11y.
 **Depends on:** Phases 4–8.
+
+**Delivered:**
+- **SEO layer (`src/seo/`):** `config.ts` (single source of truth; `https://mattschoe.dev`,
+  overridable via `VITE_SITE_URL` for Phase 10 deploy), pure tested builders `meta.ts`
+  (`absoluteUrl`/`pageTitle`/`buildSeo` + `articleJsonLd`/`recipeJsonLd`), and the `<Seo>` component
+  wrapping vite-react-ssg's `<Head>` (react-helmet-async — already transitive, no new runtime dep).
+  `<Seo>` lives in each page's JSX (8 pages) so detail pages that early-return `<NotFound/>` never
+  emit a stale title. Emits per-page title, description, canonical, OG, Twitter, optional JSON-LD
+  (`BlogPosting` on posts, `Recipe` on recipes), and `robots: noindex` on 404. `index.html` keeps the
+  static title + a default description as the pre-hydration fallback.
+- **Build-time generators:** extracted the Node file-reader into `src/content/read.node.ts` (shared
+  by the `virtual:content` plugin *and* the generator — no `virtual:content` in the Node hook), lifted
+  the feed mappers into `src/content/feed.ts` (shared by the runtime "Latest" feed and the combined
+  RSS). `src/seo/feeds.ts` builds `sitemap.xml` (static routes + one `<url>`/item), `rss.xml` (blog),
+  and `feed.xml` (combined all-streams); `src/seo/generate.ts` writes them via `ssgOptions.onFinished`.
+  `public/robots.txt` points at the sitemap. All three XML files validate (`xmllint --noout`).
+- **Rule 4 preserved:** generators read content dynamically — dropping a `.md` auto-adds it to
+  sitemap/RSS/feed with no code change (verified: the untracked grilled-teriyaki-skewers recipe
+  appeared in `sitemap.xml`/`feed.xml` on build with zero edits).
+- **Tests:** `src/seo/meta.test.ts`, `src/seo/feeds.test.ts` (XML parsed with `DOMParser`),
+  `src/seo/Seo.test.tsx` (renders into `HelmetProvider`+`MemoryRouter`, asserts head tags). Existing
+  page tests wrapped in `HelmetProvider` (RTL `wrapper` option) since pages now mount `<Head>`. Suite:
+  120 tests green; `tsc --noEmit` + eslint clean. Vitest aliases `react-helmet-async` to the
+  vite-react-ssg copy (peer-pinned <React 19, can't hoist) so tests share the same provider instance.
+- **a11y sweep:** axe-core (Playwright) over 7 pages × 2 themes × 2 widths. Landmarks (single
+  `<main>`/banner/`<footer>`), heading order (single `<h1>`/page), `aria-current="page"`, alt text,
+  focus-visible + reduced-motion all good. The post `<header>` inside `<main>` is a sectioning header,
+  not a second banner landmark.
+
+**Follow-up for Matt (design decision — not changed; out of scope per CLAUDE.md Rule 1 "don't
+redesign"):** axe flags sub-AA color contrast on a few **locked brand-accent tokens** for *small*
+text, both themes — grenadine `--accent #D44720` on paper/espresso (~3.6–3.9; recipe tag pills, arrow
+links), darkened sage `#4E7C5C` / beeswax `#B97E1E` (~3–4.2; project status, tags), and white on
+`#D44720` for the accent button (4.44, just under 4.5). These are ported verbatim from
+`design-reference/styles.css` (inherited from Phases 1–8, not introduced here). Bumping them darker for
+small-text uses would meet AA but changes the brand palette — needs Matt's sign-off.
+
+**Deferred to Phase 10 / later:** favicon + default OG art (skipped this phase by decision — `og:image`
+is set only from an item `hero`). `VITE_SITE_URL` is wired and ready for the deploy to override origin.
 
 ---
 
