@@ -104,6 +104,7 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--surface);
+  text-decoration: none;
 }
 .featured :global(.ph) {
   border: 0;
@@ -143,24 +144,32 @@
 .aboutStrip {
   background: var(--bg-2);
   border-top: var(--border-w) solid var(--line-strong);
-  border-bottom: var(--border-w) solid var(--line-strong);
+  /* No bottom border: the strip is always the last section on Home and sits
+     flush against the footer, whose border-top supplies the dividing line. */
+  scroll-margin-top: 80px; /* clear the 64px sticky header on /#about anchor */
 }
 .aboutGrid {
   display: grid;
   grid-template-columns: 0.8fr 1.4fr;
   gap: var(--s-7);
-  align-items: center;
+  /* Stretch the text column to the image's height so the title pins to the
+     image top and the actions pin to the image bottom (see .aboutActions). */
+  align-items: stretch;
   padding-block: var(--s-8);
 }
 .aboutGrid :global(.ph) {
   aspect-ratio: 3/4;
+}
+.aboutText {
+  display: flex;
+  flex-direction: column;
 }
 .aboutGrid h2 {
   font-size: var(--fs-h2);
   margin-bottom: var(--s-4);
 }
 .aboutActions {
-  margin-top: var(--s-4);
+  margin-top: auto; /* pin to the bottom of the stretched column */
 }
 
 @media (max-width: 880px) {
@@ -184,7 +193,21 @@
     grid-template-columns: 1fr;
   }
   .aboutGrid :global(.ph) {
-    max-width: 300px;
+    /* A definite width (capped on narrow screens) so the auto margins have free
+       space to center against — `margin:auto` alone cancels the grid stretch and
+       collapses the box to its glyph. */
+    width: 300px;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+  /* Stacked on mobile: center the text and let the actions flow under the body
+     rather than stretch/pin to a (now full-width) row. */
+  .aboutText {
+    text-align: center;
+    align-items: center;
+  }
+  .aboutActions {
+    margin-top: var(--s-4);
   }
 }
 @media (max-width: 640px) {
