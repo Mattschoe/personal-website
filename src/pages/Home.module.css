@@ -141,21 +141,16 @@
   color: var(--accent);
 }
 
-.aboutStrip {
-  background: var(--bg-2);
-  border-top: var(--border-w) solid var(--line-strong);
-  /* No bottom border: the strip is always the last section on Home and sits
-     flush against the footer, whose border-top supplies the dividing line. */
+.about {
   scroll-margin-top: 80px; /* clear the 64px sticky header on /#about anchor */
 }
 .aboutGrid {
   display: grid;
   grid-template-columns: 0.8fr 1.4fr;
   gap: var(--s-7);
-  /* Stretch the text column to the image's height so the title pins to the
-     image top and the actions pin to the image bottom (see .aboutActions). */
+  /* Stretch the text column to the image's height so the actions pin to the
+     image bottom (see .aboutActions). */
   align-items: stretch;
-  padding-block: var(--s-8);
 }
 .aboutGrid :global(.ph) {
   aspect-ratio: 3/4;

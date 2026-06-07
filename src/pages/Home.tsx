@@ -150,12 +150,17 @@ export function Home() {
         </div>
       </section>
 
-      {/* ============ ABOUT STRIP ============ */}
-      <section className={`about-strip ${styles.aboutStrip}`} id="about">
-        <div className={`container ${styles.aboutGrid}`}>
+      {/* ============ ABOUT ============ */}
+      <section className={`section container ${styles.about}`} id="about">
+        <div className="section-head">
+          <div>
+            <h2>About me</h2>
+          </div>
+        </div>
+
+        <div className={styles.aboutGrid}>
           <Image tone="latte" label="Portrait · 3:4" glyph="M" alt="" />
           <div className={styles.aboutText}>
-            <h2>About me</h2>
             {/* TODO(copy): placeholder bio — replace the Lorem Ipsum below with
                 Matt's real about copy. */}
             <p className="lead">
