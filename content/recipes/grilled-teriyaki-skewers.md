@@ -6,6 +6,8 @@ heroAlt: a platter of skewers with grilled chicken thigh and vegetables
 category: Grilling
 yield: Serves 2-3
 time: 2 hours
+pairsWith:
+  - summer-salad-2026
 ingredients:
   - heading: Marinade
     items: 
@@ -36,5 +38,3 @@ steps:
   - Whisk the sauce together and pour over the chicken. Let the chicken marinate for however long you'd like. Take out at fridge minimum 30 minutes before making the skewers.
   - Skew the meat and vegetables and grill. Remember that thigh can be quite forgiving, so don't worry about dryness. 
 ---
-
-Test!

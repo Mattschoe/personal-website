@@ -6,6 +6,8 @@ hero: /images/recipes/grilled_shrimp_skewers.jpg
 heroAlt: a grill showing the marinated skewers of shrimp
 yield: 2-3 skewers
 time: 30 minutes
+pairsWith:
+  - summer-salad-2026
 ingredients:
   - heading: Marinade
     items:
