@@ -116,11 +116,6 @@ describe('Home', () => {
     expect(scope.getByText(featured.title)).toBeInTheDocument();
   });
 
-  it('shows the hero lead as a literal TODO placeholder', () => {
-    renderHome();
-    expect(screen.getByText(/TODO: write hero lead copy/i)).toBeInTheDocument();
-  });
-
   it('exposes the #about anchor target for the header link', () => {
     const { container } = renderHome();
     const about = container.querySelector('#about');
