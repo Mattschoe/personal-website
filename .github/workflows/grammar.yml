@@ -2,7 +2,7 @@ name: Grammar check
 on:
   push:
     branches: [main]
-    paths: [**.md']
+    paths: ['**.md']
 
 permissions:
   contents: write
