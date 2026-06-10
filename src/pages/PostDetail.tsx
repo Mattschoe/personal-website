@@ -7,11 +7,10 @@ import { articleJsonLd } from '../seo/meta';
 import { NotFound } from './NotFound';
 import styles from './PostDetail.module.css';
 
-// Single post: left-aligned header (tag, title, byline), centered lead figure,
-// then the 680px reading column with a drop-capped first paragraph and a tag
-// row. Per Matt, there is no reading-time and no "keep reading" 2-up — the post
-// ends cleanly after its tags. The lead figure stays a `.ph` placeholder until
-// real imagery lands in Phase 8.
+// Single post: left-aligned header (title, byline), centered lead figure (only
+// when the post has a `hero`), then the 680px reading column with a drop-capped
+// first paragraph. Per Matt, there is no reading-time, no "keep reading" 2-up,
+// and no tag row — the post ends cleanly after its body.
 export function PostDetail() {
   const { slug } = useParams();
   const post = slug ? getPost(slug) : undefined;
@@ -27,37 +26,28 @@ export function PostDetail() {
         jsonLd={articleJsonLd(post)}
       />
       <nav className={styles.crumb}>
-        <Link to="/blog">Blog</Link> <span>/</span> <span>Essay</span>
+        <Link to="/blog">Blog</Link>
       </nav>
 
       <header className={styles.postHeader}>
-        <span className="tag tag--essay">Essay</span>
         <h1>{post.title}</h1>
         <div className={styles.byline}>
-          <span className="ph" data-tone="sage" data-ph=""></span>
           <span>{formatDate(post.date, { withYear: true })}</span>
         </div>
       </header>
 
-      <figure className={`${styles.leadFigure} read`}>
-        <Image
-          src={post.hero}
-          alt={post.heroAlt ?? post.title}
-          tone="beeswax"
-          label="Lead image · 16:8"
-          eager
-        />
-      </figure>
+      {post.hero && (
+        <figure className={`${styles.leadFigure} read`}>
+          <Image
+            src={post.hero}
+            alt={post.heroAlt ?? post.title}
+            tone="beeswax"
+            eager
+          />
+        </figure>
+      )}
 
       <Markdown dropcap>{post.body}</Markdown>
-
-      <div className={styles.postFoot}>
-        <div className={styles.tagRow}>
-          {post.tags.map((tag) => (
-            <span key={tag}>#{tag}</span>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

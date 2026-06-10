@@ -294,6 +294,13 @@ p{ margin:0 0 1em; text-wrap:pretty; }
 .read figure{ margin:1.8em 0; }
 .read figcaption{ font-family:var(--font-mono); font-size:var(--fs-meta);
   color:var(--ink-soft); text-transform:uppercase; letter-spacing:.1em; margin-top:.6em; }
+.read table{ margin:1.8em auto; border-collapse:collapse; font-size:var(--fs-small);
+  line-height:1.5; max-width:100%; display:block; overflow-x:auto; }
+.read th,.read td{ padding:.55em .9em; border:1px solid var(--line); text-align:left;
+  vertical-align:top; }
+.read th{ background:var(--surface); font-family:var(--font-display); font-weight:700;
+  letter-spacing:-0.01em; }
+.read tbody tr:nth-child(even){ background:var(--surface); }
 .dropcap::first-letter{
   font-family:var(--font-display); font-weight:800; float:left;
   font-size:3.6em; line-height:.78; padding:.05em .12em 0 0; color:var(--accent);

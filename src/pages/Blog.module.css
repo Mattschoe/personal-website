@@ -4,7 +4,7 @@
    so .postRow is a 2-column grid (date · main) instead of 3. */
 
 .pageHead {
-  padding-block: var(--s-8) var(--s-6);
+  padding-block: var(--s-8) var(--s-3);
 }
 .pageHead h1 {
   font-size: var(--fs-h1);
@@ -13,7 +13,7 @@
 }
 
 .postList {
-  margin-top: var(--s-3);
+  margin-top: 0;
 }
 .postRow {
   display: grid;

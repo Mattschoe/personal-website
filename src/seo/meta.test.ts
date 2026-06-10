@@ -81,7 +81,6 @@ const post: Post = {
   excerpt: 'A short blurb.',
   readingTime: '3 min read',
   body: 'Body.',
-  tags: ['react', 'ssg'],
   hero: '/images/post.jpg',
 };
 

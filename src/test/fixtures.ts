@@ -120,7 +120,6 @@ export const posts: Post[] = [
     excerpt: 'Plain text outlives every app I have ever loved.',
     readingTime: '3 min read',
     body: 'Plain text outlives every app I have ever loved, and that durability is the whole point.\n\nIt diffs cleanly, greps instantly, and survives format churn.',
-    tags: ['writing', 'tools'],
   },
   {
     title: 'Designing in the Open',
@@ -129,6 +128,5 @@ export const posts: Post[] = [
     excerpt: 'Notes on building a personal site in public.',
     readingTime: '2 min read',
     body: 'Building in the open keeps me honest about the work.\n\nThe commits are the changelog.',
-    tags: ['design', 'meta'],
   },
 ];

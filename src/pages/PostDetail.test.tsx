@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { describe, it, expect } from 'vitest';
@@ -21,11 +21,10 @@ function renderPost(slug: string) {
 const post = getPosts()[0];
 
 describe('PostDetail', () => {
-  it('renders the Essay tag, crumb, title and year-stamped byline date', () => {
+  it('renders the crumb, title and year-stamped byline date, with no Essay tag', () => {
     renderPost(post.slug);
 
-    const tag = screen.getByText('Essay', { selector: '.tag' });
-    expect(tag).toHaveClass('tag', 'tag--essay');
+    expect(screen.queryByText('Essay')).toBeNull();
 
     expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute(
       'href',
@@ -47,16 +46,6 @@ describe('PostDetail', () => {
     Array.from(paragraphs)
       .slice(1)
       .forEach((p) => expect(p).not.toHaveClass('dropcap'));
-  });
-
-  it('renders a tag row with #-prefixed front-matter tags', () => {
-    const { container } = renderPost(post.slug);
-    const tagRow = container.querySelector('[class*="tagRow"]');
-    expect(tagRow).not.toBeNull();
-    const scope = within(tagRow as HTMLElement);
-    post.tags.forEach((t) => {
-      expect(scope.getByText(`#${t}`)).toBeInTheDocument();
-    });
   });
 
   it('shows no reading time and no "keep reading" section', () => {

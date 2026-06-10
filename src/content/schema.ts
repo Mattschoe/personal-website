@@ -89,7 +89,6 @@ export const projectFrontmatter = z.strictObject({
 export const postFrontmatter = z.strictObject({
   ...base,
   excerpt: z.string().min(1).optional(),
-  tags: z.array(z.string().min(1)).min(1),
 });
 
 export type RecipeFrontmatter = z.infer<typeof recipeFrontmatter>;

@@ -89,7 +89,6 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
     dateModified: post.date,
     author: { '@type': 'Person', name: siteConfig.author },
     url: absoluteUrl(`/blog/${post.slug}`),
-    keywords: post.tags.join(', '),
     ...(post.hero ? { image: absoluteUrl(post.hero) } : {}),
   };
 }
