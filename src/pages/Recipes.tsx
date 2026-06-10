@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { getRecipes } from '../content';
+import { getRecipes, truncate } from '../content';
 import { Image } from '../components/Image';
 import { Seo } from '../seo/Seo';
 import styles from './Recipes.module.css';
@@ -106,7 +106,7 @@ export function Recipes() {
                   <span className="card-meta">{recipe.time}</span>
                 </div>
                 <div className="card-title">{recipe.title}</div>
-                <p className="card-excerpt">{recipe.excerpt}</p>
+                <p className="card-excerpt">{truncate(recipe.excerpt)}</p>
               </Link>
             ))}
           </div>

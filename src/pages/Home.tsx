@@ -116,7 +116,7 @@ export function Home() {
                 </span>
               </div>
               <h3>{featured.title}</h3>
-              <p className="card-excerpt">{featured.excerpt}</p>
+              {featured.caption && <p className="card-excerpt">{featured.caption}</p>}
               <span
                 className={`arrow-link ${styles.arrowOnly}`}
                 aria-hidden="true"
@@ -143,7 +143,7 @@ export function Home() {
                   <span className="card-meta">{formatDate(item.date)}</span>
                 </div>
                 <div className="card-title">{item.title}</div>
-                <p className="card-excerpt">{item.excerpt}</p>
+                {item.caption && <p className="card-excerpt">{item.caption}</p>}
               </Link>
             );
           })}

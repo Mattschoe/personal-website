@@ -29,6 +29,16 @@ const base = {
   title: z.string().min(1),
   date: isoDate,
   slug: z.string().min(1).optional(),
+  // Author-controlled blurb shown verbatim on the Home cards only — purely
+  // opt-in: a card shows a caption iff the author wrote one, otherwise it shows
+  // no blurb (the excerpt is never pulled in here). The index pages and
+  // SEO/feeds always use the full `excerpt`/`summary`. Optional, and an empty or
+  // whitespace-only value is normalised to "no caption".
+  caption: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => v || undefined),
   // Image path (absolute `/images/...` URL under `public/`) + its alt text.
   // Both optional: when `hero` is unset the UI shows a toned `.ph` placeholder.
   hero: z.string().min(1).optional(),
@@ -139,6 +149,9 @@ export interface FeedItem {
   title: string;
   date: string;
   excerpt: string;
+  // Author-controlled card blurb, carried through from the source item. When
+  // present the Home cards show it verbatim; when absent they show no blurb.
+  caption?: string;
   href: string;
   tone: FeedTone;
   // Carried through from the source item so Home's featured + feed cards can

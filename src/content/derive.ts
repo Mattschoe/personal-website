@@ -96,6 +96,22 @@ export function excerptFromBody(body: string): string {
 }
 
 /**
+ * Truncate prose to a maximum length for card display, cutting on a word
+ * boundary and appending an ellipsis. Shorter strings are returned untouched.
+ * Used only for the fixed-size index/home cards; the full excerpt is kept in
+ * the data layer for SEO descriptions.
+ */
+export function truncate(text: string, max = 160): string {
+  if (text.length <= max) return text;
+  const clipped = text.slice(0, max);
+  // Back off to the last word boundary unless the cut already landed cleanly
+  // at the start of the next word (the char past the cut is whitespace).
+  const lastSpace = clipped.lastIndexOf(' ');
+  const head = /\s/.test(text[max]) || lastSpace <= 0 ? clipped : clipped.slice(0, lastSpace);
+  return `${head.trimEnd().replace(/[.,;:!?-]+$/, '')}…`;
+}
+
+/**
  * Newest-first comparator. Ties on `date` are broken by a stable secondary key
  * (ascending) so the merged/sorted output is deterministic regardless of the
  * order the files happen to be read in.
