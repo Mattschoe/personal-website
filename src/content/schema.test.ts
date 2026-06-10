@@ -82,6 +82,23 @@ describe('content schemas', () => {
     expect(recipeFrontmatter.safeParse({ ...validRecipe, hero: '' }).success).toBe(false);
   });
 
+  it('accepts an optional caption on every stream and normalises an empty one to undefined', () => {
+    expect(
+      recipeFrontmatter.safeParse({ ...validRecipe, caption: 'Smooth card line.' }).success,
+    ).toBe(true);
+    expect(
+      projectFrontmatter.safeParse({ ...validProject, caption: 'Smooth card line.' }).success,
+    ).toBe(true);
+    expect(
+      postFrontmatter.safeParse({ ...validPost, caption: 'Smooth card line.' }).success,
+    ).toBe(true);
+    // An empty or whitespace-only caption means "no caption" — accepted, then
+    // normalised away so the Home card renders no blurb (never the excerpt).
+    const empty = recipeFrontmatter.safeParse({ ...validRecipe, caption: '   ' });
+    expect(empty.success).toBe(true);
+    expect(empty.success && empty.data.caption).toBeUndefined();
+  });
+
   it('coerces numeric year and ingredient amounts to strings', () => {
     const project = projectFrontmatter.safeParse({ ...validProject, year: 2025 });
     expect(project.success).toBe(true);

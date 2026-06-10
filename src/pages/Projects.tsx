@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { getProjects } from '../content';
+import { getProjects, truncate } from '../content';
 import { Image } from '../components/Image';
 import { Seo } from '../seo/Seo';
 import styles from './Projects.module.css';
@@ -48,7 +48,7 @@ export function Projects() {
                   <span className="card-meta">{project.year}</span>
                 </div>
                 <h3>{project.title}</h3>
-                <p className="card-excerpt">{project.summary}</p>
+                <p className="card-excerpt">{truncate(project.summary)}</p>
                 <div className={styles.stack}>
                   {project.stack.map((tech) => (
                     <span key={tech}>{tech}</span>

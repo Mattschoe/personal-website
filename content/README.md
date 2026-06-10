@@ -38,6 +38,7 @@ file, so typos can't slip through silently.
 - **`slug`** is optional — it defaults to the filename (`weeknight-tomato-soup.md` → `/recipes/weeknight-tomato-soup`). Set it explicitly only to override.
 - **`date`** must be `YYYY-MM-DD`. Streams sort newest-first, and the Home "Latest" feed merges all three by date.
 - **`hero`** / **`heroAlt`** (optional) point at an image under `public/images/` — see **Images** above.
+- **`caption`** (optional) is the exact blurb shown on the **Home** "Latest" cards — purely opt-in. Set it and the card shows it verbatim (no truncation), so you control the card line. Omit it (or leave it empty) and the card shows **no blurb** — the excerpt is never pulled in here. The index pages (Recipes/Projects/Blog), SEO descriptions, and feeds always use the full `excerpt`/`summary` (the index cards truncate it; SEO/feeds use it whole) — never `caption`.
 - **`sample: true`** marks development seed content. Delete those files when real content lands.
 
 ## Recipes (`content/recipes/`)

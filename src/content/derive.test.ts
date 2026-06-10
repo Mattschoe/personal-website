@@ -4,6 +4,7 @@ import {
   slugFromPath,
   readingTime,
   excerptFromBody,
+  truncate,
   byDateDesc,
 } from './derive';
 
@@ -66,6 +67,28 @@ describe('excerptFromBody', () => {
   it('returns the first real paragraph, de-marked', () => {
     const body = '# Heading\n\nThis is **bold** and a [link](https://x).\n\nSecond.';
     expect(excerptFromBody(body)).toBe('This is bold and a link.');
+  });
+});
+
+describe('truncate', () => {
+  it('returns short text unchanged', () => {
+    expect(truncate('Short and sweet.', 160)).toBe('Short and sweet.');
+  });
+
+  it('returns text at exactly the limit unchanged', () => {
+    const text = 'a'.repeat(20);
+    expect(truncate(text, 20)).toBe(text);
+  });
+
+  it('cuts on a word boundary and appends an ellipsis', () => {
+    const text = 'The quick brown fox jumps over the lazy dog';
+    const result = truncate(text, 20);
+    expect(result).toBe('The quick brown fox…');
+    expect(result.length).toBeLessThanOrEqual(21);
+  });
+
+  it('strips trailing punctuation before the ellipsis', () => {
+    expect(truncate('Hello there, friend and more', 13)).toBe('Hello there…');
   });
 });
 

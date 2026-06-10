@@ -32,10 +32,25 @@ describe('Recipes index', () => {
       expect(card).toHaveAttribute('href', `/recipes/${recipe.slug}`);
       const scope = within(card as HTMLElement);
       expect(scope.getByText(recipe.title)).toBeInTheDocument();
+      // Index cards show the excerpt; the author `caption` is a home-card-only
+      // override and must never surface here.
       expect(scope.getByText(recipe.excerpt)).toBeInTheDocument();
       expect(scope.getByText(recipe.category)).toBeInTheDocument();
       expect(scope.getByText(recipe.time)).toBeInTheDocument();
     });
+  });
+
+  it('shows the excerpt — not the author caption — even when a caption is set', () => {
+    const captioned = recipes.find((r) => r.caption && r.caption !== r.excerpt);
+    expect(captioned, 'fixtures should include a captioned recipe').toBeTruthy();
+    const { container } = renderRecipes();
+    const card = [...cards(container)].find(
+      (c) => c.getAttribute('href') === `/recipes/${captioned!.slug}`,
+    );
+    const scope = within(card as HTMLElement);
+    // The caption belongs to the home cards only; the index keeps the excerpt.
+    expect(scope.getByText(captioned!.excerpt)).toBeInTheDocument();
+    expect(scope.queryByText(captioned!.caption!)).not.toBeInTheDocument();
   });
 
   it('derives the chip list from content: All + each unique category', () => {

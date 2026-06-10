@@ -32,6 +32,7 @@ export const recipes: Recipe[] = [
     date: '2025-05-01',
     slug: 'grilled-teriyaki-skewers',
     excerpt: 'Sticky, charred chicken thigh skewers off the grill.',
+    caption: 'Sticky teriyaki skewers, straight off the grill.',
     body: 'Weeknight-friendly skewers with a quick teriyaki glaze.',
     hero: '/images/recipes/grilled_teriyaki_skewers.jpg',
     heroAlt: 'Charred chicken skewers on a platter',

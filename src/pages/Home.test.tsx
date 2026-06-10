@@ -57,6 +57,29 @@ describe('Home', () => {
     });
   });
 
+  it('shows the author caption on a feed card when one is set, not the excerpt', () => {
+    // Caption is a home-card-only override; the index pages keep the excerpt.
+    const captioned = rest.find((item) => item.caption && item.caption !== item.excerpt);
+    expect(captioned, 'fixtures should put a captioned item in the home feed').toBeTruthy();
+    const { container } = renderHome();
+    const card = [...container.querySelectorAll('a.card')].find(
+      (c) => c.getAttribute('href') === captioned!.href,
+    );
+    const scope = within(card as HTMLElement);
+    expect(scope.getByText(captioned!.caption!)).toBeInTheDocument();
+    expect(scope.queryByText(captioned!.excerpt)).not.toBeInTheDocument();
+  });
+
+  it('renders no blurb on a card that has no caption (no excerpt fallback)', () => {
+    const plain = rest.find((item) => !item.caption);
+    expect(plain, 'fixtures should include an uncaptioned feed item').toBeTruthy();
+    const { container } = renderHome();
+    const card = [...container.querySelectorAll('a.card')].find(
+      (c) => c.getAttribute('href') === plain!.href,
+    );
+    expect((card as HTMLElement).querySelector('.card-excerpt')).toBeNull();
+  });
+
   it('shows the hero lead as a literal TODO placeholder', () => {
     renderHome();
     expect(screen.getByText(/TODO: write hero lead copy/i)).toBeInTheDocument();
