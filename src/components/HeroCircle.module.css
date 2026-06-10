@@ -1,0 +1,25 @@
+/* Hero-circle Flow Field wrapper — ported from `.circle-wrap` in the design
+   prototype (circle-concepts.html). Tokens only; the width fills the hero's
+   grid column (kept square via aspect-ratio) instead of the prototype's fixed
+   360px. */
+
+.circle {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: var(--border-w) solid var(--line-strong);
+  box-shadow: var(--shadow-soft);
+  background: var(--bg);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
