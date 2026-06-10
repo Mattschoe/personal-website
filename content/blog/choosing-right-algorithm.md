@@ -2,8 +2,6 @@
 title: How to choose the right approach for Competitive Programming
 date: 2026-06-10
 excerpt: Being able to choose the right algorithm and datastructure for a exercise is essential for competitive-style programming exercises. Here's a list of my methods to analyze any question.
-tags:
-  - Programming
 ---
 Being able to choose the right algorithm and datastructure for a exercise is essential for 
 competitive-style programming exercises. Here's a list of my methods to analyze any question.

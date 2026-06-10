@@ -42,8 +42,6 @@ Project body.
 const postMd = `---
 title: Test Post
 date: 2024-07-04
-tags:
-  - meta
 ---
 
 # A Heading
@@ -178,8 +176,8 @@ describe('parsePosts', () => {
     expect(post.readingTime).toMatch(/^\d+ min read$/);
   });
 
-  it('throws naming the file when tags are absent', () => {
-    const bad = postMd.replace('tags:\n  - meta\n', '');
+  it('throws naming the file when a required field is absent', () => {
+    const bad = postMd.replace('title: Test Post\n', '');
     expect(() => parsePosts({ '/content/blog/broken.md': bad })).toThrow(
       /\/content\/blog\/broken\.md/,
     );

@@ -116,7 +116,6 @@ The body is the case-study article.
 |---|---|---|
 | `title` | yes | |
 | `date` | yes | `YYYY-MM-DD` |
-| `tags` | yes | list of strings |
 | `excerpt` | no | one-line summary; derived from the body if omitted |
 | `slug`, `hero`, `heroAlt`, `sample` | no | see conventions above |
 

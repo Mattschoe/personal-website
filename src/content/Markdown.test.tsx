@@ -32,4 +32,23 @@ describe('Markdown hydration', () => {
     if (errors.length) console.log('HYDRATION ERRORS:\n' + errors.join('\n---\n'));
     expect(errors).toEqual([]);
   });
+
+  it('typesets inline and block math via KaTeX', () => {
+    const html = renderToString(
+      <Markdown>{'Inline $a^2 + b^2 = c^2$ and a block:\n\n$$\n\\frac{1}{2}\n$$'}</Markdown>,
+    );
+    // rehype-katex emits a .katex span for the inline math and a .katex-display
+    // wrapper for the fenced `$$` block (the raw TeX is retained only inside
+    // KaTeX's MathML <annotation>, which is why we assert on the wrappers).
+    expect(html).toContain('katex');
+    expect(html).toContain('katex-display');
+  });
+
+  it('renders a GFM table', () => {
+    const html = renderToString(
+      <Markdown>{'| A | B |\n|---|---|\n| 1 | 2 |'}</Markdown>,
+    );
+    expect(html).toContain('<table>');
+    expect(html).toContain('<th>A</th>');
+  });
 });

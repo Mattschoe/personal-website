@@ -24,7 +24,6 @@ const validProject = {
 const validPost = {
   title: 'Test Post',
   date: '2024-01-01',
-  tags: ['workflow'],
 };
 
 describe('content schemas', () => {
