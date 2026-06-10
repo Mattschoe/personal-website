@@ -1,0 +1,19 @@
+name: Grammar check
+on:
+  push:
+    branches: [main]
+    paths: [**.md']
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  grammar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Mattschoe/grammar-check@v1
+        with:
+          provider: ${{ vars.provider }}
+          api-key: ${{ secrets.LLM_API_KEY }}
+          file-extensions: md
