@@ -2,6 +2,7 @@
 title: Building Agentic Scrum for Novo Nordisk
 date: 2026-06-08
 summary: An agentic system taking over some of the accountabilities of SM and PO in Scrum
+caption: An agentic system taking over some of the accountabilities of SM and PO in Scrum
 status: Active
 year: 2026 - present
 role: Systems Developer
