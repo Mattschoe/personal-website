@@ -31,7 +31,7 @@
   margin: var(--s-3) 0 var(--s-4);
 }
 .projHead :global(.lead) {
-  max-width: 54ch;
+  max-width: none;
 }
 .projActions {
   display: flex;

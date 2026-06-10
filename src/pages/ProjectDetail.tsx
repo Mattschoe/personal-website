@@ -34,7 +34,6 @@ export function ProjectDetail() {
       </nav>
 
       <section className={styles.projHead}>
-        <span className="tag tag--project">Project</span>
         <h1>{project.title}</h1>
         <p className="lead">{project.summary}</p>
         {hasActions && (
