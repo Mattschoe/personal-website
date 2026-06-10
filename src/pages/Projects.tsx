@@ -54,9 +54,6 @@ export function Projects() {
                     <span key={tech}>{tech}</span>
                   ))}
                 </div>
-                <span className="arrow-link" style={{ marginTop: 'var(--s-2)' }}>
-                  Case study <span className="ar">&#8599;</span>
-                </span>
               </div>
             </Link>
           ))}

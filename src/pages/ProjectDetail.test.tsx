@@ -34,11 +34,10 @@ describe('ProjectDetail', () => {
     expect(partial).toBeDefined();
   });
 
-  it('renders the Project tag, crumb, title and summary lead', () => {
+  it('renders the crumb, title and summary lead (no stream tag)', () => {
     renderProject(full.slug);
 
-    const tag = screen.getByText('Project', { selector: '.tag' });
-    expect(tag).toHaveClass('tag', 'tag--project');
+    expect(screen.queryByText('Project', { selector: '.tag' })).toBeNull();
 
     expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute(
       'href',

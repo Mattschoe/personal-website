@@ -6,7 +6,7 @@
    flips the columns + media order), so the JSX stays uniform per row. */
 
 .pageHead {
-  padding-block: var(--s-8) var(--s-6);
+  padding-block: var(--s-8) var(--s-3);
 }
 .pageHead h1 {
   font-size: var(--fs-h1);
@@ -15,7 +15,7 @@
 }
 
 .projList {
-  margin-top: var(--s-3);
+  margin-top: 0;
   display: flex;
   flex-direction: column;
   gap: var(--s-6);
@@ -25,7 +25,7 @@
   display: grid;
   grid-template-columns: 1.1fr 1.3fr;
   gap: var(--s-6);
-  align-items: stretch;
+  align-items: start;
   background: var(--surface);
   border: var(--border-w) solid var(--line-strong);
   border-radius: var(--radius-lg);
@@ -45,22 +45,32 @@
   order: 2;
 }
 
+/* The reserved image area is a fixed 16:10 box (a standard screen ratio, so a
+   full-window screenshot fits with no crop). The image always fills it via
+   `object-fit: cover`, anchored top-left, so it scales corner-to-corner
+   regardless of the source dimensions. */
 .projMedia {
-  min-height: 280px;
+  aspect-ratio: 16 / 10;
   display: flex;
 }
 .projMedia :global(.ph) {
   width: 100%;
   height: 100%;
-  min-height: 280px;
   border: 0;
   border-radius: 0;
 }
+.projMedia :global(.ph) img {
+  object-position: top left;
+}
 
+/* Text is centered against the (taller) image area so short cards stay
+   balanced rather than top-stacked with whitespace below. */
 .projBody {
   padding: var(--s-6);
+  align-self: stretch;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: var(--s-3);
 }
 .projBody h3 {
@@ -117,8 +127,5 @@
   }
   .proj:nth-child(even) .projMedia {
     order: 0;
-  }
-  .projMedia {
-    min-height: 200px;
   }
 }
