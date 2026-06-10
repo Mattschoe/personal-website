@@ -2,15 +2,16 @@
 title: How to choose the right approach for Competitive Programming
 date: 2026-06-10
 excerpt: Being able to choose the right algorithm and datastructure for a exercise is essential for competitive-style programming exercises. Here's a list of my methods to analyze any question.
+caption: Being able to choose the right algorithm and datastructure for a exercise is essential for competitive-style programming exercises. Here's a list of my methods to analyze any question.
 ---
-Being able to choose the right algorithm and datastructure for a exercise is essential for 
+Being able to choose the right algorithm and datastructure for a algorithmic problem is essential for 
 competitive-style programming exercises. Here's a list of my methods to analyze any question.
 # Meta Analysis of Input Constraints
-The best thing and quickest thing you can do is analyzing the input constraints. Assuming a standard 
+The best and quickest thing you can do is always analyzing the input constraints. Assuming a standard 
 time-limit of 1 second, allowing roughly $10^6$ operations use this table to get a quick and rough 
 idea of what potentiel solutions you should be looking at.
-| **Input Size (N)** | **Required Complexity** | **Like algorithm candidates**                                                                          |
-| ------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Input Size (N)** | **Required Complexity** | **Algorithm Candidates**                                                                          |
+| ---------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------ |
 | N $\leq$ 20        | O($2^N$) or O($N!$)     | Backtracking, Recursion, Bitmask DP. (Complete search is feasible).                                    |
 | N $\leq$ 2.000     | O($N^2$)                | DP (2D state), Graph (Dense / Adjacency Matrix), Selection/Insertion Sort (rare).                      |
 | N $\leq 10^5$      | O($N$ *log* $N$)        | Sorting, Greedy, Heap (Priority Queue), Binary Search, Segment Tree, Graph (Dijkstra/BFS on Adj List). |
