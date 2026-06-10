@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { getLatestFeed, formatDate, type FeedItem } from '../content';
 import { Image } from '../components/Image';
+import { HeroCircle } from '../components/HeroCircle';
 import { Seo } from '../seo/Seo';
 import styles from './Home.module.css';
 
@@ -79,7 +80,7 @@ export function Home() {
             </div>
           </div>
           <div className={styles.heroPhoto}>
-            <Image tone="sage" label="Portrait · square" glyph="M" alt="" eager />
+            <HeroCircle />
           </div>
         </div>
       </section>
