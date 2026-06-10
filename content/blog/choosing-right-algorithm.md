@@ -1,15 +1,15 @@
 ---
 title: How to choose the right approach for Competitive Programming
 date: 2026-06-10
-excerpt: Being able to choose the right algorithm and datastructure for a exercise is essential for competitive-style programming exercises. Here's a list of my methods to analyze any question.
-caption: Being able to choose the right algorithm and datastructure for a exercise is essential for competitive-style programming exercises. Here's a list of my methods to analyze any question.
+excerpt: Being able to choose the right algorithm and data structure for an exercise is essential for competitive-style programming exercises. Here's a list of my methods to analyze any question.
+caption: Being able to choose the right algorithm and data structure for an exercise is essential for competitive-style programming exercises. Here's a list of my methods to analyze any question.
 ---
-Being able to choose the right algorithm and datastructure for a algorithmic problem is essential for 
+Being able to choose the right algorithm and data structure for an algorithmic problem is essential for 
 competitive-style programming exercises. Here's a list of my methods to analyze any question.
 # Meta Analysis of Input Constraints
-The best and quickest thing you can do is always analyzing the input constraints. Assuming a standard 
+The best and quickest thing you can do is always analyze the input constraints. Assuming a standard 
 time-limit of 1 second, allowing roughly $10^6$ operations use this table to get a quick and rough 
-idea of what potentiel solutions you should be looking at.
+idea of what potential solutions you should be looking at.
 | **Input Size (N)** | **Required Complexity** | **Algorithm Candidates**                                                                          |
 | ---------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------ |
 | N $\leq$ 20        | O($2^N$) or O($N!$)     | Backtracking, Recursion, Bitmask DP. (Complete search is feasible).                                    |
@@ -18,10 +18,10 @@ idea of what potentiel solutions you should be looking at.
 | N $\leq 10^6$      | O($N$)                  | Two Pointers, Sliding Window, KMP, Union-Find, Linear DP.                                              |
 | N $\leq 10^{18}$   | O(*log N*) or O(1)      | Math (Number Theory), Matrix Exponentiation, Binary Search on Answer.                                  |
 # Problem Type Keywords
-Once you have narrowed the field with the input constraint, it's often a very good idea to analyse
+Once you have narrowed the field with the input constraint, it's often a very good idea to analyze
 the text of the problem and see if you can recognize some common phrases used for specific types
 of problems. Finding the phrase often means finding the algorithm behind it. Here is a list of
-what i typically look for and what i try to do next.
+what I typically look for and what I try to do next.
 ## "Find the Minimum/Maximum/Longest/Shortest..." (Optimization)
 **Candidate 1: Greedy.** \
 *Can I make a locally optimal choice that never leads to a mistake?*
@@ -44,25 +44,25 @@ unless the construction is unique and deterministic.
 - **Union-Find** (Connectivity).
 - **2-SAT** (Logic satisfaction).
 ## Misc
-Here's a list of some other keywords i often see pointing me towards a certain algorithmic choice:
+Here's a list of some other keywords I often see pointing me towards a certain algorithmic choice:
 | Algorithm                     | Keywords                                                                                                                                                                                                                   |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Sliding Window (Two Pointers) | "Contiguous subarrary" combined with "at most K" or "sum at most X"                                                                                                                                                        |
+| Sliding Window (Two Pointers) | "Contiguous subarray" combined with "at most K" or "sum at most X"                                                                                                                                                        |
 | Binary search on Answer       | "Minimize the maximum time" "Find the minimum time to reach a target" If the answer space is monotonic (if *X* is valid, *X+1* is also) Constraints on *result* is huge, but verifying a specific value is cheap. |
 | Heap (PQ)                     | "Find the K-th smallest/Largest" (No need to sort array, just maintain top *K* elements)                                                                                                                                   |
 | Dynamic Programming           | "Count the number of ways" "Longest increasing subsequence"/"Longest common ..." (Decision at index *i* depends on history of decision before it).                                                                      |
 | Two Pointers                  | "Palindrome"                                                                                                                                                                                                               |
-| BFS                           | "Shortest path" when it's unweighed                                                                                                                                                                                        |
-| Djikstra                      | "Shortest path" when it's weighed                                                                                                                                                                                          |
+| BFS                           | "Shortest path" when it's unweighted                                                                                                                                                                                        |
+| Dijkstra                      | "Shortest path" when it's weighted                                                                                                                                                                                          |
 | Union-Find                    | "Connectivity" "Groups" "Sets" When you don't care about path, only about membership, like: "Is A in the same group as B?"                                                                                        |
 
 # Greedy vs. Dynamic
 The hardest distinction to make is always if greedy is the optimal solution or if DP is necessary. 
 Greedy often *feels* correct, even when it is wrong. Here it's important to remember that Greedy is 
-**only** the solution when: A local optimal choice can be proofed to lead to a global optimal solution 
+**only** the solution when: A local optimal choice can be proven to lead to a global optimal solution 
 without ever needing to reconsider.
 
-But how do we go on about proofing this? Well, the most common strategy is using the *Exchange Argument*, 
+But how do we go about proving this? Well, the most common strategy is using the *Exchange Argument*, 
 which goes as follows:
 1. Imagine an Optimal Solution ($O$) that _disagrees_ with your Greedy Choice ($G$) at the very first step.
 2. Can you swap the piece from $O$ with your piece $G$ and still result in a valid solution that is just as good or better?
