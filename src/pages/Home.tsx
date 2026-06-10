@@ -37,8 +37,10 @@ export function Home() {
           <div>
             <span className={styles.hi}>Hi! I&apos;m Matt</span>
             <h1>I build software, cook, and write.</h1>
-            {/* TODO(copy): replace with Matt's real hero lead paragraph. */}
-            <p className="lead">TODO: write hero lead copy.</p>
+            <p className="lead">
+              I'm a software developer studying at the IT-University of Copenhagen. This place is
+              where i keep my projects and writing, but most important of all, my beloved recipes.
+            </p>
             <div className={styles.quick}>
               <Link className={styles.quickLink} to="/recipes">
                 Recipes <span className="ar">&#8599;</span>
@@ -109,16 +111,11 @@ export function Home() {
                 <span className={`tag ${TYPE_META[featured.type].tagClass}`}>
                   {TYPE_META[featured.type].label}
                 </span>
-                <span className="card-meta">
-                  {formatDate(featured.date, { withYear: true })}
-                </span>
+                <span className="card-meta">{formatDate(featured.date, { withYear: true })}</span>
               </div>
               <h3>{featured.title}</h3>
               {featured.caption && <p className="card-excerpt">{featured.caption}</p>}
-              <span
-                className={`arrow-link ${styles.arrowOnly}`}
-                aria-hidden="true"
-              >
+              <span className={`arrow-link ${styles.arrowOnly}`} aria-hidden="true">
                 <span className="ar">&#8599;</span>
               </span>
             </div>
@@ -131,11 +128,7 @@ export function Home() {
             return (
               <Link className="card" to={item.href} key={item.href}>
                 {item.hero && (
-                  <Image
-                    src={item.hero}
-                    alt={item.heroAlt ?? item.title}
-                    tone={item.tone}
-                  />
+                  <Image src={item.hero} alt={item.heroAlt ?? item.title} tone={item.tone} />
                 )}
                 <div className="card-top">
                   <span className={`tag ${meta.tagClass}`}>{meta.label}</span>
@@ -158,20 +151,17 @@ export function Home() {
         </div>
 
         <div className={styles.aboutGrid}>
-          <Image tone="latte" label="Portrait · 3:4" glyph="M" alt="" />
+          <Image src={"/images/about_me_image.jpg"} label="Portrait · 3:4" alt="A fun little picture of me mid crossaint eating" />
           <div className={styles.aboutText}>
-            {/* TODO(copy): placeholder bio — replace the Lorem Ipsum below with
-                Matt's real about copy. */}
-            <p className="lead">
-              TODO: write about-me copy. Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation.
-            </p>
+            <p className="lead">Hi! My name is Matt!</p>
             <p>
-              Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-              irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur.
+              I'm a student at the IT-University of Copenhagen, where i am currently taking my
+              Bachelor in Software Development. While i am a huge fan of coding, what i love much
+              more is building useful products and tools for the people i love and care for. For me
+              software development has always been the most creative field and i love showing that
+              creativity in everything i build. Oh, and i also love cooking, so while this website
+              was originally for showing off my work, it has mostly been transformed to a recipe
+              site. Enjoy!
             </p>
             <div className={`${styles.quick} ${styles.aboutActions}`}>
               <Link className="btn btn--accent" to="/projects">
