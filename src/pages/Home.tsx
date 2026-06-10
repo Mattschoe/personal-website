@@ -11,14 +11,11 @@ const LINKEDIN_URL = 'https://www.linkedin.com/in/matthias-s-nielsen';
 const EMAIL = 'mailto:matthias.s.nielsen@protonmail.com';
 
 // Per-stream presentation derived from the feed item's `type`: the tag label +
-// class and the placeholder caption. Tone/href/date already live on the item.
-const TYPE_META: Record<
-  FeedItem['type'],
-  { label: string; tagClass: string; phLabel: string }
-> = {
-  recipe: { label: 'Recipe', tagClass: 'tag--recipe', phLabel: 'Recipe photo · 4:3' },
-  project: { label: 'Project', tagClass: 'tag--project', phLabel: 'Project shot · 4:3' },
-  essay: { label: 'Essay', tagClass: 'tag--essay', phLabel: 'Essay image · 4:3' },
+// class. Tone/href/date already live on the item.
+const TYPE_META: Record<FeedItem['type'], { label: string; tagClass: string }> = {
+  recipe: { label: 'Recipe', tagClass: 'tag--recipe' },
+  project: { label: 'Project', tagClass: 'tag--project' },
+  essay: { label: 'Essay', tagClass: 'tag--essay' },
 };
 
 export function Home() {
@@ -95,18 +92,18 @@ export function Home() {
 
         {featured && (
           <Link
-            className={`featured ${styles.featured}`}
+            className={`featured ${styles.featured} ${featured.hero ? '' : styles.featuredNoImage}`}
             to={featured.href}
             aria-label={`Read featured ${TYPE_META[featured.type].label.toLowerCase()}`}
           >
-            <Image
-              src={featured.hero}
-              alt={featured.heroAlt ?? featured.title}
-              tone={featured.tone}
-              label="Featured image · 16:10"
-              glyph="✶"
-              eager
-            />
+            {featured.hero && (
+              <Image
+                src={featured.hero}
+                alt={featured.heroAlt ?? featured.title}
+                tone={featured.tone}
+                eager
+              />
+            )}
             <div className={styles.featuredBody}>
               <div className="card-top">
                 <span className={`tag ${TYPE_META[featured.type].tagClass}`}>
@@ -133,12 +130,13 @@ export function Home() {
             const meta = TYPE_META[item.type];
             return (
               <Link className="card" to={item.href} key={item.href}>
-                <Image
-                  src={item.hero}
-                  alt={item.heroAlt ?? item.title}
-                  tone={item.tone}
-                  label={meta.phLabel}
-                />
+                {item.hero && (
+                  <Image
+                    src={item.hero}
+                    alt={item.heroAlt ?? item.title}
+                    tone={item.tone}
+                  />
+                )}
                 <div className="card-top">
                   <span className={`tag ${meta.tagClass}`}>{meta.label}</span>
                   <span className="card-meta">{formatDate(item.date)}</span>

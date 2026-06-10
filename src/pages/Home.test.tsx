@@ -83,6 +83,39 @@ describe('Home', () => {
     expect((card as HTMLElement).querySelector('.card-excerpt')).toBeNull();
   });
 
+  it('renders a feed card image only when the item has a hero — never a placeholder', () => {
+    const { container } = renderHome();
+    const cards = container.querySelectorAll('a.card');
+
+    rest.forEach((item, i) => {
+      const card = cards[i] as HTMLElement;
+      if (item.hero) {
+        expect(card.querySelector('img')).not.toBeNull();
+      } else {
+        // No image — and crucially no toned `.ph` placeholder box either.
+        expect(card.querySelector('img')).toBeNull();
+        expect(card.querySelector('.ph')).toBeNull();
+        // Title still carries the card with no image.
+        expect(within(card).getByText(item.title)).toBeInTheDocument();
+      }
+    });
+  });
+
+  it('drops the image on the featured card when it has no hero, keeping title + meta', () => {
+    const { container } = renderHome();
+    const featuredEl = container.querySelector('a.featured') as HTMLElement;
+    const scope = within(featuredEl);
+
+    if (featured.hero) {
+      expect(featuredEl.querySelector('img')).not.toBeNull();
+    } else {
+      expect(featuredEl.querySelector('img')).toBeNull();
+      expect(featuredEl.querySelector('.ph')).toBeNull();
+    }
+    // Title renders regardless of whether an image is present.
+    expect(scope.getByText(featured.title)).toBeInTheDocument();
+  });
+
   it('shows the hero lead as a literal TODO placeholder', () => {
     renderHome();
     expect(screen.getByText(/TODO: write hero lead copy/i)).toBeInTheDocument();
