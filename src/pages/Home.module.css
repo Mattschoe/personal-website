@@ -93,6 +93,11 @@
   transform: translate(-3px, -3px);
   box-shadow: var(--shadow);
 }
+/* No hero image — collapse the image|body split to a single body column so the
+   card reads as a clean title/caption block instead of leaving an empty cell. */
+.featuredNoImage {
+  grid-template-columns: 1fr;
+}
 .featured :global(.ph) {
   border: 0;
   border-radius: 0;
