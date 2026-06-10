@@ -42,48 +42,43 @@ that the 3 roles sometimes have accountabilities that are not quite actual accou
 Scrum Theory, but has been decided internally in *some* Novo teams that that is the person
 who should do such things. 
 
-So what did we actually end up with? At its core Agentic Scrum is a multi-agent system. 
-Instead of one giant AI trying to do everything at once, we built an orchestrator that sits 
-in front and routes your request to the right specialist. Think of it as a manager that knows 
-exactly which of its team members to hand a given task to.
+So what did we actually end up with? At its core Agentic Scrum is a multi-agent system. The system
+consists of a *Product Owner* agent and a *Scrum Master* agent that each carry 
+their own personality and their own accountabilities. The most interesting thing we built however
+is that they can actually talk to each other. When a decision needs input from both roles, the two agents 
+negotiate back and forth until they land on an outcome, the same way a real PO and SM would. 
+Underneath the two agents, they have been filled with useful and important tools, for them 
+to execute their role, accountabilities and be overall helpful in the team, this is tools such 
+as: 
 
-Underneath that orchestrator live a handful of specialized agents, each with their own tools 
-and their own job to do:
-
-- A **GitHub agent** that owns issues, projects and the backlog. It creates issues, assigns 
-them to the right developer, and keeps the board in order.
-- An **Outlook agent** that handles the calendar and email side of things, booking meetings 
-and sending out the communication that usually eats up a Scrum Master's day.
-- An **Excalidraw agent** that draws diagrams on the fly, so when you need a quick visual of 
+- **Github:** The agents can creates issues, assigns them to the right developer, 
+and keeps the board in order. The PO mainly uses this for driving their accountability
+of an effective product backlog, while the SM uses it for faciliting Scrum and ensuring stability.
+- **Outlook:** Where the agents can handle the calendar and email side of things for the team. 
+They can even book meetings and send out the communication that would usually eats up a 
+Scrum Master's day.
+- **Excalidraw:** The PO and SM can draw diagrams on the fly, so when you need a quick visual of 
 a workflow or an architecture, you just ask for it.
-- A **web-fetch agent** for pulling in outside context, anything from a documentation page to 
+- **Web-fetching:** For pulling in outside context, anything from a documentation page to 
 a YouTube transcript.
 
-All of this is built in Python on top of Langgraph, which is what lets these agents reason, 
-call their tools, and loop until the job is actually done.
+All of this is built in Python on top of [Langgraph](https://www.langchain.com/langgraph), 
+which is what lets these agents reason, call their tools, and loop until the job is actually done.
 
-But the part i'm most proud of is the two Scrum roles themselves. We didn't just build one 
-generic assistant, we built a **Product Owner agent and a Scrum Master agent** that each carry 
-their own personality and their own accountabilities. And here is the fun part: they can 
-actually talk to each other. When a decision needs input from both roles, the two agents 
-negotiate back and forth until they land on an outcome, the same way a real PO and SM would 
-hash something out in a meeting.
-
-What makes the whole thing click is context. The system isn't a generic chatbot, it lives 
+What makes the whole thing work is context. The system isn't a generic chatbot, it lives 
 inside your project. It knows your sprints, your backlog, your Definition of Done, and even who 
 is on your team through a developer registry that maps people to their GitHub accounts. During 
 setup it ingests intake forms and builds personas from them, so the agents understand the shape 
 of your specific team rather than some textbook version of Scrum.
 
-And because a tool is only as good as it is easy to reach, we made sure Agentic Scrum meets you 
+And because a tool is only as good as it is easy to reach, we made sure Agentic Scrum meets Novo
 where you already work. There is a web app built in NextJS that mirrors the clean chat style 
 you know from Claude or ChatGPT, with voice support on top so you can talk to it instead of 
-typing. And for teams that already live inside Microsoft Teams, the system plugs straight into 
-your chat, with the PO and SM showing up as their own separate bots. So you can drop a question 
-into a Teams channel and watch the two of them respond, negotiate, and get to work without ever 
-leaving the conversation.
-
-
+typing (this is what you see in the image above). 
+And for Novo Nordisk's teams that already live inside Microsoft Teams, the system plugs straight into 
+their chat, with the PO and SM showing up as their own separate bots. So now teams at Novo can 
+drop a question into a Teams channel and watch the two of them respond, negotiate, and get to 
+work without ever leaving the conversation.
 
 # What's next for Agentic Scrum?
 With the project handed off to Novo Nordisk, it is now in their hands to extend the project.
