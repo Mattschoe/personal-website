@@ -28,7 +28,7 @@ It was with these words that our Product Owner from Novo Nordisk joined my team 
 build the goal of ***Agentic Scrum***: A system where the framework of Scrum was accelerated with 
 AI workflows. The goal? Building something that took some of the annoyances out of Scrum and replaced 
 it with pure efficiency. The idea is simple: let's build a system where the AI has context about 
-everything Scrum related: the sprints, the refinement, the reviews, retros, artefacts, commitments, 
+everything Scrum related: the sprints, the refinement, the reviews, retros, artifacts, commitments, 
 Definition of Done, Backlogs, and so on. 
 
 # What we built
