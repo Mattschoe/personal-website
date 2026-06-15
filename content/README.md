@@ -29,6 +29,29 @@ heroAlt: A platter of blistered sweetcorn with herbs and lime   # optional
 - Use the labelled aspect ratios from the design (portrait square/3:4, recipe 4:3/square, project
   16:8, post lead 16:8) — the box is fixed, so an off-ratio image is cropped to `cover`.
 
+### Inline images (mid-text)
+
+Inside a **blog post or project body** you can drop pictures between paragraphs with plain Markdown
+image syntax. They render full reading-column width, centered. Put the files under
+`public/images/blog/` or `public/images/projects/` and reference them by absolute path:
+
+```markdown
+Some prose leading into the photo.
+
+![A platter of blistered sweetcorn with herbs and lime](/images/blog/charred-corn.jpg "Charred corn, straight off the grill")
+
+More prose after it.
+```
+
+- The **alt text** (the `[...]` part) describes the image for screen readers — write a real one. Use
+  empty alt (`![](...)`) only for purely decorative pictures.
+- The **caption is optional**: the quoted text after the path becomes a styled caption under the
+  image. Omit it for no caption:
+
+  ```markdown
+  ![A platter of blistered sweetcorn](/images/blog/charred-corn.jpg)
+  ```
+
 Each file is YAML front-matter (between `---` lines) followed by a Markdown **body**. Front-matter is
 validated at build time: an unknown or malformed field **fails the build** with a message naming the
 file, so typos can't slip through silently.

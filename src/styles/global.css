@@ -293,6 +293,7 @@ p{ margin:0 0 1em; text-wrap:pretty; }
 .read a{ color:var(--accent); text-underline-offset:3px; }
 .read ul,.read ol{ font-size:var(--fs-lead); line-height:1.7; padding-left:1.2em; }
 .read figure{ margin:1.8em 0; }
+.read figure img{ width:100%; }
 .read figcaption{ font-family:var(--font-mono); font-size:var(--fs-meta);
   color:var(--ink-soft); text-transform:uppercase; letter-spacing:.1em; margin-top:.6em; }
 .read table{ margin:1.8em auto; border-collapse:collapse; font-size:var(--fs-small);
