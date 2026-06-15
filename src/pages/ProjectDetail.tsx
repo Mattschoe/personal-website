@@ -9,7 +9,7 @@ import styles from './ProjectDetail.module.css';
 // Single project (case study): breadcrumb → title + action buttons (GitHub /
 // demo / docs, each rendered only when its link is present) → wide 16:8
 // screenshot → 2-column layout with the rendered Markdown body in a `.read`
-// article alongside a sticky spec rail (stack / role / status / year /
+// article alongside a sticky spec rail (stack / status / year /
 // numbers). The screenshot stays a `.ph` placeholder until real imagery lands
 // in Phase 8. The body renders plain (no dropcap) — that prop is blog-only.
 export function ProjectDetail() {
@@ -92,11 +92,6 @@ export function ProjectDetail() {
                 <span key={tech}>{tech}</span>
               ))}
             </div>
-          </div>
-          <hr className={styles.divider} />
-          <div className={styles.specBlock}>
-            <h4>Role</h4>
-            <p>{project.role}</p>
           </div>
           <hr className={styles.divider} />
           <div className={styles.specBlock}>

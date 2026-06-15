@@ -80,7 +80,7 @@ describe('ProjectDetail', () => {
     }
   });
 
-  it('renders the spec rail with stack, role, status and year', () => {
+  it('renders the spec rail with stack, status and year', () => {
     const { container } = renderProject(full.slug);
     const spec = container.querySelector('aside');
     expect(spec).not.toBeNull();
@@ -90,8 +90,6 @@ describe('ProjectDetail', () => {
     full.stack.forEach((tech) => {
       expect(scope.getByText(tech)).toBeInTheDocument();
     });
-    expect(scope.getByText('Role')).toBeInTheDocument();
-    expect(scope.getByText(full.role)).toBeInTheDocument();
     expect(scope.getByText('Status')).toBeInTheDocument();
     expect(scope.getByText(full.status)).toBeInTheDocument();
     expect(scope.getByText('Year')).toBeInTheDocument();

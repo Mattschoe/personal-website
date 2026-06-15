@@ -29,7 +29,6 @@ const projects: Project[] = [
     status: 'Live',
     year: '2025',
     stack: ['React'],
-    role: 'Everything',
   },
 ];
 

@@ -5,7 +5,6 @@ summary: An agentic system taking over some of the accountabilities of SM and PO
 caption: An agentic system taking over some of the accountabilities of SM and PO in Scrum
 status: Active
 year: 2026 - present
-role: Systems Developer
 stack:
   - Python
   - Langgraph

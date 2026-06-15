@@ -85,7 +85,6 @@ export const projectFrontmatter = z.strictObject({
   status: z.string().min(1),
   year: text,
   stack: z.array(z.string().min(1)).min(1),
-  role: z.string().min(1),
   metrics: z.string().min(1).optional(),
   links: z
     .strictObject({
