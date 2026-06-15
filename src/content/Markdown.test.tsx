@@ -51,4 +51,32 @@ describe('Markdown hydration', () => {
     expect(html).toContain('<table>');
     expect(html).toContain('<th>A</th>');
   });
+
+  it('renders an inline image with a title as a captioned figure', () => {
+    const html = renderToString(
+      <Markdown>{'![A platter](/images/blog/platter.jpg "Sunday lunch")'}</Markdown>,
+    );
+    expect(html).toContain('<figure>');
+    expect(html).toContain('<img');
+    expect(html).toContain('alt="A platter"');
+    expect(html).toContain('<figcaption>Sunday lunch</figcaption>');
+  });
+
+  it('renders an inline image without a title and without a caption', () => {
+    const html = renderToString(
+      <Markdown>{'![A platter](/images/blog/platter.jpg)'}</Markdown>,
+    );
+    expect(html).toContain('<figure>');
+    expect(html).toContain('<img');
+    expect(html).not.toContain('<figcaption');
+  });
+
+  it('does not wrap a lone inline image in a paragraph', () => {
+    // rehype-unwrap-images strips the wrapping <p>; without it the <figure>
+    // would nest inside a <p> (invalid HTML → hydration mismatch in the build).
+    const html = renderToString(
+      <Markdown>{'![A platter](/images/blog/platter.jpg)'}</Markdown>,
+    );
+    expect(html).not.toContain('<p>');
+  });
 });
