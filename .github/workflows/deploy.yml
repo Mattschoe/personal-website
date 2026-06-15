@@ -8,6 +8,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily rebuild so the homepage GitHub-activity graph stays fresh between
+  # content pushes (the build bakes in a static snapshot; see the fetch step).
+  schedule:
+    - cron: '0 6 * * *'
 
 # Serialize image publishes but never cancel one mid-flight; a newer push queues
 # and runs after the current one finishes.
@@ -40,6 +44,15 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test
+
+      # Refresh the GitHub-activity snapshot into the working tree before the
+      # image build (Dockerfile's `COPY . .` carries it into the build context).
+      # Fails soft: keeps the committed snapshot on any error. Default token =
+      # public contributions only.
+      - name: Fetch GitHub activity
+        run: node scripts/fetch-github-activity.mjs
+        env:
+          GITHUB_ACTIVITY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to GHCR
         uses: docker/login-action@v3

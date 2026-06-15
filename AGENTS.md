@@ -54,9 +54,19 @@ Nothing else needs client-side state unless a change genuinely calls for it.
   the fixtures (final loaded shape) or parse inline raw-markdown strings (see
   `src/content/parse.test.ts`). Anything with logic worth getting right gets a test in the same
   change.
-- **Verify visually when the look changes.** Run `npm run dev` (or `preview` on the build) and drive
-  a headless browser (Playwright) to screenshot touched pages at a desktop width (~1280px) and mobile
-  width (~390px), in both themes (toggle `data-theme="dark"` on `<html>`). Read the screenshots back.
+- **Verify visually when the look changes — use the committed helper, don't re-derive Playwright.**
+  `scripts/screenshot.mjs` shoots a route at desktop (1280px) + mobile (390px) in both themes; read
+  the PNGs back. Steps that otherwise get rediscovered each time (and cost tokens):
+  ```sh
+  npm run build && npm run preview &        # serves :4173 (or `npm run dev` → :5173)
+  npm install --no-save playwright-core      # JS client only; Chromium is cached in ~/.cache/ms-playwright
+  node scripts/screenshot.mjs / home "section[aria-labelledby='up-to-heading']"
+  #                            ^route ^prefix ^optional CSS selector to clip to
+  # → /tmp/home-{desktop,mobile}-{light,dark}.png   (override host with BASE_URL=…)
+  ```
+  Gotchas baked into the script: playwright-core is **CommonJS** (import via `createRequire`); resolve
+  Chromium from the cache (never `npx playwright install`); toggle dark theme **after** load or the
+  pre-paint snippet overwrites it. When done, stop the preview server.
 - **Commit as [Conventional Commits](https://www.conventionalcommits.org).** Format
   `type(scope): summary` (types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`,
   `build`, `ci`; scope is the area touched, e.g. `content`, `home`, `theme`, `recipes`, `ci`). End
@@ -96,6 +106,10 @@ src/
     theme-context.ts            theme React context
     ThemeToggle.tsx             [data-theme-toggle] button
     Image.tsx / .module.css     real <img> or toned .ph placeholder at a fixed aspect ratio
+    WhatImUpTo.tsx / .module.css  Home "What I'm up to": GitHub month timeline + year heatmap (tokens)
+  data/                         build-time GitHub-activity snapshot for WhatImUpTo
+    github-activity.json        committed snapshot/fallback (fetched in CI; see scripts/)
+    github-activity.ts          typed loader + pure heatmap derivations (cellLevel/levelThresholds)
   content/                      the content layer
     schema.ts                   zod front-matter schemas + the final Recipe/Project/Post/FeedItem types
     parse.ts                    build-time parse + validate + derive (Node only; imports gray-matter)
@@ -121,13 +135,16 @@ src/
     app.css                     app-shell structure not in the token sheet
   test/
     fixtures.ts                 fixed typed dataset aliased over `virtual:content` for tests
+scripts/                        Node build/dev utilities (not bundled)
+  fetch-github-activity.mjs     CI: fetch GitHub contribution data → src/data/github-activity.json (fails soft)
+  screenshot.mjs                visual-verify helper: route × {desktop,mobile} × {light,dark} → /tmp PNGs
 vite-plugin-content.ts          the `virtual:content` plugin: parses content/ at build time
 vite.config.ts                  Vite + Vitest config (test aliases: react-helmet-async, virtual:content)
 index.html                      Vite HTML entry with the pre-paint theme snippet
 Dockerfile / nginx.conf         multi-stage build → nginx serving dist/
 docker-compose.yml              local runs only, not production
 deploy/                         Quadlet unit + podman-auto-update timer override for the VPS
-.github/workflows/deploy.yml    CI: typecheck → lint → test → build image → push to GHCR
+.github/workflows/deploy.yml    CI (on push + daily cron): typecheck → lint → test → fetch GitHub activity → build image → push to GHCR
 README.md                       content-publishing guide + deployment pointer
 AGENTS.md                       byte-identical mirror of this file
 ```

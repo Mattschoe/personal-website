@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { getLatestFeed, formatDate, type FeedItem } from '../content';
 import { Image } from '../components/Image';
 import { HeroCircle } from '../components/HeroCircle';
+import { WhatImUpTo } from '../components/WhatImUpTo';
 import { Seo } from '../seo/Seo';
 import styles from './Home.module.css';
 
@@ -141,6 +142,9 @@ export function Home() {
           })}
         </div>
       </section>
+
+      {/* ============ WHAT I'M UP TO ============ */}
+      <WhatImUpTo />
 
       {/* ============ ABOUT ============ */}
       <section className={`section container ${styles.about}`} id="about">
