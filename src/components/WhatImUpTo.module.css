@@ -1,0 +1,155 @@
+/* "What I'm up to" — GitHub timeline + contribution heatmap, tokens only.
+   Composes with global classes (.kicker, .arrow-link, .section-head) handled in
+   the JSX; everything here is module-scoped. */
+
+.layout {
+  display: grid;
+  gap: var(--s-7);
+}
+
+/* ---- This month's commit timeline ---- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  /* As a grid item, default min-width:auto = min-content; 0 lets it wrap/shrink
+     to the column instead of forcing the layout wider than the viewport. */
+  min-width: 0;
+}
+.summary {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.summary strong {
+  color: var(--accent);
+}
+.repos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-4);
+  max-width: 620px;
+}
+.repo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(90px, 240px);
+  align-items: center;
+  gap: var(--s-5);
+}
+.repoText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  min-width: 0;
+}
+.repoLink {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--accent);
+  text-decoration: none;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.repoLink:hover {
+  text-decoration: underline;
+}
+.repoCount {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.bar {
+  height: 10px;
+  background: var(--bg-2);
+  border: var(--border-w) solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.barFill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.4s var(--ease);
+}
+
+/* ---- Last-year contribution heatmap ---- */
+.heatmapBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  /* Same as .timeline: keep the max-content heatmap from blowing out the grid;
+     overflow-x:auto on .heatmapScroll then scrolls it within the column. */
+  min-width: 0;
+}
+.heatmapTotal {
+  margin: 0;
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}
+.heatmapTotal strong {
+  color: var(--ink);
+}
+.heatmapScroll {
+  --cell: 11px;
+  --cell-gap: 3px;
+  overflow-x: auto;
+  padding-bottom: var(--s-2);
+}
+.months {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--cell);
+  column-gap: var(--cell-gap);
+  margin-bottom: var(--s-2);
+}
+.month {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--cell);
+  column-gap: var(--cell-gap);
+  width: max-content;
+}
+.week {
+  display: grid;
+  grid-template-rows: repeat(7, var(--cell));
+  row-gap: var(--cell-gap);
+}
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 2px;
+}
+.cell[data-level='0'] {
+  background: color-mix(in srgb, var(--line) 55%, var(--bg-2));
+}
+.cell[data-level='1'] {
+  background: color-mix(in srgb, var(--accent) 26%, var(--bg-2));
+}
+.cell[data-level='2'] {
+  background: color-mix(in srgb, var(--accent) 48%, var(--bg-2));
+}
+.cell[data-level='3'] {
+  background: color-mix(in srgb, var(--accent) 72%, var(--bg-2));
+}
+.cell[data-level='4'] {
+  background: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .repo {
+    grid-template-columns: 1fr;
+    gap: var(--s-2);
+  }
+}
