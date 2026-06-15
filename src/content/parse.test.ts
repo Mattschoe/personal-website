@@ -31,7 +31,6 @@ date: 2025-02-01
 summary: A small tool.
 status: Live
 year: 2025
-role: Solo
 stack:
   - React
 ---

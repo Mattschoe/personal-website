@@ -92,7 +92,6 @@ export const projects: Project[] = [
     status: 'Active · v1.2 · MIT',
     year: '2025',
     stack: ['TypeScript', 'Node'],
-    role: 'Design, code, docs — solo',
     metrics: '2.1k stars · 40k installs',
     links: {
       repo: 'https://github.com/example/static-feed-builder',
@@ -109,7 +108,6 @@ export const projects: Project[] = [
     status: 'Archived',
     year: '2024',
     stack: ['React', 'CSS'],
-    role: 'Solo',
   },
 ];
 

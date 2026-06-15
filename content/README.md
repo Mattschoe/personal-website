@@ -103,7 +103,6 @@ ingredients:
 | `summary` | yes | one-line description (used on cards and the feed) |
 | `status` | yes | e.g. `Active · v1.2 · MIT` |
 | `year` | yes | e.g. `2023 — present` |
-| `role` | yes | e.g. `Design, code, docs — solo` |
 | `stack` | yes | list of strings (tech chips) |
 | `metrics` | no | e.g. `2.1k stars · 40k installs` |
 | `links` | no | object with optional `repo`, `demo`, `docs` URLs |
