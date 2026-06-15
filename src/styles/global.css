@@ -293,6 +293,7 @@ p{ margin:0 0 1em; text-wrap:pretty; }
 .read a{ color:var(--accent); text-underline-offset:3px; }
 .read ul,.read ol{ font-size:var(--fs-lead); line-height:1.7; padding-left:1.2em; }
 .read figure{ margin:1.8em 0; }
+.read figure img{ width:100%; }
 .read figcaption{ font-family:var(--font-mono); font-size:var(--fs-meta);
   color:var(--ink-soft); text-transform:uppercase; letter-spacing:.1em; margin-top:.6em; }
 .read table{ margin:1.8em auto; border-collapse:collapse; font-size:var(--fs-small);
@@ -302,6 +303,14 @@ p{ margin:0 0 1em; text-wrap:pretty; }
 .read th{ background:var(--surface); font-family:var(--font-display); font-weight:700;
   letter-spacing:-0.01em; }
 .read tbody tr:nth-child(even){ background:var(--surface); }
+/* Inline code + fenced blocks: a toned surface panel so references read as code. */
+.read code{ font-family:var(--font-mono); font-size:.86em;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:.12em .38em; }
+.read pre{ margin:1.6em 0; padding:var(--s-4); background:var(--surface);
+  border:1px solid var(--line); border-radius:var(--radius); overflow-x:auto;
+  line-height:1.5; }
+.read pre code{ background:none; border:0; border-radius:0; padding:0; font-size:var(--fs-small); }
 .dropcap::first-letter{
   font-family:var(--font-display); font-weight:800; float:left;
   font-size:3.6em; line-height:.78; padding:.05em .12em 0 0; color:var(--accent);
