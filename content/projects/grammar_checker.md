@@ -55,7 +55,7 @@ credits for this, well then it also works for Deepseek (which is incredibly chea
 coming! Model size can also be customized to your liking, I recommend the cheap ones, no real reason to run 
 Opus on your minor spelling mistakes.
 
-Do remember that this tool is purely for prose and grammar. It focuses on how the sentences *flows* 
+Do remember that this tool is purely for prose and grammar. It focuses on how the sentences *flow* 
 but nothing about the actual contents of the work. And how would it? Your arguments, discussions 
 and documentation all require context of what you are doing and why. 
 
