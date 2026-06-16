@@ -2,7 +2,7 @@
 title: Grilled Shrimp Skewers
 date: 2026-06-06
 category: Grilling
-hero: /images/recipes/grilled_shrimp_skewers.jpg
+hero: /images/recipes/grilled_shrimp_skewers.webp
 heroAlt: a grill showing the marinated skewers of shrimp
 yield: 2-3 skewers
 time: 30 minutes

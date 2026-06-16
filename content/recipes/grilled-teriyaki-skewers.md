@@ -1,7 +1,7 @@
 ---
 title: Grilled Teriyaki Skewers
 date: 2026-06-06
-hero: /images/recipes/grilled_teriyaki_skewers.jpg
+hero: /images/recipes/grilled_teriyaki_skewers.webp
 heroAlt: a platter of skewers with grilled chicken thigh and vegetables
 category: Grilling
 yield: Serves 2-3
