@@ -45,7 +45,7 @@ steps:
   - Ready the sauce. Dice the shallots fine and cut the mushrooms into quarters/halves depending on size, they just need to be a bit bigger than bite-sized.
   - Crack the eggs and mix them in a bowl. In another bowl pour the panko. Now make the krebinetter by mixing the meat mix into patties, about the size of a burger patty. Then first cover the patty in eggs and then cover with panko. 
   - Prepare a large skillet with a shameful amount of butter and oil, and pan-fry the krebinetter. They should have a nice crust with a little blackening starting to appear (see image).
-  - When all krebinetter has been cooked, remove the worst of the leftover panko from the pan and add the mushrooms. Turn up the temperature and cook until they have a good color, keep the temp high to avoid boiling them when they shed water.
+  - When all krebinetter have been cooked, remove the worst of the leftover panko from the pan and add the mushrooms. Turn up the temperature and cook until they have a good color, keep the temp high to avoid boiling them when they shed water.
   - Add shallots and quickly give them a bit of color. When you can smell shallots add white wine and deglaze.
   - When the wine has reduced by about 50% add cream and balsamico. Have the cream reach boiling temp, then reduce in temp and keep reducing until you get nappe consistency.
   - Take the sauce off the heat and add the butter. Slowly envelop the butter in the sauce by constantly stirring it around. 
