@@ -4,6 +4,7 @@ import {
   slugFromPath,
   readingTime,
   excerptFromBody,
+  imageRefsFromBody,
   truncate,
   byDateDesc,
 } from './derive';
@@ -67,6 +68,47 @@ describe('excerptFromBody', () => {
   it('returns the first real paragraph, de-marked', () => {
     const body = '# Heading\n\nThis is **bold** and a [link](https://x).\n\nSecond.';
     expect(excerptFromBody(body)).toBe('This is bold and a link.');
+  });
+});
+
+describe('imageRefsFromBody', () => {
+  it('extracts a single local image path', () => {
+    expect(imageRefsFromBody('![alt](/images/blog/x.jpg)')).toEqual([
+      '/images/blog/x.jpg',
+    ]);
+  });
+
+  it('extracts multiple images across the body', () => {
+    const body = 'lead\n\n![a](/images/a.png)\n\nmid\n\n![b](/images/b.webp)';
+    expect(imageRefsFromBody(body)).toEqual(['/images/a.png', '/images/b.webp']);
+  });
+
+  it('ignores an optional "title" after the path', () => {
+    expect(imageRefsFromBody('![a](/images/x.jpg "Charred corn")')).toEqual([
+      '/images/x.jpg',
+    ]);
+  });
+
+  it('handles decorative (empty-alt) images', () => {
+    expect(imageRefsFromBody('![](/images/deco.png)')).toEqual([
+      '/images/deco.png',
+    ]);
+  });
+
+  it('unwraps an <>-wrapped path', () => {
+    expect(imageRefsFromBody('![a](</images/with space.png>)')).toEqual([
+      '/images/with space.png',
+    ]);
+  });
+
+  it('excludes remote and data URIs (only public/ assets are checked)', () => {
+    const body =
+      '![a](https://x/y.png)\n\n![b](http://x/z.png)\n\n![c](data:image/png;base64,AAAA)\n\n![d](/images/local.png)';
+    expect(imageRefsFromBody(body)).toEqual(['/images/local.png']);
+  });
+
+  it('returns an empty list when there are no images', () => {
+    expect(imageRefsFromBody('just [a link](/recipes/x) and prose')).toEqual([]);
   });
 });
 
