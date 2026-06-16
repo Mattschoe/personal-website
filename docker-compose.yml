@@ -16,13 +16,14 @@ services:
       - traefik-net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.personal-website.rule=Host(`mattschoe.dev`)"
+      - "traefik.http.routers.personal-website.rule=Host(`mattschoe.dev`) || Host(`www.mattschoe.dev`)"
       - "traefik.http.routers.personal-website.entrypoints=websecure"
       - "traefik.http.routers.personal-website.tls.certresolver=myresolver"
       - "traefik.http.services.personal-website.loadbalancer.server.port=80"
-      # To also serve www.mattschoe.dev, change the rule above to
-      #   Host(`mattschoe.dev`) || Host(`www.mattschoe.dev`)
-      # and add a redirect middleware if you want www → apex.
+      - "traefik.http.routers.personal-website.middlewares=www-redirect"
+      - "traefik.http.middlewares.www-redirect.redirectregex.regex=^https?://www\\.mattschoe\\.dev/(.*)"
+      - "traefik.http.middlewares.www-redirect.redirectregex.replacement=https://mattschoe.dev/$${1}"
+      - "traefik.http.middlewares.www-redirect.redirectregex.permanent=true"
 
 networks:
   traefik-net:
