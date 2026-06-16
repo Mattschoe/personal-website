@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { getLatestFeed, formatDate, type FeedItem } from '../content';
 import { Image } from '../components/Image';
+import { PrefetchLink } from '../components/PrefetchLink';
 import { HeroCircle } from '../components/HeroCircle';
 import { WhatImUpTo } from '../components/WhatImUpTo';
 import { Seo } from '../seo/Seo';
@@ -94,9 +95,10 @@ export function Home() {
         </div>
 
         {featured && (
-          <Link
+          <PrefetchLink
             className={`featured ${styles.featured} ${featured.hero ? '' : styles.featuredNoImage}`}
             to={featured.href}
+            prefetch={featured.hero}
             aria-label={`Read featured ${TYPE_META[featured.type].label.toLowerCase()}`}
           >
             {featured.hero && (
@@ -120,14 +122,14 @@ export function Home() {
                 <span className="ar">&#8599;</span>
               </span>
             </div>
-          </Link>
+          </PrefetchLink>
         )}
 
         <div className={styles.feedGrid}>
           {rest.map((item) => {
             const meta = TYPE_META[item.type];
             return (
-              <Link className="card" to={item.href} key={item.href}>
+              <PrefetchLink className="card" to={item.href} prefetch={item.hero} key={item.href}>
                 {item.hero && (
                   <Image src={item.hero} alt={item.heroAlt ?? item.title} tone={item.tone} />
                 )}
@@ -137,7 +139,7 @@ export function Home() {
                 </div>
                 <div className="card-title">{item.title}</div>
                 {item.caption && <p className="card-excerpt">{item.caption}</p>}
-              </Link>
+              </PrefetchLink>
             );
           })}
         </div>

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import { getProjects, truncate } from '../content';
 import { Image } from '../components/Image';
+import { PrefetchLink } from '../components/PrefetchLink';
 import { Seo } from '../seo/Seo';
 import styles from './Projects.module.css';
 
@@ -29,9 +29,10 @@ export function Projects() {
       <section className="container">
         <div className={styles.projList}>
           {projects.map((project, i) => (
-            <Link
+            <PrefetchLink
               className={styles.proj}
               to={`/projects/${project.slug}`}
+              prefetch={project.hero}
               key={project.slug}
             >
               <div className={styles.projMedia}>
@@ -55,7 +56,7 @@ export function Projects() {
                   ))}
                 </div>
               </div>
-            </Link>
+            </PrefetchLink>
           ))}
         </div>
       </section>
