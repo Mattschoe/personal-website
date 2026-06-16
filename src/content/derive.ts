@@ -96,6 +96,26 @@ export function excerptFromBody(body: string): string {
 }
 
 /**
+ * Local image URLs referenced by Markdown `![alt](url "title")` syntax in a
+ * body. Returns absolute `/...` paths only — http(s):// and data: URIs are a
+ * remote/embedded concern and aren't checked against `public/`. Strips an
+ * optional `"title"`/`'title'` and the `<...>` URL wrapper. Used by the
+ * content-image existence test to assert every inline image ships a real file.
+ */
+export function imageRefsFromBody(body: string): string[] {
+  const refs: string[] = [];
+  // ![alt](url) with an optional title and optional <>-wrapped url.
+  const re = /!\[[^\]]*\]\(\s*(<[^>]*>|[^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(body)) !== null) {
+    let url = match[1].trim();
+    if (url.startsWith('<') && url.endsWith('>')) url = url.slice(1, -1).trim();
+    if (url.startsWith('/')) refs.push(url);
+  }
+  return refs;
+}
+
+/**
  * Truncate prose to a maximum length for card display, cutting on a word
  * boundary and appending an ellipsis. Shorter strings are returned untouched.
  * Used only for the fixed-size index/home cards; the full excerpt is kept in

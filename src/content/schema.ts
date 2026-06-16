@@ -41,8 +41,12 @@ const base = {
     .transform((v) => v || undefined),
   // Image path (absolute `/images/...` URL under `public/`) + its alt text.
   // Both optional: when `hero` is unset the UI shows a toned `.ph` placeholder.
-  hero: z.string().min(1).optional(),
-  heroAlt: z.string().min(1).optional(),
+  // Trimmed before the min-length check so a stray trailing space can't produce
+  // a broken `<img src>` that 404s in production (see content-images.test.ts),
+  // while an empty/whitespace-only value still fails — that's a mistake, not
+  // "no image".
+  hero: z.string().trim().min(1).optional(),
+  heroAlt: z.string().trim().min(1).optional(),
   // Marks seed/sample content so it's easy to find and delete. Allowed on every
   // stream so the strict schemas don't reject our development fixtures.
   sample: z.boolean().optional(),
