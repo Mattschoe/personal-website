@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { getRecipes, truncate } from '../content';
 import { Image } from '../components/Image';
+import { PrefetchLink } from '../components/PrefetchLink';
 import { Seo } from '../seo/Seo';
 import styles from './Recipes.module.css';
 
@@ -94,7 +95,12 @@ export function Recipes() {
         ) : (
           <div className={styles.recipeGrid}>
             {visible.map((recipe, i) => (
-              <Link className="card" to={`/recipes/${recipe.slug}`} key={recipe.slug}>
+              <PrefetchLink
+                className="card"
+                to={`/recipes/${recipe.slug}`}
+                prefetch={recipe.hero}
+                key={recipe.slug}
+              >
                 <Image
                   src={recipe.hero}
                   alt={recipe.heroAlt ?? recipe.title}
@@ -107,7 +113,7 @@ export function Recipes() {
                 </div>
                 <div className="card-title">{recipe.title}</div>
                 <p className="card-excerpt">{truncate(recipe.excerpt)}</p>
-              </Link>
+              </PrefetchLink>
             ))}
           </div>
         )}

@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import { getPosts, formatDate } from '../content';
+import { PrefetchLink } from '../components/PrefetchLink';
 import { Seo } from '../seo/Seo';
 import styles from './Blog.module.css';
 
@@ -23,9 +23,10 @@ export function Blog() {
       <section className="container">
         <div className={styles.postList}>
           {posts.map((post) => (
-            <Link
+            <PrefetchLink
               className={styles.postRow}
               to={`/blog/${post.slug}`}
+              prefetch={post.hero}
               key={post.slug}
             >
               <span className={styles.postDate}>
@@ -35,7 +36,7 @@ export function Blog() {
                 <h3>{post.title}</h3>
                 <p>{post.excerpt}</p>
               </div>
-            </Link>
+            </PrefetchLink>
           ))}
         </div>
       </section>
