@@ -23,7 +23,8 @@ export const siteConfig = {
   // Home <title> / SEO bare title. Matches the static <title> in index.html
   // (the pre-hydration fallback).
   title: 'Matthias Nielsen',
-  description: 'Personal website of Matthias Nielsen',
+  description:
+    "I'm a software developer studying at the IT-University of Copenhagen. This place is where I keep my projects and writing, but most important of all, my beloved recipes.",
   author: 'Matthias Nielsen',
   locale: 'en',
   social: {
