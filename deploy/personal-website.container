@@ -22,10 +22,28 @@ ContainerName=personal-website
 AutoUpdate=registry
 Network=traefik-net
 Label=traefik.enable=true
-Label=traefik.http.routers.personal-website.rule=Host(`mattschoe.dev`)
+# Serve both the apex and www so Traefik can terminate TLS for either host; the
+# www-redirect middleware below 301s www → apex so there's one canonical origin
+# (without the www host here, https://www.mattschoe.dev fails the TLS handshake
+# and Google records it as a 404). The value is QUOTED: Quadlet splits Label= on
+# whitespace, so the unquoted `... || ...` rule was being torn into three bogus
+# labels (apex-only rule, plus junk `||` and `Host(...)` labels).
+Label="traefik.http.routers.personal-website.rule=Host(`mattschoe.dev`) || Host(`www.mattschoe.dev`)"
 Label=traefik.http.routers.personal-website.entrypoints=websecure
 Label=traefik.http.routers.personal-website.tls.certresolver=myresolver
 Label=traefik.http.services.personal-website.loadbalancer.server.port=80
+# Permanent redirect www.mattschoe.dev → mattschoe.dev (any path), so the apex is
+# the single canonical host search engines index. Two Quadlet-specific gotchas:
+#   - replacement uses $${1} not ${1}: systemd expands $ in unit values, so the
+#     backreference must be doubled to reach Traefik as ${1}.
+#   - regex uses plain dots, not \.: a backslash here is an invalid systemd escape
+#     and the whole Label= line gets dropped, leaving a regex-less redirect that
+#     matches every position and corrupts the Location header. `.` matches the
+#     literal dots fine for this host.
+Label=traefik.http.routers.personal-website.middlewares=www-redirect
+Label=traefik.http.middlewares.www-redirect.redirectregex.regex=^https?://www.mattschoe.dev/(.*)
+Label=traefik.http.middlewares.www-redirect.redirectregex.replacement=https://mattschoe.dev/$${1}
+Label=traefik.http.middlewares.www-redirect.redirectregex.permanent=true
 # Healthcheck so auto-update can detect a bad image and roll back to the previous
 # one. wget ships in the nginx:1.27-alpine (busybox) runtime image.
 HealthCmd=wget -q --spider http://localhost/ || exit 1
