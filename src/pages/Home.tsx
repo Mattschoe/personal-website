@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { getLatestFeed, formatDate, type FeedItem } from '../content';
 import { Image } from '../components/Image';
 import { PrefetchLink } from '../components/PrefetchLink';
+import { RecipeRatingBadge } from '../components/RecipeRatingBadge';
 import { HeroCircle } from '../components/HeroCircle';
 import { WhatImUpTo } from '../components/WhatImUpTo';
 import { Seo } from '../seo/Seo';
@@ -19,6 +20,12 @@ const TYPE_META: Record<FeedItem['type'], { label: string; tagClass: string }> =
   project: { label: 'Project', tagClass: 'tag--project' },
   essay: { label: 'Essay', tagClass: 'tag--essay' },
 };
+
+// Ratings only exist for recipes. FeedItem carries no slug, but recipe hrefs are
+// `/recipes/<slug>` — pull the slug back off for the rating lookup.
+function recipeSlug(item: FeedItem): string | undefined {
+  return item.type === 'recipe' ? item.href.split('/').pop() : undefined;
+}
 
 export function Home() {
   // Item 0 is the featured card; 1–3 fill the feed grid. Generated, never
@@ -118,6 +125,9 @@ export function Home() {
               </div>
               <h3>{featured.title}</h3>
               {featured.caption && <p className="card-excerpt">{featured.caption}</p>}
+              {recipeSlug(featured) && (
+                <RecipeRatingBadge slug={recipeSlug(featured)!} pinned={false} />
+              )}
               <span className={`arrow-link ${styles.arrowOnly}`} aria-hidden="true">
                 <span className="ar">&#8599;</span>
               </span>
@@ -139,6 +149,7 @@ export function Home() {
                 </div>
                 <div className="card-title">{item.title}</div>
                 {item.caption && <p className="card-excerpt">{item.caption}</p>}
+                {recipeSlug(item) && <RecipeRatingBadge slug={recipeSlug(item)!} />}
               </PrefetchLink>
             );
           })}

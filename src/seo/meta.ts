@@ -1,5 +1,6 @@
 import { siteConfig } from './config';
 import type { Post, Recipe } from '../content/schema';
+import type { Rating } from '../data/ratings';
 
 // Pure, dependency-free meta builders shared by the runtime <Seo> component and
 // the build-time generators. Nothing here touches the DOM or the filesystem, so
@@ -93,8 +94,13 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
   };
 }
 
-/** schema.org `Recipe` for a recipe. */
-export function recipeJsonLd(recipe: Recipe): Record<string, unknown> {
+/** schema.org `Recipe` for a recipe.
+ *
+ *  `rating` is injected by the caller (from the baked ratings snapshot) rather
+ *  than read here, so this stays pure/DOM-free and runs in Node, the browser,
+ *  and Vitest. `aggregateRating` is emitted **only** when there is at least one
+ *  real rating — never fabricated, since Google penalises fake star data. */
+export function recipeJsonLd(recipe: Recipe, rating?: Rating): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Recipe',
@@ -109,5 +115,16 @@ export function recipeJsonLd(recipe: Recipe): Record<string, unknown> {
     recipeIngredient: recipe.ingredients.map((i) => `${i.amount} ${i.item}`.trim()),
     recipeInstructions: recipe.steps.map((text) => ({ '@type': 'HowToStep', text })),
     ...(recipe.hero ? { image: absoluteUrl(recipe.hero) } : {}),
+    ...(rating && rating.count > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: rating.average,
+            ratingCount: rating.count,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
   };
 }

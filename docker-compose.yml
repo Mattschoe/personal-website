@@ -25,6 +25,32 @@ services:
       - "traefik.http.middlewares.www-redirect.redirectregex.replacement=https://mattschoe.dev/$${1}"
       - "traefik.http.middlewares.www-redirect.redirectregex.permanent=true"
 
+  # The recipe-ratings sidecar — the one dynamic service. Routed on the same host
+  # under /api/* with a higher priority so it wins over the static site router.
+  personal-website-ratings:
+    image: ghcr.io/mattschoe/personal-website-ratings:latest
+    container_name: personal-website-ratings
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    volumes:
+      - ratings-data:/data
+    environment:
+      # Set to a long random secret in the real environment; stable across rolls.
+      - RATINGS_IP_SALT=${RATINGS_IP_SALT:-CHANGE_ME}
+      - RATINGS_DATA=/data/ratings.db
+      - PORT=8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.personal-website-ratings.rule=(Host(`mattschoe.dev`) || Host(`www.mattschoe.dev`)) && PathPrefix(`/api`)"
+      - "traefik.http.routers.personal-website-ratings.priority=1000"
+      - "traefik.http.routers.personal-website-ratings.entrypoints=websecure"
+      - "traefik.http.routers.personal-website-ratings.tls.certresolver=myresolver"
+      - "traefik.http.services.personal-website-ratings.loadbalancer.server.port=8080"
+
 networks:
   traefik-net:
     external: true
+
+volumes:
+  ratings-data:

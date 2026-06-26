@@ -1,0 +1,90 @@
+/* The 5-star rating widget shown beside the recipe stat strip. Tokens only;
+   CSS-Module-scoped. The label mirrors the stat strip's `.k` mono caption so it
+   reads as part of the same row. Stars are layered glyphs: a muted base ★ with
+   an accent ★ clipped to a fractional width on top — that overlay drives both
+   the community average (fractional) and the hover preview (whole stars). */
+
+/* The widget fills a stat-strip segment: a mono caption (matching the strip's
+   other `.k` labels) over a row of stars with the count alongside. */
+.rating {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.stars {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.2rem;
+  line-height: 1;
+  /* The clipped accent glyph reads against a muted base. */
+  color: color-mix(in srgb, var(--ink-soft) 40%, transparent);
+}
+
+/* One star cell: a muted base glyph with an accent fill clipped over it. */
+.star {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+}
+.star::before {
+  content: '★';
+  position: absolute;
+  inset: 0;
+}
+.starFill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--accent);
+}
+.starFill::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Interactive star = an unstyled button wrapping one star cell. */
+.starButton {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0 0.04em;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.12s var(--ease);
+}
+.starButton:hover {
+  transform: translateY(-2px);
+}
+.starButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}

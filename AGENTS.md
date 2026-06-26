@@ -14,7 +14,8 @@ builds a static site, ships it as a container image to GHCR, and the VPS pulls i
 - **Vite + React + TypeScript.** Function components, hooks. Strict TS.
 - **Static site generation** via `vite-react-ssg` (React Router-compatible). Every route, including
   the dynamic content routes, is prerendered to crawlable HTML at build time. The site ships as
-  static files — no runtime server, no API.
+  static files — no runtime server, no API. **One deliberate exception:** a tiny ratings sidecar
+  (see below) runs beside the static site to hold recipe star votes; the frontend stays static.
 - **Routing:** React Router, driven through `vite-react-ssg`'s route config (`src/routes.tsx`).
 - **Content:** plain Markdown (`.md`) files in `content/`, parsed at build time by the
   `virtual:content` Vite plugin (`vite-plugin-content.ts` → `src/content/parse.ts`), front-matter
@@ -26,6 +27,18 @@ builds a static site, ships it as a container image to GHCR, and the VPS pulls i
   (`ThemeProvider`) wires the `[data-theme-toggle]` buttons.
 - **Deploy:** multi-stage Dockerfile (Node build stage → nginx serving `dist/`). GitHub Actions
   builds and pushes the image to GHCR on push to `main`; the VPS pulls via `podman-auto-update`.
+- **Ratings sidecar (the one dynamic exception — decided, do not relitigate).** Recipe pages show a
+  live 5-star widget and emit schema.org `aggregateRating`. A shared, cross-visitor vote count is
+  impossible in a pure-static site, so a tiny zero-framework Node service (`service/ratings/`,
+  SQLite via `better-sqlite3`) runs **beside** the static frontend on the VPS, its own container +
+  Quadlet unit, routed by Traefik on `Host(mattschoe.dev) && PathPrefix(/api)` (same origin, no
+  CORS). It's **anonymous (no auth)**: one tap, no login. "One vote per person" is *approximated* —
+  a `localStorage` lock on the client + a server `UNIQUE(slug, ip_hash)` guard — never guaranteed.
+  `aggregateRating` is baked at build time from `src/data/ratings.json` (refreshed by the daily CI
+  cron, like the GitHub-activity snapshot) and emitted **only when ≥1 real rating exists** — never
+  fabricated. `better-sqlite3` is native and lives **only** in `service/ratings/package.json` (never
+  the root, or it breaks the frontend `npm ci`/Docker build); that service has its own tests and is
+  excluded from the root vitest.
 
 Keep JS minimal. The interactive surface is: theme toggle, mobile nav drawer, and recipe filters.
 Nothing else needs client-side state unless a change genuinely calls for it.
@@ -107,9 +120,14 @@ src/
     ThemeToggle.tsx             [data-theme-toggle] button
     Image.tsx / .module.css     real <img> or toned .ph placeholder at a fixed aspect ratio
     WhatImUpTo.tsx / .module.css  Home "What I'm up to": GitHub month timeline + year heatmap (tokens)
-  data/                         build-time GitHub-activity snapshot for WhatImUpTo
+    recipe-rating.ts            pure localStorage helpers for this browser's own recipe vote (no TTL)
+    useRecipeRating.ts          hook: seed from snapshot, fetch live /api numbers, submit a vote (fail-soft)
+    RecipeRating.tsx / .module.css  the 5-star widget (fractional fill + count); interactive until voted
+  data/                         build-time snapshots baked into the prerendered HTML
     github-activity.json        committed snapshot/fallback (fetched in CI; see scripts/)
     github-activity.ts          typed loader + pure heatmap derivations (cellLevel/levelThresholds)
+    ratings.json                committed recipe-ratings snapshot/fallback (fetched in CI; starts empty)
+    ratings.ts                  typed loader + getRating + pure starFill derivation
   content/                      the content layer
     schema.ts                   zod front-matter schemas + the final Recipe/Project/Post/FeedItem types
     parse.ts                    build-time parse + validate + derive (Node only; imports gray-matter)
@@ -135,16 +153,22 @@ src/
     app.css                     app-shell structure not in the token sheet
   test/
     fixtures.ts                 fixed typed dataset aliased over `virtual:content` for tests
+service/ratings/                the dynamic ratings sidecar (own package.json; native dep; not in root vitest)
+  store.mjs                     SQLite core: openDb/ipHash/recordVote/aggregate + validation (one row per vote)
+  server.mjs                    node:http server: GET/POST /api/ratings[/:slug], /healthz (no framework)
+  store.test.mjs                vitest over the core against an in-memory DB (`cd service/ratings && npm test`)
+  Dockerfile / package.json / README.md   two-stage alpine image; better-sqlite3 only dep
 scripts/                        Node build/dev utilities (not bundled)
   fetch-github-activity.mjs     CI: fetch GitHub contribution data → src/data/github-activity.json (fails soft)
+  fetch-ratings.mjs             CI: fetch live ratings → src/data/ratings.json (fails soft; mirrors the above)
   screenshot.mjs                visual-verify helper: route × {desktop,mobile} × {light,dark} → /tmp PNGs
 vite-plugin-content.ts          the `virtual:content` plugin: parses content/ at build time
-vite.config.ts                  Vite + Vitest config (test aliases: react-helmet-async, virtual:content)
+vite.config.ts                  Vite + Vitest config (test aliases + service/** excluded from the suite)
 index.html                      Vite HTML entry with the pre-paint theme snippet
 Dockerfile / nginx.conf         multi-stage build → nginx serving dist/
-docker-compose.yml              local runs only, not production
-deploy/                         Quadlet unit + podman-auto-update timer override for the VPS
-.github/workflows/deploy.yml    CI (on push + daily cron): typecheck → lint → test → fetch GitHub activity → build image → push to GHCR
+docker-compose.yml              local runs only, not production (site + ratings sidecar for parity)
+deploy/                         Quadlet units (site + ratings) + podman-auto-update timer override for the VPS
+.github/workflows/deploy.yml    CI (on push + daily cron): checks → fetch GitHub activity + ratings → build & push both images to GHCR
 README.md                       content-publishing guide + deployment pointer
 AGENTS.md                       byte-identical mirror of this file
 ```

@@ -129,4 +129,20 @@ describe('recipeJsonLd', () => {
     ]);
     expect(ld.url).toBe(`${siteConfig.url}/recipes/teriyaki-skewers`);
   });
+
+  it('omits aggregateRating when there is no rating', () => {
+    expect(recipeJsonLd(recipe).aggregateRating).toBeUndefined();
+    expect(recipeJsonLd(recipe, { count: 0, average: 0 }).aggregateRating).toBeUndefined();
+  });
+
+  it('emits aggregateRating when there is at least one real rating', () => {
+    const ld = recipeJsonLd(recipe, { count: 12, average: 4.3 });
+    expect(ld.aggregateRating).toEqual({
+      '@type': 'AggregateRating',
+      ratingValue: 4.3,
+      ratingCount: 12,
+      bestRating: 5,
+      worstRating: 1,
+    });
+  });
 });

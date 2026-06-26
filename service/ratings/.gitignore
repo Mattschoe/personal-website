@@ -1,0 +1,4 @@
+# Local SQLite database files (e.g. from `RATINGS_DATA=./dev.db npm start`).
+*.db
+*.db-wal
+*.db-shm

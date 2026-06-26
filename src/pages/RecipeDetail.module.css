@@ -40,6 +40,7 @@
 
 .statRow {
   display: flex;
+  flex-wrap: wrap;
   gap: 0;
   border: var(--border-w) solid var(--line-strong);
   border-radius: var(--radius);
@@ -48,12 +49,17 @@
   background: var(--surface);
 }
 .stat {
-  flex: 1;
+  flex: 1 1 0;
   padding: var(--s-4);
   border-right: 1px solid var(--line);
 }
 .stat:last-child {
   border-right: 0;
+}
+/* The rating segment carries the widget (its own label/stars/count). */
+.ratingStat {
+  display: flex;
+  align-items: center;
 }
 .k {
   font-family: var(--font-mono);
@@ -313,5 +319,14 @@
   }
   .ingredients {
     position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  /* On a phone the rating drops to its own full-width row inside the bordered
+     strip, divided from Time/Makes by a top hairline. */
+  .ratingStat {
+    flex-basis: 100%;
+    border-top: 1px solid var(--line);
   }
 }

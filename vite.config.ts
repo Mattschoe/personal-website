@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, configDefaults } from 'vitest/config';
 import { contentPlugin } from './vite-plugin-content';
 
 // https://vite.dev/config/ — Vitest config is merged in via vitest/config's defineConfig.
@@ -21,6 +21,11 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/setupTests.ts'],
+    // The ratings sidecar (service/ratings) has its own package.json, its only
+    // dependency is the native better-sqlite3, and it's tested by its own
+    // `npm test`. Keep it out of the frontend suite so that native dep never
+    // has to resolve from the root.
+    exclude: [...configDefaults.exclude, 'service/**'],
     // react-helmet-async is a transitive dep of vite-react-ssg, peer-pinned to
     // React <19 so it can't hoist to the project root under React 19. Alias the
     // bare specifier to that one copy so Seo.test.tsx can wrap <Seo> in the same

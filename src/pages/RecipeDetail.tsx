@@ -3,6 +3,8 @@ import { getRecipe, type Recipe } from '../content';
 import { Markdown } from '../content/Markdown';
 import { Image } from '../components/Image';
 import { useRecipeChecklist } from '../components/useRecipeChecklist';
+import { RecipeRating } from '../components/RecipeRating';
+import { getRating } from '../data/ratings';
 import { Seo } from '../seo/Seo';
 import { recipeJsonLd } from '../seo/meta';
 import { NotFound } from './NotFound';
@@ -48,7 +50,7 @@ export function RecipeDetail() {
         description={recipe.excerpt}
         image={recipe.hero}
         type="article"
-        jsonLd={recipeJsonLd(recipe)}
+        jsonLd={recipeJsonLd(recipe, getRating(recipe.slug))}
       />
       <nav className={styles.crumb}>
         <Link to="/recipes">Recipes</Link> <span>/</span>{' '}
@@ -66,6 +68,9 @@ export function RecipeDetail() {
             <div className={styles.stat}>
               <span className={styles.k}>{recipe.yieldLabel ?? 'Makes'}</span>
               <span className={styles.v}>{recipe.yield}</span>
+            </div>
+            <div className={`${styles.stat} ${styles.ratingStat}`}>
+              <RecipeRating slug={recipe.slug} />
             </div>
           </div>
           <Markdown className={styles.heroBody}>{recipe.body}</Markdown>
