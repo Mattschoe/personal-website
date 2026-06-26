@@ -1,0 +1,57 @@
+# Quadlet unit for the recipe-ratings sidecar on the production VPS (rootless
+# Podman, user `mattschoe`). This is the one dynamic service beside the static
+# site; see the top-level CLAUDE.md for why it exists.
+#
+# Install once: copy to ~/.config/containers/systemd/personal-website-ratings.container
+# then `systemctl --user daemon-reload && systemctl --user start personal-website-ratings.service`.
+# Set RATINGS_IP_SALT below to a long random secret (e.g. `openssl rand -hex 32`)
+# BEFORE first start — POSTs 500 until it's set, and changing it later invalidates
+# every existing per-voter dedup hash.
+#
+# Deployment is pull-based, same as the site: `podman-auto-update` rolls this unit
+# to the new :latest digest. CI only builds and pushes the image.
+#
+# Mirrors docker-compose.yml: same external traefik-net network and Traefik labels.
+
+[Unit]
+Description=Matt's personal website — recipe ratings API
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=ghcr.io/mattschoe/personal-website-ratings:latest
+ContainerName=personal-website-ratings
+AutoUpdate=registry
+Network=traefik-net
+# SQLite database persisted on a named volume so votes survive image rolls.
+Volume=ratings-data:/data
+# REQUIRED — replace with a long random secret on the VPS and keep it stable.
+Environment=RATINGS_IP_SALT=CHANGE_ME
+Environment=RATINGS_DATA=/data/ratings.db
+Environment=PORT=8080
+Label=traefik.enable=true
+# Route /api/* on the apex (and www, so a vote isn't lost if the page loads
+# pre-redirect) here. Quoted: Quadlet splits Label= on whitespace, so the rule
+# must stay one token. priority is set very high so this always beats the static
+# site router — Traefik defaults a priority-less router to its rule *length*, so
+# a hardcoded large number removes any risk of the catch-all shadowing /api.
+Label="traefik.http.routers.personal-website-ratings.rule=(Host(`mattschoe.dev`) || Host(`www.mattschoe.dev`)) && PathPrefix(`/api`)"
+Label=traefik.http.routers.personal-website-ratings.priority=1000
+Label=traefik.http.routers.personal-website-ratings.entrypoints=websecure
+Label=traefik.http.routers.personal-website-ratings.tls.certresolver=myresolver
+Label=traefik.http.services.personal-website-ratings.loadbalancer.server.port=8080
+# Healthcheck so auto-update can detect a bad image and roll back. wget ships in
+# the node:22-alpine (busybox) runtime image.
+HealthCmd=wget -q --spider http://localhost:8080/healthz || exit 1
+HealthInterval=30s
+HealthRetries=3
+HealthStartPeriod=10s
+# Treat the service as "started" only once healthy (Podman 5.0+); a bad image
+# then leaves the unit failed and auto-update rolls back. Drop on older Podman.
+Notify=healthy
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

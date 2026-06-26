@@ -1,0 +1,57 @@
+/* The compact read-only rating on recipe cards. Layered-glyph stars (muted base
+   ★ with an accent ★ clipped to a fractional width on top) mirror
+   RecipeRating.module.css at a smaller size, with the count alongside. Tokens
+   only; CSS-Module-scoped. The `.pinned` modifier adds `margin-top:auto` to
+   stick it to the bottom of the `.card` flex column (bottom-left placement). */
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+/* Pin to the bottom of a `.card` flex column (bottom-left placement). */
+.pinned {
+  margin-top: auto;
+}
+
+.stars {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1;
+  /* The clipped accent glyph reads against a muted base. */
+  color: color-mix(in srgb, var(--ink-soft) 40%, transparent);
+}
+
+/* One star cell: a muted base glyph with an accent fill clipped over it. */
+.star {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+}
+.star::before {
+  content: '★';
+  position: absolute;
+  inset: 0;
+}
+.starFill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--accent);
+}
+.starFill::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--ink-soft);
+}

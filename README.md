@@ -49,3 +49,24 @@ rootless-Podman Quadlet unit behind Traefik, serving the prerendered `dist/` fro
 Details and the one-time VPS setup live in the deploy files:
 [`deploy/`](./deploy/), [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml),
 [`Dockerfile`](./Dockerfile), and [`nginx.conf`](./nginx.conf).
+
+### Ratings sidecar
+
+Recipe pages carry a live 5-star rating widget (and emit `aggregateRating` for search). Because a
+pure-static site can't hold a shared vote count, a tiny anonymous rating service runs **beside** the
+site as a **second container** — see [`service/ratings/`](./service/ratings/). CI builds and pushes
+`ghcr.io/…/personal-website-ratings:latest` alongside the site image; the VPS runs it from its own
+Quadlet unit ([`deploy/personal-website-ratings.container`](./deploy/personal-website-ratings.container)),
+behind Traefik on `mattschoe.dev/api/*`, storing a SQLite database on a named volume (`ratings-data`).
+
+One-time VPS setup, in addition to the site unit:
+
+1. Copy `deploy/personal-website-ratings.container` to
+   `~/.config/containers/systemd/personal-website-ratings.container`.
+2. Set `RATINGS_IP_SALT=` in that unit to a long random secret (e.g. `openssl rand -hex 32`) and
+   keep it stable — POSTs 500 until it's set, and changing it invalidates the per-voter dedup hashes.
+3. `systemctl --user daemon-reload && systemctl --user start personal-website-ratings.service`.
+
+The daily CI rebuild bakes the latest aggregates into the static HTML via
+[`scripts/fetch-ratings.mjs`](./scripts/fetch-ratings.mjs) (fail-soft: keeps the committed snapshot
+on any error), so the SEO numbers track the live widget.
