@@ -47,6 +47,14 @@ describe('RecipeDetail', () => {
     expect(screen.getByText(recipe.yield)).toBeInTheDocument();
   });
 
+  it('uses a custom yieldLabel when set, instead of "Makes"', () => {
+    const labelled = recipes.find((r) => r.yieldLabel);
+    if (!labelled) throw new Error('fixture with a yieldLabel expected');
+    renderRecipe(labelled.slug);
+    expect(screen.getByText(labelled.yieldLabel as string)).toBeInTheDocument();
+    expect(screen.queryByText('Makes')).toBeNull();
+  });
+
   it('lists every ingredient with its amount and item', () => {
     renderRecipe(recipe.slug);
     const aside = screen

@@ -73,6 +73,7 @@ file, so typos can't slip through silently.
 | `category` | yes | e.g. `Baking`, `Salads` |
 | `time` | yes | e.g. `35 min` |
 | `yield` | yes | e.g. `Serves 4` |
+| `yieldLabel` | no | label shown before `yield`; defaults to `Makes`. Set `Serves` for dinners |
 | `ingredients` | yes | list of `{ amount, item }`, or a list of headed groups (see below) |
 | `steps` | yes | list of strings (the method) |
 | `excerpt` | no | one-line summary; derived from the body if omitted |

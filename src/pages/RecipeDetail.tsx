@@ -64,7 +64,7 @@ export function RecipeDetail() {
               <span className={styles.v}>{recipe.time}</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.k}>Makes</span>
+              <span className={styles.k}>{recipe.yieldLabel ?? 'Makes'}</span>
               <span className={styles.v}>{recipe.yield}</span>
             </div>
           </div>
