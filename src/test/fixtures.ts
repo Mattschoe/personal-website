@@ -60,7 +60,8 @@ export const recipes: Recipe[] = [
     body: 'A bright summer salad built on charred corn.',
     category: 'Salads',
     time: '25 min',
-    yield: 'Serves 4',
+    yield: '4',
+    yieldLabel: 'Serves',
     ingredients: [
       { amount: '4 ears', item: 'sweetcorn' },
       { amount: '1', item: 'lime' },
