@@ -7,7 +7,7 @@
 //   GET  /healthz            → { ok: true }                     (container health)
 //   GET  /api/ratings        → { generatedAt, ratings: {…} }    (CI snapshot + runtime read)
 //   GET  /api/ratings/:slug  → { slug, count, average }
-//   POST /api/ratings/:slug  { value: 1..5 } → { slug, count, average }
+//   POST /api/ratings/:slug  { value: 1..5, voterId } → { slug, count, average }
 //
 // Everything else is a 404; wrong method on a known route is a 405. Bad input
 // (ValidationError) is a 400. A small body cap and a coarse per-IP request
@@ -126,7 +126,6 @@ const server = createServer(async (req, res) => {
       }
 
       if (method === 'POST') {
-        if (!SALT) return send(res, 500, { error: 'server misconfigured (no RATINGS_IP_SALT)' });
         const raw = await readBody(req, MAX_BODY);
         let parsed;
         try {
@@ -134,7 +133,11 @@ const server = createServer(async (req, res) => {
         } catch {
           throw new ValidationError('body must be JSON');
         }
-        const agg = recordVote(db, slug, parsed?.value, ipHash(ip, SALT));
+        // Dedup is keyed on the client's anonymous voter token, not the IP. The
+        // ip_hash is stored only as a soft abuse signal (and is empty when no
+        // salt is configured) — it never gates the vote.
+        const ipHashValue = SALT ? ipHash(ip, SALT) : '';
+        const agg = recordVote(db, slug, parsed?.value, parsed?.voterId, ipHashValue);
         return send(res, 200, { slug, ...agg });
       }
 
@@ -151,5 +154,5 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`[ratings] listening on :${PORT}, data=${DATA}`);
-  if (!SALT) console.warn('[ratings] RATINGS_IP_SALT is unset — POSTs will 500 until it is set.');
+  if (!SALT) console.warn('[ratings] RATINGS_IP_SALT is unset — ip_hash abuse signal disabled.');
 });

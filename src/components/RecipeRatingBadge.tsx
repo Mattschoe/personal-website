@@ -1,10 +1,14 @@
-import { getRating, starFill } from '../data/ratings';
+import { getRating, starFill, type Rating } from '../data/ratings';
 import styles from './RecipeRatingBadge.module.css';
 
 // A compact, read-only rating shown at the bottom-left of recipe cards (Home
-// feed + Recipes index). It reads the baked build-time snapshot via getRating —
-// no live fetch, no interactivity — so cards stay static. Renders nothing until
-// a recipe has ≥1 real vote, mirroring the detail widget's empty count slot.
+// feed + Recipes index). Read-only, no interactivity — cards stay static.
+// Renders nothing until a recipe has ≥1 real vote, mirroring the detail widget's
+// empty count slot.
+//
+// Numbers come from the `rating` prop when provided (the page passes a live value
+// from useAllRatings) and otherwise fall back to the baked build-time snapshot
+// (getRating) — so it's correct in SSG/offline and upgrades to live after mount.
 //
 // The interactive widget on the recipe page is RecipeRating; this is its quiet
 // card-sized cousin, sharing only the pure starFill helper.
@@ -19,12 +23,14 @@ function plural(n: number, one: string, many: string): string {
 export function RecipeRatingBadge({
   slug,
   pinned = true,
+  rating: override,
 }: {
   slug: string;
   pinned?: boolean;
+  rating?: Rating;
 }) {
-  const rating = getRating(slug);
-  if (!rating) return null;
+  const rating = override ?? getRating(slug);
+  if (!rating || rating.count < 1) return null;
 
   const { average, count } = rating;
   const label = `${average.toFixed(1)} out of 5 from ${count} ${plural(count, 'rating', 'ratings')}`;

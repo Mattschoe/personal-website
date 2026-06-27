@@ -5,9 +5,9 @@ import styles from './RecipeRating.module.css';
 
 // The visible 5-star rating widget, shown beside the recipe stat strip. It
 // renders the community average as fractionally-filled stars plus `(count)`,
-// and — until this browser has voted and while the service is reachable — lets
-// a visitor rate once by clicking a star. Tokens only; honours
-// prefers-reduced-motion via global CSS (transitions are disabled there).
+// and — while the service is reachable — lets a visitor cast or change their
+// vote by clicking a star (the server upserts on an anonymous token). Tokens
+// only; honours prefers-reduced-motion via global CSS (transitions disabled).
 //
 // Data + persistence live in useRecipeRating; this component is the view.
 
@@ -25,10 +25,14 @@ function Star({ fill }: { fill: number }) {
 }
 
 export function RecipeRating({ slug }: { slug: string }) {
-  const { average, count, hasVoted, available, ready, submit } = useRecipeRating(slug);
+  const { average, count, available, ready, submit } = useRecipeRating(slug);
   const [hover, setHover] = useState(0);
 
-  const interactive = ready && available && !hasVoted;
+  // Interactive whenever the service is reachable — including after voting, so a
+  // visitor can change their rating. The label always reads "Rating" and the
+  // stars always show the community average (never the visitor's own vote), so
+  // it never looks like one person is responsible for the count.
+  const interactive = ready && available;
 
   const summary =
     count > 0
@@ -41,7 +45,7 @@ export function RecipeRating({ slug }: { slug: string }) {
 
   return (
     <div className={styles.rating}>
-      <span className={styles.label}>{hasVoted ? 'You rated' : 'Rating'}</span>
+      <span className={styles.label}>Rating</span>
 
       <span className={styles.row}>
         {interactive ? (
