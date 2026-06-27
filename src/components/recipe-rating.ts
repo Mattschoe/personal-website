@@ -5,15 +5,52 @@
 // try/catch (private mode / disabled storage degrade to "nothing persists"
 // rather than throwing).
 //
-// Unlike the checklist, the vote lock is **persistent** (no TTL): once you've
-// rated a recipe, this browser stays locked. It's a soft, client-side half of
-// the dedup — the server-side ip_hash guard is the other half. Neither is a
-// guarantee (no auth), and that's the accepted trade-off.
+// We remember this browser's own vote per recipe (so it survives reloads) and a
+// stable anonymous voter token (getVoterId) that the server dedups on. The
+// visitor can re-vote to change their rating: a new submit overwrites the stored
+// value here and the server upserts the row keyed on the token. Soft, no-auth
+// dedup — clearing storage mints a new token and counts as a new voter, the
+// accepted trade-off.
 
 export const RATINGS_KEY = 'matt-recipe-ratings';
+export const VOTER_ID_KEY = 'matt-voter-id';
 
 /** `{ [slug]: value }` — the value this browser voted for each recipe. */
 export type RatingStore = Record<string, number>;
+
+/**
+ * This browser's stable anonymous voter token — the server's dedup key (it can't
+ * trust the client IP; see service/ratings/store.mjs). Created once and persisted
+ * so the same browser keeps the same identity across visits, which is what lets a
+ * visitor *change* their vote (server upserts on it). Clearing storage mints a
+ * fresh token and counts as a new voter — the accepted soft-dedup trade-off.
+ *
+ * Returns a fresh (unpersisted) token when storage is unavailable rather than
+ * throwing; the vote still records, it just can't be changed later.
+ */
+export function getVoterId(): string {
+  try {
+    const existing = localStorage.getItem(VOTER_ID_KEY);
+    if (existing) return existing;
+    const id = newVoterId();
+    localStorage.setItem(VOTER_ID_KEY, id);
+    return id;
+  } catch {
+    return newVoterId();
+  }
+}
+
+/** A URL-safe token matching the server's VOTER_ID_RE (UUID, or a fallback). */
+function newVoterId(): string {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    // Older browsers without crypto.randomUUID: a 32-char hex string.
+    let s = '';
+    for (let i = 0; i < 32; i++) s += Math.floor(Math.random() * 16).toString(16);
+    return s;
+  }
+}
 
 function isValidVote(v: unknown): v is number {
   return typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= 5;

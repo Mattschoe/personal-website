@@ -3,6 +3,7 @@ import { getLatestFeed, formatDate, type FeedItem } from '../content';
 import { Image } from '../components/Image';
 import { PrefetchLink } from '../components/PrefetchLink';
 import { RecipeRatingBadge } from '../components/RecipeRatingBadge';
+import { useAllRatings } from '../components/useAllRatings';
 import { HeroCircle } from '../components/HeroCircle';
 import { WhatImUpTo } from '../components/WhatImUpTo';
 import { Seo } from '../seo/Seo';
@@ -33,6 +34,7 @@ export function Home() {
   const feed = getLatestFeed(4);
   const featured = feed[0];
   const rest = feed.slice(1);
+  const ratings = useAllRatings();
 
   return (
     // Layout already provides the <main> landmark, so this page is just its
@@ -126,7 +128,11 @@ export function Home() {
               <h3>{featured.title}</h3>
               {featured.caption && <p className="card-excerpt">{featured.caption}</p>}
               {recipeSlug(featured) && (
-                <RecipeRatingBadge slug={recipeSlug(featured)!} pinned={false} />
+                <RecipeRatingBadge
+                  slug={recipeSlug(featured)!}
+                  rating={ratings[recipeSlug(featured)!]}
+                  pinned={false}
+                />
               )}
               <span className={`arrow-link ${styles.arrowOnly}`} aria-hidden="true">
                 <span className="ar">&#8599;</span>
@@ -149,7 +155,9 @@ export function Home() {
                 </div>
                 <div className="card-title">{item.title}</div>
                 {item.caption && <p className="card-excerpt">{item.caption}</p>}
-                {recipeSlug(item) && <RecipeRatingBadge slug={recipeSlug(item)!} />}
+                {recipeSlug(item) && (
+                  <RecipeRatingBadge slug={recipeSlug(item)!} rating={ratings[recipeSlug(item)!]} />
+                )}
               </PrefetchLink>
             );
           })}

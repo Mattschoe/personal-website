@@ -63,8 +63,9 @@ One-time VPS setup, in addition to the site unit:
 
 1. Copy `deploy/personal-website-ratings.container` to
    `~/.config/containers/systemd/personal-website-ratings.container`.
-2. Set `RATINGS_IP_SALT=` in that unit to a long random secret (e.g. `openssl rand -hex 32`) and
-   keep it stable — POSTs 500 until it's set, and changing it invalidates the per-voter dedup hashes.
+2. Set `RATINGS_IP_SALT=` in that unit to a long random secret (e.g. `openssl rand -hex 32`).
+   Dedup keys on an anonymous per-browser voter token, not the IP, so this salt only seasons the
+   soft `ip_hash` abuse signal — votes still work if it's unset.
 3. `systemctl --user daemon-reload && systemctl --user start personal-website-ratings.service`.
 
 The daily CI rebuild bakes the latest aggregates into the static HTML via

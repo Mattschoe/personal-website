@@ -32,8 +32,15 @@ builds a static site, ships it as a container image to GHCR, and the VPS pulls i
   impossible in a pure-static site, so a tiny zero-framework Node service (`service/ratings/`,
   SQLite via `better-sqlite3`) runs **beside** the static frontend on the VPS, its own container +
   Quadlet unit, routed by Traefik on `Host(mattschoe.dev) && PathPrefix(/api)` (same origin, no
-  CORS). It's **anonymous (no auth)**: one tap, no login. "One vote per person" is *approximated* —
-  a `localStorage` lock on the client + a server `UNIQUE(slug, ip_hash)` guard — never guaranteed.
+  CORS). It's **anonymous (no auth)**: one tap, no login, and the vote is **changeable** (re-tap a
+  different star). "One vote per person" is *approximated* by an **anonymous voter token** — a UUID
+  the browser mints in `localStorage` (`matt-voter-id`) and sends with each vote; the server upserts
+  on `UNIQUE(slug, voter_id)`, so a re-vote updates the row. **Not** IP-based: the VPS runs rootless
+  Podman, whose port forwarder SNATs every connection to one internal address before Traefik, so all
+  visitors share one IP — `ip_hash` is therefore stored only as a non-unique, best-effort abuse
+  signal and never gates a vote. Clearing storage mints a new token (counts as a new voter) — never
+  guaranteed. Card badges (`RecipeRatingBadge`) read the baked snapshot for SSG and live-upgrade via
+  one `/api/ratings` fetch per listing page (`useAllRatings`), fail-soft.
   `aggregateRating` is baked at build time from `src/data/ratings.json` (refreshed by the daily CI
   cron, like the GitHub-activity snapshot) and emitted **only when ≥1 real rating exists** — never
   fabricated. `better-sqlite3` is native and lives **only** in `service/ratings/package.json` (never
@@ -120,9 +127,11 @@ src/
     ThemeToggle.tsx             [data-theme-toggle] button
     Image.tsx / .module.css     real <img> or toned .ph placeholder at a fixed aspect ratio
     WhatImUpTo.tsx / .module.css  Home "What I'm up to": GitHub month timeline + year heatmap (tokens)
-    recipe-rating.ts            pure localStorage helpers for this browser's own recipe vote (no TTL)
-    useRecipeRating.ts          hook: seed from snapshot, fetch live /api numbers, submit a vote (fail-soft)
-    RecipeRating.tsx / .module.css  the 5-star widget (fractional fill + count); interactive until voted
+    recipe-rating.ts            pure localStorage helpers: this browser's own votes + anonymous voter token (getVoterId)
+    useRecipeRating.ts          hook: seed from snapshot, fetch live /api numbers, submit/change a vote (fail-soft)
+    useAllRatings.ts            hook: one /api/ratings fetch per listing page, seeded from snapshot (fail-soft) — feeds card badges
+    RecipeRating.tsx / .module.css  the 5-star widget (fractional fill + count); interactive (cast or change your vote)
+    RecipeRatingBadge.tsx / .module.css  compact read-only card rating; live `rating` prop over the baked snapshot
   data/                         build-time snapshots baked into the prerendered HTML
     github-activity.json        committed snapshot/fallback (fetched in CI; see scripts/)
     github-activity.ts          typed loader + pure heatmap derivations (cellLevel/levelThresholds)
@@ -154,7 +163,7 @@ src/
   test/
     fixtures.ts                 fixed typed dataset aliased over `virtual:content` for tests
 service/ratings/                the dynamic ratings sidecar (own package.json; native dep; not in root vitest)
-  store.mjs                     SQLite core: openDb/ipHash/recordVote/aggregate + validation (one row per vote)
+  store.mjs                     SQLite core: openDb(+migrate)/recordVote(upsert on voter_id)/aggregate + validation; ipHash is a soft signal
   server.mjs                    node:http server: GET/POST /api/ratings[/:slug], /healthz (no framework)
   store.test.mjs                vitest over the core against an in-memory DB (`cd service/ratings && npm test`)
   Dockerfile / package.json / README.md   two-stage alpine image; better-sqlite3 only dep

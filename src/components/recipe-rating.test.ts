@@ -1,10 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
   RATINGS_KEY,
+  VOTER_ID_KEY,
   loadRatings,
   saveRatings,
   getOwnVote,
   recordOwnVote,
+  getVoterId,
   type RatingStore,
 } from './recipe-rating';
 
@@ -54,5 +56,20 @@ describe('recordOwnVote', () => {
     saveRatings({ stew: 3 });
     expect(recordOwnVote('soup', 9)).toEqual({ stew: 3 });
     expect(loadRatings()).toEqual({ stew: 3 });
+  });
+});
+
+describe('getVoterId', () => {
+  it('mints a token on first call and reuses it thereafter', () => {
+    const first = getVoterId();
+    expect(first).toMatch(/^[A-Za-z0-9_-]{8,64}$/);
+    expect(localStorage.getItem(VOTER_ID_KEY)).toBe(first);
+    expect(getVoterId()).toBe(first); // stable across calls
+  });
+
+  it('honours an already-stored token', () => {
+    const existing = '11111111-1111-4111-8111-111111111111';
+    localStorage.setItem(VOTER_ID_KEY, existing);
+    expect(getVoterId()).toBe(existing);
   });
 });

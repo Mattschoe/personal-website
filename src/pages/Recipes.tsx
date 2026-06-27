@@ -4,6 +4,7 @@ import { getRecipes, truncate } from '../content';
 import { Image } from '../components/Image';
 import { PrefetchLink } from '../components/PrefetchLink';
 import { RecipeRatingBadge } from '../components/RecipeRatingBadge';
+import { useAllRatings } from '../components/useAllRatings';
 import { Seo } from '../seo/Seo';
 import styles from './Recipes.module.css';
 
@@ -18,6 +19,7 @@ const TONES = ['grenadine', 'beeswax', 'latte', 'sage'] as const;
 // (`?category=` / `?q=`) so filtered views are shareable.
 export function Recipes() {
   const recipes = getRecipes();
+  const ratings = useAllRatings();
 
   // Unique categories in first-appearance order (recipes are pre-sorted
   // newest-first), with a leading "All".
@@ -114,7 +116,7 @@ export function Recipes() {
                 </div>
                 <div className="card-title">{recipe.title}</div>
                 <p className="card-excerpt">{truncate(recipe.excerpt)}</p>
-                <RecipeRatingBadge slug={recipe.slug} />
+                <RecipeRatingBadge slug={recipe.slug} rating={ratings[recipe.slug]} />
               </PrefetchLink>
             ))}
           </div>

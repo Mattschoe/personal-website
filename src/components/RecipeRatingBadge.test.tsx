@@ -38,4 +38,26 @@ describe('RecipeRatingBadge', () => {
 
     expect(container).toBeEmptyDOMElement();
   });
+
+  it('prefers the live `rating` prop over the snapshot', () => {
+    // Snapshot is empty, but the page passes a live value → it must still render.
+    vi.spyOn(ratings, 'getRating').mockReturnValue(undefined);
+
+    render(<RecipeRatingBadge slug="soup" rating={{ count: 7, average: 4.0 }} />);
+
+    expect(
+      screen.getByRole('img', { name: /4\.0 out of 5 from 7 ratings/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('(7)')).toBeInTheDocument();
+  });
+
+  it('renders nothing when the live `rating` prop has no votes', () => {
+    vi.spyOn(ratings, 'getRating').mockReturnValue(undefined);
+
+    const { container } = render(
+      <RecipeRatingBadge slug="soup" rating={{ count: 0, average: 0 }} />,
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
 });

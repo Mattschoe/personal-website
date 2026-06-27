@@ -36,7 +36,7 @@ describe('RecipeRating', () => {
     expect(fetchMock).toHaveBeenCalledWith('/api/ratings/soup');
   });
 
-  it('posts the vote on click, then locks the widget', async () => {
+  it('posts the vote (with a voter token) on click and stays interactive', async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(ok({ slug: 'soup', count: 12, average: 4.3 })) // GET
@@ -48,21 +48,51 @@ describe('RecipeRating', () => {
     const star = await screen.findByRole('button', { name: 'Rate 5 stars' });
     fireEvent.click(star);
 
-    // POSTed the chosen value.
+    // POSTed the chosen value plus a voter token.
     await waitFor(() => {
       const post = fetchMock.mock.calls.find((c) => c[1]?.method === 'POST');
       expect(post).toBeTruthy();
       expect(post?.[0]).toBe('/api/ratings/soup');
-      expect(JSON.parse(post?.[1].body).value).toBe(5);
+      const body = JSON.parse(post?.[1].body);
+      expect(body.value).toBe(5);
+      expect(typeof body.voterId).toBe('string');
+      expect(body.voterId.length).toBeGreaterThanOrEqual(8);
     });
 
-    // Locked: buttons gone, "You rated" shown, new count reflected, lock stored.
-    await waitFor(() => {
-      expect(screen.queryByRole('group')).not.toBeInTheDocument();
-    });
-    expect(screen.getByText('You rated')).toBeInTheDocument();
+    // New count reflected, own vote stored, label unchanged, still interactive
+    // (so the visitor can change their rating).
     expect(await screen.findByText('(13)')).toBeInTheDocument();
     expect(loadRatings().soup).toBe(5);
+    expect(screen.getByText('Rating')).toBeInTheDocument();
+    expect(screen.queryByText('You rated')).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /rate this recipe/i })).toBeInTheDocument();
+  });
+
+  it('lets the visitor change their vote (a second click re-posts)', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(ok({ slug: 'soup', count: 12, average: 4.3 })) // GET
+      .mockResolvedValueOnce(ok({ slug: 'soup', count: 13, average: 4.4 })) // POST #1
+      .mockResolvedValueOnce(ok({ slug: 'soup', count: 13, average: 4.0 })); // POST #2
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<RecipeRating slug="soup" />);
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Rate 5 stars' }));
+    expect(await screen.findByText('(13)')).toBeInTheDocument();
+
+    // Still interactive — change the vote to 2.
+    fireEvent.click(await screen.findByRole('button', { name: 'Rate 2 stars' }));
+
+    await waitFor(() => {
+      const posts = fetchMock.mock.calls.filter((c) => c[1]?.method === 'POST');
+      expect(posts).toHaveLength(2);
+      expect(JSON.parse(posts[1][1].body).value).toBe(2);
+    });
+    expect(loadRatings().soup).toBe(2);
+    // Both posts carry the same voter token (so the server upserts one row).
+    const posts = fetchMock.mock.calls.filter((c) => c[1]?.method === 'POST');
+    expect(JSON.parse(posts[0][1].body).voterId).toBe(JSON.parse(posts[1][1].body).voterId);
   });
 
   it('sends only one vote when stars are clicked in quick succession', async () => {
@@ -74,16 +104,15 @@ describe('RecipeRating', () => {
 
     render(<RecipeRating slug="soup" />);
 
-    // Two clicks before the lock re-renders the buttons away: the synchronous
-    // re-entry guard must drop the second so only the first value is POSTed.
+    // Two clicks in the same tick: the synchronous re-entry guard must drop the
+    // second so only the first value is POSTed (the in-flight request hasn't
+    // resolved yet to reset the guard).
     const three = await screen.findByRole('button', { name: 'Rate 3 stars' });
     const five = screen.getByRole('button', { name: 'Rate 5 stars' });
     fireEvent.click(three);
     fireEvent.click(five);
 
-    await waitFor(() => {
-      expect(screen.queryByRole('group')).not.toBeInTheDocument();
-    });
+    expect(await screen.findByText('(13)')).toBeInTheDocument();
 
     const posts = fetchMock.mock.calls.filter((c) => c[1]?.method === 'POST');
     expect(posts).toHaveLength(1);
@@ -91,7 +120,7 @@ describe('RecipeRating', () => {
     expect(loadRatings().soup).toBe(3);
   });
 
-  it('stays read-only when this browser has already voted', async () => {
+  it('stays interactive when this browser has already voted (so it can change)', async () => {
     saveRatings({ soup: 4 });
     const fetchMock = vi
       .fn()
@@ -101,8 +130,8 @@ describe('RecipeRating', () => {
     render(<RecipeRating slug="soup" />);
 
     expect(await screen.findByText('(12)')).toBeInTheDocument();
-    expect(screen.queryByRole('group')).not.toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /4\.3 out of 5 from 12 ratings/i })).toBeInTheDocument();
+    // Still offers the interactive star group — a prior vote no longer locks it.
+    expect(screen.getByRole('group', { name: /rate this recipe/i })).toBeInTheDocument();
   });
 
   it('falls back to read-only when the service is unreachable', async () => {

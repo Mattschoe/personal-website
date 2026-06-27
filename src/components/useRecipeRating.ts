@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getRating } from '../data/ratings';
-import { loadRatings, getOwnVote, recordOwnVote, saveRatings } from './recipe-rating';
+import { loadRatings, getOwnVote, recordOwnVote, saveRatings, getVoterId } from './recipe-rating';
 
 // Per-recipe rating state for the RecipeRating widget.
 //
@@ -61,27 +61,30 @@ export function useRecipeRating(slug: string): RecipeRatingState {
 
   const submit = useCallback(
     (value: number) => {
-      if (submitting.current || hasVoted) return;
+      // The synchronous ref guard drops same-tick repeat clicks; we no longer
+      // block on hasVoted, so a visitor can re-submit to change their rating.
+      if (submitting.current) return;
       submitting.current = true;
-      // Optimistic lock: persist this browser's vote and lock the widget now.
+      // Remember this browser's own vote (survives reloads); the server dedups
+      // on the anonymous voter token, upserting so a re-vote updates the row.
       recordOwnVote(slug, value);
       setHasVoted(true);
 
       fetch(`/api/ratings/${slug}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ value }),
+        body: JSON.stringify({ value, voterId: getVoterId() }),
       })
         .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
         .then((data) => {
           if (typeof data?.count === 'number') setCount(data.count);
           if (typeof data?.average === 'number') setAverage(data.average);
+          submitting.current = false;
         })
         .catch(() => {
-          // Couldn't record — drop the optimistic lock and stay interactive so
-          // the visitor can try again this session. (Leaving `available` true is
-          // deliberate: flipping it would make the widget read-only and prevent
-          // the very retry we just freed up.)
+          // Couldn't record — undo the optimistic own-vote so the visitor can
+          // try again this session. (Leaving `available` true is deliberate:
+          // flipping it would make the widget read-only and prevent the retry.)
           const store = loadRatings();
           delete store[slug];
           saveRatings(store);
@@ -89,7 +92,7 @@ export function useRecipeRating(slug: string): RecipeRatingState {
           submitting.current = false;
         });
     },
-    [hasVoted, slug],
+    [slug],
   );
 
   return { average, count, hasVoted, available, ready, submit };

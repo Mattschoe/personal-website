@@ -4,9 +4,9 @@
 #
 # Install once: copy to ~/.config/containers/systemd/personal-website-ratings.container
 # then `systemctl --user daemon-reload && systemctl --user start personal-website-ratings.service`.
-# Set RATINGS_IP_SALT below to a long random secret (e.g. `openssl rand -hex 32`)
-# BEFORE first start — POSTs 500 until it's set, and changing it later invalidates
-# every existing per-voter dedup hash.
+# Set RATINGS_IP_SALT below to a long random secret (e.g. `openssl rand -hex 32`).
+# Dedup keys on the client's anonymous voter token, not the IP, so this salt now
+# only seasons the soft `ip_hash` abuse signal — votes still work if it's unset.
 #
 # Deployment is pull-based, same as the site: `podman-auto-update` rolls this unit
 # to the new :latest digest. CI only builds and pushes the image.
