@@ -4,7 +4,7 @@ date: 2026-06-15
 summary: Over my 4th semester I found myself continuously using Git and GitHub for writing my reports. While it was great being back in control of my tools, I found myself constantly copying and pasting my work to have AI review it. Here's how I solved it using GitHub Workflows. 
 caption: Manually remembering to have an LLM reviewer go through your documentation and work can be tedious, here's how I found a way to automate the task.
 status: Active
-hero: /images/projects/grammer_checker_hero.webp
+hero: /images/projects/grammar_checker_hero.webp
 year: 2026 - present
 stack:
   - Python
@@ -18,7 +18,7 @@ additional terminal and have it do review while I kept working, I still found my
 forgetting to review sections of reports for grammar errors and bad prose. So on a Monday morning 3 days 
 before an essay deadline I found myself procrastinating writing about philosophy and instead built this tool.
 
-**First of all** what was the point of this tool for me? Well, I wanted something where I didn't have
+**First of all**, what was the point of this tool for me? Well, I wanted something where I didn't have
 to remember to have the LLM check my work. For me I needed an automation step, where I could have a 
 plain helper work in the background and support me in my weaknesses. So since all my 
 work was already living through GitHub I thought I might as well just design a GitHub Action around how
@@ -66,6 +66,6 @@ report or documentation is hard, it's easy for you to bask in the glory of whate
 understands anything you have written. This tool is here to help, I purposely built this as a workflow
 that creates PR with changes and not just pushes the changes, you should not treat it as a fixer, you
 should treat it as a perspective. There is real value in seeing an opinion on how to write something
-(even if it's from a LLM) and deciding **not** to go down that route. At university we don't always
+(even if it's from an LLM) and deciding **not** to go down that route. At university we don't always
 have fellow students at our fingertips to help us give perspective on our work, and that is why I made this
 tool.

@@ -83,7 +83,7 @@ work without ever leaving the conversation.
 # What's next for Agentic Scrum?
 With the project handed off to Novo Nordisk, it is now in their hands to extend the project.
 I already know that the primary goal of the project will be: Closing the loop. Essentially
-we have created a system that replaces two of the 3 roles in Scrum, so why not also the third?
+we have created a system that replaces two of the three roles in Scrum, so why not also the third?
 (the Developer). It will be exciting to return to this project later on and see where the outcome
 will land.
 
