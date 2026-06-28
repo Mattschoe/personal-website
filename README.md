@@ -1,6 +1,6 @@
 # Personal site
 
-A almost static personal site with three content streams — **Recipes**, **Projects**, and a **Blog** —
+An almost static personal site with three content streams — **Recipes**, **Projects**, and a **Blog** —
 plus a Home page surfacing the latest of each. Built with Vite + React + TypeScript and prerendered
 to static HTML with [`vite-react-ssg`](https://github.com/Daydreamer-riri/vite-react-ssg). Content is
 plain Markdown committed to the repo.
