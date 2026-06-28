@@ -1,16 +1,11 @@
 # Personal site
 
-A static personal site with three content streams — **Recipes**, **Projects**, and a **Blog** —
+A almost static personal site with three content streams — **Recipes**, **Projects**, and a **Blog** —
 plus a Home page surfacing the latest of each. Built with Vite + React + TypeScript and prerendered
 to static HTML with [`vite-react-ssg`](https://github.com/Daydreamer-riri/vite-react-ssg). Content is
-plain Markdown committed to the repo. No runtime server, no database.
-
-Forked it for your own site? Start here, then adjust `src/seo/config.ts` (canonical URL, titles) and
-the content under `content/`. Everything else below works the same wherever you host it.
+plain Markdown committed to the repo.
 
 ## Publishing content
-
-The whole point — **no code changes required**:
 
 1. Drop a Markdown file into the right stream folder:
    - `content/recipes/<slug>.md`
@@ -25,7 +20,7 @@ The whole point — **no code changes required**:
    [Images](#images) for the optimization step.
 4. Commit and push.
 
-Front-matter is validated at build time — an unknown or malformed field **fails the build** with a
+Front-matter is validated at build time, an unknown or malformed field **fails the build** with a
 message naming the file, so typos can't slip through. The build prerenders the new page and
 regenerates the Home feed, sitemap, and RSS automatically.
 
