@@ -237,7 +237,7 @@
   display: block;
   font-size: var(--fs-lead);
   line-height: 1.6;
-  margin: 0.2em 0 0;
+  margin: 0;
 }
 .steps li.checked .stepText {
   color: var(--ink-soft);
