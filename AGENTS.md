@@ -110,6 +110,8 @@ content/                        author content — drop a .md in, commit, push (
   blog/*.md                     one file per post
   assets/                       images co-located with content (currently a .gitkeep)
 public/                         static assets copied verbatim into dist/
+  favicon.svg                   the [m] logo favicon; embedded <style> auto-swaps light/dark via prefers-color-scheme
+  favicon-16/32.png, apple-touch-icon.png, icon-192/512(.png + -maskable), site.webmanifest  PNG fallbacks + iOS/PWA icon set (referenced from index.html <head>)
   robots.txt                    points crawlers at the sitemap
   images/**/*.webp              optimized hero/inline images referenced from content via `hero:`/`![]()` — only the .webp is committed; raw .jpg/.jpeg/.png sources are gitignored (run `npm run images` to (re)generate, see scripts/optimize-images.mjs)
 src/
@@ -125,6 +127,7 @@ src/
     ThemeProvider.tsx           pre-paint theme provider; persists to localStorage
     theme-context.ts            theme React context
     ThemeToggle.tsx             [data-theme-toggle] button
+    BracketMark.tsx / .module.css  the [m] logo as inline SVG; brackets fill --accent, m fills --ink (theme-aware); used in Header + Footer
     Image.tsx / .module.css     real <img> or toned .ph placeholder at a fixed aspect ratio
     WhatImUpTo.tsx / .module.css  Home "What I'm up to": GitHub month timeline + year heatmap (tokens)
     recipe-rating.ts            pure localStorage helpers: this browser's own votes + anonymous voter token (getVoterId)

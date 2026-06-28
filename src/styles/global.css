@@ -271,6 +271,7 @@ p{ margin:0 0 1em; text-wrap:pretty; }
 .site-footer .container{ padding-block:var(--s-7); display:grid;
   grid-template-columns:1.4fr 1fr 1fr; gap:var(--s-6); align-items:start; }
 .site-footer .wordmark{ font-size:2rem; margin-bottom:var(--s-3); }
+.foot-mark{ margin-bottom:var(--s-2); }
 .foot-col h4{ font-family:var(--font-mono); font-weight:700; font-size:var(--fs-meta);
   text-transform:uppercase; letter-spacing:.15em; color:var(--ink-soft); margin-bottom:var(--s-3); }
 .foot-col a{ display:block; text-decoration:none; color:var(--ink); margin-bottom:.4em; }

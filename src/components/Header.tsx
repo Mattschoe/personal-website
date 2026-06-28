@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
+import { BracketMark } from './BracketMark';
 import styles from './Header.module.css';
 
 // Primary nav. About is an anchor on the Home page (lands once Phase 4 builds
@@ -94,6 +95,7 @@ export function Header() {
     <header className="site-header">
       <div className="container">
         <Link className="wordmark" to="/">
+          <BracketMark size="1.05em" />
           Matt
         </Link>
 
