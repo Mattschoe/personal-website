@@ -176,7 +176,7 @@ export function Home() {
         </div>
 
         <div className={styles.aboutGrid}>
-          <Image src={"/images/about_me_image.jpg"} label="Portrait · 3:4" alt="A fun little picture of me mid crossaint eating" />
+          <Image src={"/images/about_me_image.webp"} label="Portrait · 3:4" alt="A fun little picture of me mid crossaint eating" />
           <div className={styles.aboutText}>
             <p className="lead">Hi! My name is Matt!</p>
             <p>

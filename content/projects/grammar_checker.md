@@ -4,7 +4,7 @@ date: 2026-06-15
 summary: Over my 4th semester I found myself continuously using Git and GitHub for writing my reports. While it was great being back in control of my tools, I found myself constantly copying and pasting my work to have AI review it. Here's how I solved it using GitHub Workflows. 
 caption: Manually remembering to have an LLM reviewer go through your documentation and work can be tedious, here's how I found a way to automate the task.
 status: Active
-hero: /images/projects/grammer_checker_hero.png
+hero: /images/projects/grammer_checker_hero.webp
 year: 2026 - present
 stack:
   - Python
@@ -46,7 +46,7 @@ jobs:
           file-extensions: tex,md
 ```
 you would now get something like this:
-![example Pull-Request of grammar checker](/images/projects/grammar_checker_example_pr.png) 
+![example Pull-Request of grammar checker](/images/projects/grammar_checker_example_pr.webp) 
 Which you could easily just merge into main. Even better, if you didn't agree with the changes you can just
 write a comment into the PR and the workflow will run again, taking your feedback into consideration and
 fixing the errors. The system is extendable so that you can improve the system prompt if you would like to,

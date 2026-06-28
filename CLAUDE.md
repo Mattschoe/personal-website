@@ -111,7 +111,7 @@ content/                        author content — drop a .md in, commit, push (
   assets/                       images co-located with content (currently a .gitkeep)
 public/                         static assets copied verbatim into dist/
   robots.txt                    points crawlers at the sitemap
-  images/recipes/*.jpg          hero images referenced from front-matter via `hero:`
+  images/**/*.webp              optimized hero/inline images referenced from content via `hero:`/`![]()` — only the .webp is committed; raw .jpg/.jpeg/.png sources are gitignored (run `npm run images` to (re)generate, see scripts/optimize-images.mjs)
 src/
   main.tsx                      vite-react-ssg entry
   routes.tsx                    route config; content routes derive getStaticPaths from the streams
@@ -170,6 +170,7 @@ service/ratings/                the dynamic ratings sidecar (own package.json; n
 scripts/                        Node build/dev utilities (not bundled)
   fetch-github-activity.mjs     CI: fetch GitHub contribution data → src/data/github-activity.json (fails soft)
   fetch-ratings.mjs             CI: fetch live ratings → src/data/ratings.json (fails soft; mirrors the above)
+  optimize-images.mjs           `npm run images`: every non-.webp under public/images/ → compressed sibling .webp (≤1600px, q80); self-bootstraps sharp via npm install --no-save (native, never in package.json); skips existing .webp; has its own test
   screenshot.mjs                visual-verify helper: route × {desktop,mobile} × {light,dark} → /tmp PNGs
 vite-plugin-content.ts          the `virtual:content` plugin: parses content/ at build time
 vite.config.ts                  Vite + Vitest config (test aliases + service/** excluded from the suite)

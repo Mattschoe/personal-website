@@ -14,11 +14,20 @@ content/
 ## Images
 
 Images live under **`public/images/...`** and are referenced from front-matter by their absolute URL
-path. To add one: drop the file in (e.g.) `public/images/recipes/`, then set `hero:` on the item —
-no code change needed.
+path. To add one:
+
+1. Drop the raw photo (`.jpg/.jpeg/.png`) into `public/images/<stream>/` (e.g. `public/images/recipes/`).
+2. Run **`npm run images`** — it writes an optimized sibling `.webp` (resized to max **1600px** wide,
+   WebP **quality 80**) next to it. Re-running only converts new photos; existing `.webp` are never
+   touched. To regenerate one, delete its `.webp` and re-run.
+3. Set `hero:` (or an inline `![...](...)`) to the **`.webp`** path — no code change needed.
+
+Only the optimized `.webp` is committed: the raw `.jpg/.jpeg/.png` under `public/images/` are
+**gitignored**, so the repo stays lean. (CI guards this — `content-images.test.ts` fails the build if
+a referenced `.webp` is missing.)
 
 ```yaml
-hero: /images/recipes/charred-corn-salad.jpg
+hero: /images/recipes/charred-corn-salad.webp
 heroAlt: A platter of blistered sweetcorn with herbs and lime   # optional
 ```
 
@@ -32,13 +41,14 @@ heroAlt: A platter of blistered sweetcorn with herbs and lime   # optional
 ### Inline images (mid-text)
 
 Inside a **blog post or project body** you can drop pictures between paragraphs with plain Markdown
-image syntax. They render full reading-column width, centered. Put the files under
-`public/images/blog/` or `public/images/projects/` and reference them by absolute path:
+image syntax. They render full reading-column width, centered. Put the raw files under
+`public/images/blog/` or `public/images/projects/`, run `npm run images`, and reference the optimized
+`.webp` by absolute path:
 
 ```markdown
 Some prose leading into the photo.
 
-![A platter of blistered sweetcorn with herbs and lime](/images/blog/charred-corn.jpg "Charred corn, straight off the grill")
+![A platter of blistered sweetcorn with herbs and lime](/images/blog/charred-corn.webp "Charred corn, straight off the grill")
 
 More prose after it.
 ```
@@ -49,7 +59,7 @@ More prose after it.
   image. Omit it for no caption:
 
   ```markdown
-  ![A platter of blistered sweetcorn](/images/blog/charred-corn.jpg)
+  ![A platter of blistered sweetcorn](/images/blog/charred-corn.webp)
   ```
 
 Each file is YAML front-matter (between `---` lines) followed by a Markdown **body**. Front-matter is
