@@ -127,11 +127,18 @@ async function main() {
 
 /** Resolve `sharp`, installing it ad-hoc (never into package.json) if absent. */
 async function loadSharp() {
+  // `sharp` is intentionally never a declared dep (see header). Resolve it
+  // through a non-literal specifier so Vite/Vitest can't statically analyse and
+  // resolve the import at transform time — a literal `import('sharp')` makes the
+  // test suite fail under CI's clean `npm ci`, where `sharp` is absent. Node
+  // resolves the variable specifier natively at runtime; this only runs when the
+  // CLI does real encoding, never in tests.
+  const mod = 'sharp';
   try {
-    return (await import('sharp')).default;
+    return (await import(mod)).default;
   } catch {
     console.log('[images] sharp not found — installing it locally (npm install --no-save sharp)…');
     execFileSync('npm', ['install', '--no-save', 'sharp'], { stdio: 'inherit' });
-    return (await import('sharp')).default;
+    return (await import(mod)).default;
   }
 }
