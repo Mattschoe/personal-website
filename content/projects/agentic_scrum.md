@@ -12,7 +12,7 @@ stack:
   - Podman
 links: 
   repo: https://github.com/agentic-scrum/agentic-scrum
-hero: /images/projects/agentic_scrum.png
+hero: /images/projects/agentic_scrum.webp
 heroAlt: The landing page of the Agentic Scrum Project. It's a web-app that matches the similar style of AI-websites like Claude, Gemini, Deepseek and ChatGPT. 
 ---
 In the 4th semester at ITU I teamed up with some of the best people studying Software Development

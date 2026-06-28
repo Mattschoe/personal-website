@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

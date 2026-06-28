@@ -1,7 +1,7 @@
 ---
 title: AI is not like the calculator
 date: 2026-06-16
-hero: /images/blog/teachers_protest_calculator.jpg
+hero: /images/blog/teachers_protest_calculator.webp
 heroAlt: An old newspaper showing teachers protesting the introduction of calculators
 ---
 Last year, when I was much more AI-positive, I often had conversations about AI with people both
