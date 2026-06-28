@@ -1,0 +1,5 @@
+/* The [m] mark inherits the site theme via tokens (presentation attributes
+   don't resolve var(), so fill is set here, not on the <path>). */
+.mark{ display:inline-block; width:auto; vertical-align:-0.18em; }
+.brk{ fill:var(--accent); }
+.ink{ fill:var(--ink); }

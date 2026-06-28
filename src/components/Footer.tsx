@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
+import { BracketMark } from './BracketMark';
 
 export function Footer() {
   return (
     <footer className="site-footer">
       <div className="container">
         <div>
+          <div className="foot-mark" aria-hidden="true">
+            <BracketMark size="3.5rem" />
+          </div>
           <Link className="wordmark" to="/">
             Matt
           </Link>
