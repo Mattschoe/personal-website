@@ -102,7 +102,7 @@ function fail(path: string, error: z.ZodError, data: unknown): never {
     throw new Error(
       `Invalid front-matter in ${path}: no fields were found.\n` +
         `The front-matter block is empty or mis-indented — check that each key ` +
-        `starts at the left margin and that you indented with spaces, not tabs ` +
+        `starts at the left margin and that you indent with spaces, not tabs ` +
         `(YAML forbids tabs for indentation).\n` +
         `Expected, but missing:\n${details}`,
     );
