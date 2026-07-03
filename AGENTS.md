@@ -1,3 +1,4 @@
+=== CLAUDE.md ===
 # CLAUDE.md — Matt's personal site
 
 Standing instructions for maintaining this site. The phased build is finished; this file is the
