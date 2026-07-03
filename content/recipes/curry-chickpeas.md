@@ -42,4 +42,4 @@ steps:
   - When the curry is to your liking take it off the heat. In the curry add the garam masala, then slowly add the spinach a handful at a time. Afterwards taste for salt, it probably needs some. 
   - Serve with rice.
 ---
-A lovely vibrant and vegetarian curry that helps a lot with eating more diverse food. Inspiration from this recipe is heavily derived from the lovely people at [The Plant School](https://theplantbasedschool.com/chickpea-curry/). The recipe here will give you a lot of leftovers for just two people, so a fantastic meal prep recipe as well. I recommend adding a bit of lime or citrus to the leftovers to help keep it interesting.  
+A lovely vibrant and vegetarian curry that helps a lot with eating more diverse food. Inspiration for this recipe is heavily derived from the lovely people at [The Plant School](https://theplantbasedschool.com/chickpea-curry/). The recipe here will give you a lot of leftovers for just two people, so it's a fantastic meal prep recipe as well. I recommend adding a bit of lime or citrus to the leftovers to help keep it interesting.
