@@ -141,8 +141,11 @@ vite.config.ts.timestamp-*
 # Misc
 .idea/
 .pi/
+**.obsidian/
+**.trash/
 
 # Raw source photos — only the optimized .webp is committed (see `npm run images`)
 public/images/**/*.jpg
 public/images/**/*.jpeg
 public/images/**/*.png
+
