@@ -109,7 +109,7 @@ export function recipeJsonLd(recipe: Recipe, rating?: Rating): Record<string, un
     datePublished: recipe.date,
     author: { '@type': 'Person', name: siteConfig.author },
     url: absoluteUrl(`/recipes/${recipe.slug}`),
-    recipeCategory: recipe.category,
+    recipeCategory: recipe.categories.join(', '),
     recipeYield: recipe.yield,
     totalTime: recipe.time,
     recipeIngredient: recipe.ingredients.map((i) => `${i.amount} ${i.item}`.trim()),

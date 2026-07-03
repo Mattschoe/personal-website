@@ -23,7 +23,7 @@ export function Recipes() {
 
   // Unique categories in first-appearance order (recipes are pre-sorted
   // newest-first), with a leading "All".
-  const categories = ['All', ...new Set(recipes.map((r) => r.category))];
+  const categories = ['All', ...new Set(recipes.flatMap((r) => r.categories))];
 
   // The page is prerendered at `/recipes` with no query, so the static HTML
   // shows every recipe. Render "All"/empty until mounted, then derive the active
@@ -53,7 +53,7 @@ export function Recipes() {
   const q = query.trim().toLowerCase();
   const visible = recipes.filter(
     (r) =>
-      (active === 'All' || r.category === active) &&
+      (active === 'All' || r.categories.includes(active)) &&
       (q === '' || r.title.toLowerCase().includes(q)),
   );
 
@@ -111,7 +111,7 @@ export function Recipes() {
                   label="Hero photo · 4:3"
                 />
                 <div className="card-top">
-                  <span className="card-meta">{recipe.category}</span>
+                  <span className="card-meta">{recipe.categories.join(' · ')}</span>
                   <span className="card-meta">{recipe.time}</span>
                 </div>
                 <div className="card-title">{recipe.title}</div>

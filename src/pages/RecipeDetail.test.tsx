@@ -33,7 +33,7 @@ describe('RecipeDetail', () => {
       'href',
       '/recipes',
     );
-    expect(screen.getByText(recipe.category)).toBeInTheDocument();
+    expect(screen.getByText(recipe.categories.join(' · '))).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { level: 1, name: recipe.title }),
     ).toBeInTheDocument();

@@ -1,7 +1,8 @@
 ---
 title: My Summer Salad 2026
 date: 2026-06-09
-category: Salad
+categories:
+  - Salad
 hero: /images/recipes/summer_salad_2026.webp
 heroAlt: A bowl of pesto pasta with different ingredients
 yield: 6-8 portions

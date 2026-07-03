@@ -80,7 +80,7 @@ file, so typos can't slip through silently.
 |---|---|---|
 | `title` | yes | |
 | `date` | yes | `YYYY-MM-DD` |
-| `category` | yes | e.g. `Baking`, `Salads` |
+| `categories` | yes | list of strings; e.g. `Baking`, `Vegetarian` |
 | `time` | yes | e.g. `35 min` |
 | `yield` | yes | e.g. `Serves 4` |
 | `yieldLabel` | no | label shown before `yield`; defaults to `Makes`. Set `Serves` for dinners |
@@ -92,6 +92,14 @@ file, so typos can't slip through silently.
 | `slug`, `hero`, `heroAlt`, `sample` | no | see conventions above |
 
 The body is the recipe's intro prose.
+
+`categories` takes a list — use one or more:
+
+```yaml
+categories:
+  - Baking
+  - Vegetarian
+```
 
 `pairsWith` lists the **slugs** of other recipes (a recipe's slug is its
 filename without `.md`, unless overridden by a `slug` field). Each must resolve

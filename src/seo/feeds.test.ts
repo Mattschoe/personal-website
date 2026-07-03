@@ -11,7 +11,7 @@ const recipes: Recipe[] = [
     slug: 'skewers',
     excerpt: 'Sticky & quick.',
     body: '',
-    category: 'Dinner',
+    categories: ['Dinner'],
     time: '30 min',
     yield: '4',
     ingredients: [{ amount: '2', item: 'thighs' }],

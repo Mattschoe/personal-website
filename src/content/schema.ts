@@ -64,7 +64,7 @@ const ingredientGroup = z.strictObject({
 export const recipeFrontmatter = z.strictObject({
   ...base,
   excerpt: z.string().min(1).optional(),
-  category: z.string().min(1),
+  categories: z.array(z.string().min(1)).min(1),
   time: z.string().min(1),
   yield: z.string().min(1),
   // Label shown before `yield` in the stat strip (e.g. "Serves" for a dinner

@@ -10,7 +10,8 @@ import { parseRecipes, parseProjects, parsePosts } from './parse';
 const recipeMd = `---
 title: Test Skewers
 date: 2025-01-02
-category: Grilling
+categories:
+  - Grilling
 time: 30 min
 yield: Serves 4
 ingredients:
@@ -70,7 +71,8 @@ describe('parseRecipes', () => {
     const groupedMd = `---
 title: Grouped
 date: 2025-01-03
-category: Grilling
+categories:
+  - Grilling
 time: 30 min
 yield: Serves 4
 ingredients:
@@ -100,7 +102,7 @@ Body.
   });
 
   it('throws naming the file on invalid front-matter', () => {
-    const bad = recipeMd.replace('category: Grilling\n', '');
+    const bad = recipeMd.replace('categories:\n  - Grilling\n', '');
     expect(() => parseRecipes({ '/content/recipes/broken.md': bad })).toThrow(
       /\/content\/recipes\/broken\.md/,
     );
@@ -128,9 +130,9 @@ Body.
   });
 
   it('labels a missing required field as missing, not a cryptic type error', () => {
-    const bad = recipeMd.replace('category: Grilling\n', '');
+    const bad = recipeMd.replace('categories:\n  - Grilling\n', '');
     expect(() => parseRecipes({ '/content/recipes/no-cat.md': bad })).toThrow(
-      /category: required, but missing/,
+      /categories: required, but missing/,
     );
   });
 

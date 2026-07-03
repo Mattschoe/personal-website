@@ -1,7 +1,8 @@
 ---
 title: Danish Krebinetter with creamy mushroom sauce and baked potatoes
 hero: /images/recipes/krebinetter_with_mushroom.webp
-category: Pork
+categories:
+  - Pork
 date: 2026-06-13
 yield: Serves 4
 time: 2 hours

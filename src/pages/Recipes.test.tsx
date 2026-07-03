@@ -15,7 +15,7 @@ function renderRecipes(entry = '/recipes') {
 }
 
 const recipes = getRecipes();
-const categories = [...new Set(recipes.map((r) => r.category))];
+const categories = [...new Set(recipes.flatMap((r) => r.categories))];
 
 function cards(container: HTMLElement) {
   return container.querySelectorAll('a[href^="/recipes/"]');
@@ -35,7 +35,7 @@ describe('Recipes index', () => {
       // Index cards show the excerpt; the author `caption` is a home-card-only
       // override and must never surface here.
       expect(scope.getByText(recipe.excerpt)).toBeInTheDocument();
-      expect(scope.getByText(recipe.category)).toBeInTheDocument();
+      expect(scope.getByText(recipe.categories.join(' · '))).toBeInTheDocument();
       expect(scope.getByText(recipe.time)).toBeInTheDocument();
     });
   });
@@ -67,7 +67,7 @@ describe('Recipes index', () => {
 
   it('filters the grid to the chosen category and marks it pressed', () => {
     const category = categories[0];
-    const expected = recipes.filter((r) => r.category === category);
+    const expected = recipes.filter((r) => r.categories.includes(category));
     const { container } = renderRecipes();
 
     fireEvent.click(screen.getByRole('button', { name: category }));
@@ -96,7 +96,7 @@ describe('Recipes index', () => {
 
   it('honours a ?category= query on load (after mount, hydration-safe)', () => {
     const category = categories[0];
-    const expected = recipes.filter((r) => r.category === category);
+    const expected = recipes.filter((r) => r.categories.includes(category));
     const { container } = renderRecipes(
       `/recipes?category=${encodeURIComponent(category)}`,
     );
@@ -136,7 +136,7 @@ describe('Recipes index', () => {
 
   it('combines the category filter with the search query', () => {
     const category = categories[0];
-    const inCategory = recipes.filter((r) => r.category === category);
+    const inCategory = recipes.filter((r) => r.categories.includes(category));
     const target = inCategory[0];
     const term = target.title.slice(0, 4);
     const expected = inCategory.filter((r) =>

@@ -4,7 +4,7 @@ import { recipeFrontmatter, projectFrontmatter, postFrontmatter } from './schema
 const validRecipe = {
   title: 'Test Recipe',
   date: '2024-01-01',
-  category: 'Soups',
+  categories: ['Soups'],
   time: '35 min',
   yield: 'Serves 4',
   ingredients: [{ amount: '2 tins', item: 'tomatoes' }],
@@ -33,9 +33,9 @@ describe('content schemas', () => {
   });
 
   it('fails when a required field is missing', () => {
-    const noCategory: Record<string, unknown> = { ...validRecipe };
-    delete noCategory.category;
-    const result = recipeFrontmatter.safeParse(noCategory);
+    const noCategories: Record<string, unknown> = { ...validRecipe };
+    delete noCategories.categories;
+    const result = recipeFrontmatter.safeParse(noCategories);
     expect(result.success).toBe(false);
   });
 

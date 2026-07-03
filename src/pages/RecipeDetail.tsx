@@ -54,7 +54,7 @@ export function RecipeDetail() {
       />
       <nav className={styles.crumb}>
         <Link to="/recipes">Recipes</Link> <span>/</span>{' '}
-        <span>{recipe.category}</span>
+        <span>{recipe.categories.join(' · ')}</span>
       </nav>
 
       <section className={styles.recipeHero}>
@@ -164,7 +164,7 @@ export function RecipeDetail() {
                 <span className={styles.pairBody}>
                   <span className={styles.pairTitle}>{p.title}</span>
                   <span className={styles.pairMeta}>
-                    {p.category} · {p.time}
+                    {p.categories.join(' · ')} · {p.time}
                   </span>
                 </span>
               </Link>

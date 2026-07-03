@@ -90,7 +90,7 @@ const recipe: Recipe = {
   slug: 'teriyaki-skewers',
   excerpt: 'Sticky and quick.',
   body: 'Body.',
-  category: 'Dinner',
+  categories: ['Dinner'],
   time: '30 min',
   yield: '4 skewers',
   ingredients: [{ amount: '2', item: 'chicken thighs' }],
