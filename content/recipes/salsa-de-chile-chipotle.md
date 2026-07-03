@@ -9,7 +9,7 @@ yield: 3 dL
 time: 30 minutes
 ingredients:
   - amount: 1 can
-    item: chipotle chilies in adobe sauce
+    item: chipotle chilies in adobo sauce
   - amount: 1
     item: large tomato
   - amount: 1

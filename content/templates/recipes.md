@@ -5,7 +5,7 @@ category:
 date: YYYY-MM-DD
 yield: 
 time: <N> hours
-pairsWith
+pairsWith:
   - 
 ingredients:
   - heading:
