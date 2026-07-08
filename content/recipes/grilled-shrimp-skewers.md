@@ -26,7 +26,7 @@ ingredients:
       - amount: 200 g
         item: shrimp
 steps:
-  - De-shell the shrimp and remove the poop tube.
+  - De-shell the shrimp and remove the vein.
   - Mix marinade ingredients and pour over shrimp.
   - Leave shrimp in marinade for max 30 minutes to avoid the citrus breaking the shrimp down too much.
   - Grill.

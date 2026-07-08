@@ -192,4 +192,4 @@ The per-stream front-matter fields (required/optional, examples) live in
 [`content/README.md`](./content/README.md). Consult it rather than duplicating the tables here.
 
 When updating the schema for a content reference, look for a matching template in `content/templates/`
-and update it correspondenly
+and update it correspondingly.

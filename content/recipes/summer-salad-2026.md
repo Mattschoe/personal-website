@@ -25,7 +25,7 @@ steps:
   - Boil the pasta
   - Let it cool completely
   - Mix it all together and serve
-caption: Here's a recipe for what I chose as my summer salad for 2026. I am a huge fan of serving this in combination with grilled food. 
+caption: Here's a recipe for what I chose as my summer salad for 2026. I am a huge fan of serving this in combination with grilled food.
 ---
 Here's a recipe for what I chose as my summer salad for 2026. I am a huge fan of serving this in combination
-with grilled food. This easy salad works wonders as a side dish, when I'm lazy I use the salad as meal prep. If you want to do so, I would highly recommend adding some protein like chicken breast.
+with grilled food. This easy salad works wonders as a side dish. When I'm lazy, I use the salad as meal prep. If you want to do so, I would highly recommend adding some protein like chicken breast.

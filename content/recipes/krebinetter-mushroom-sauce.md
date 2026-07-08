@@ -58,5 +58,5 @@ excerpt: A Danish classic that follows the tradition of beige unhealthy food. It
 ---
 One of my all-time favorite dinners to make when I don't want to make meatballs with minced pork again. "Krebinetter"
 is a traditional Danish dish of breaded pork patties, and I couldn't really find any proper English translation of it.
-Nevertheless this is my take on a Danish classic. I subbed the stewed peas and carrots for a delicious creamy mushroom 
+Nevertheless, this is my take on a Danish classic. I subbed the stewed peas and carrots for a delicious creamy mushroom 
 sauce and some excellent small potatoes. Hope you enjoy this retro Danish meal!

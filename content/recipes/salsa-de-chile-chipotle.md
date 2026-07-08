@@ -21,7 +21,7 @@ ingredients:
     item: salt
 steps:
   - Chop the chipotles, tomato, onion and garlic fine.
-  - Heat a bit of olive oil on a pan and sauté the onion and garlic blank.
+  - Heat a bit of olive oil in a pan and sauté the onion and garlic until translucent.
   - Add the chipotle + sauce and tomato. Cook the smoky flavour out for about 2 minutes.
   - Blend everything in a food processor, salt to taste. When the salsa is one coherent sauce, strain it through a strainer to remove leftover chunks. Add water if the salsa is too thick.
 caption: A smoky chipotle salsa useful for both burritos and tacos

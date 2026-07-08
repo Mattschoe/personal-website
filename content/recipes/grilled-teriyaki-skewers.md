@@ -37,6 +37,6 @@ ingredients:
         item: yellow onion
 steps:
   - Cut the chicken and vegetables into bite-size pieces. Cut the mushrooms quite large as they will shrink a lot.
-  - Whisk the sauce together and pour over the chicken. Let the chicken marinate for however long you'd like. Take out of the fridge minimum 30 minutes before making the skewers.
-  - Skew the meat and vegetables and grill. Remember that thigh can be quite forgiving, so don't worry about dryness. 
+  - Whisk the sauce together and pour over the chicken. Let the chicken marinate for however long you'd like. Take it out of the fridge a minimum of 30 minutes before making the skewers.
+  - Skewer the meat and vegetables and grill. Remember that thigh can be quite forgiving, so don't worry about dryness. 
 ---
