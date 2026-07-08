@@ -4,6 +4,7 @@ hero: /images/recipes/salsa_chipotle.webp
 categories: 
   - Salsa
   - Mexican
+cuisine: Mexican
 date: 2026-07-03
 yield: 3 dL
 time: 30 minutes

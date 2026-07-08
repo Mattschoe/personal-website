@@ -3,6 +3,7 @@ title: Chickpea Curry
 hero: /images/recipes/curry_chickpeas.webp
 categories:
   - Vegetarian
+cuisine: Indian
 date: 2026-06-28
 yield: 6-8 Portions
 time: 1 hour
