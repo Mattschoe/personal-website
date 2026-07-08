@@ -5,6 +5,7 @@ import {
   buildSeo,
   articleJsonLd,
   recipeJsonLd,
+  iso8601Duration,
 } from './meta';
 import { siteConfig } from './config';
 import type { Post, Recipe } from '../content/schema';
@@ -97,6 +98,30 @@ const recipe: Recipe = {
   steps: ['Skewer.', 'Grill.'],
 };
 
+describe('iso8601Duration', () => {
+  it('parses minute-only strings', () => {
+    expect(iso8601Duration('30 minutes')).toBe('PT30M');
+    expect(iso8601Duration('30 min')).toBe('PT30M');
+    expect(iso8601Duration('5m')).toBe('PT5M');
+  });
+
+  it('parses hour-only strings', () => {
+    expect(iso8601Duration('1 hour')).toBe('PT1H');
+    expect(iso8601Duration('2 hours')).toBe('PT2H');
+    expect(iso8601Duration('3 hrs')).toBe('PT3H');
+  });
+
+  it('parses combined hour + minute strings', () => {
+    expect(iso8601Duration('1 hour 30 minutes')).toBe('PT1H30M');
+    expect(iso8601Duration('1h 30m')).toBe('PT1H30M');
+  });
+
+  it('returns undefined when no duration is present', () => {
+    expect(iso8601Duration('a while')).toBeUndefined();
+    expect(iso8601Duration('')).toBeUndefined();
+  });
+});
+
 describe('articleJsonLd', () => {
   it('produces a BlogPosting with required fields and ISO dates', () => {
     const ld = articleJsonLd(post);
@@ -124,10 +149,25 @@ describe('recipeJsonLd', () => {
     expect(ld.datePublished).toBe('2025-01-02');
     expect(ld.recipeIngredient).toEqual(['2 chicken thighs']);
     expect(ld.recipeInstructions).toEqual([
-      { '@type': 'HowToStep', text: 'Skewer.' },
-      { '@type': 'HowToStep', text: 'Grill.' },
+      { '@type': 'HowToStep', text: 'Skewer.', url: `${siteConfig.url}/recipes/teriyaki-skewers` },
+      { '@type': 'HowToStep', text: 'Grill.', url: `${siteConfig.url}/recipes/teriyaki-skewers` },
     ]);
     expect(ld.url).toBe(`${siteConfig.url}/recipes/teriyaki-skewers`);
+  });
+
+  it('emits totalTime as an ISO 8601 duration, and keywords from categories', () => {
+    const ld = recipeJsonLd({ ...recipe, time: '30 min', categories: ['Dinner', 'Quick'] });
+    expect(ld.totalTime).toBe('PT30M');
+    expect(ld.keywords).toBe('Dinner, Quick');
+  });
+
+  it('omits totalTime when the time string has no parseable duration', () => {
+    expect(recipeJsonLd({ ...recipe, time: 'a while' }).totalTime).toBeUndefined();
+  });
+
+  it('emits recipeCuisine only when the recipe declares a cuisine', () => {
+    expect(recipeJsonLd(recipe).recipeCuisine).toBeUndefined();
+    expect(recipeJsonLd({ ...recipe, cuisine: 'Japanese' }).recipeCuisine).toBe('Japanese');
   });
 
   it('omits aggregateRating when there is no rating', () => {

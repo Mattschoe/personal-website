@@ -65,6 +65,9 @@ export const recipeFrontmatter = z.strictObject({
   ...base,
   excerpt: z.string().min(1).optional(),
   categories: z.array(z.string().min(1)).min(1),
+  // Cuisine of origin (e.g. "Mexican", "Danish"). Optional, SEO-only: emitted as
+  // schema.org `recipeCuisine` when present, never rendered in the UI.
+  cuisine: z.string().min(1).optional(),
   time: z.string().min(1),
   yield: z.string().min(1),
   // Label shown before `yield` in the stat strip (e.g. "Serves" for a dinner

@@ -2,6 +2,7 @@
 title:
 hero: /images/recipes/<IMG4:3>.webp
 category: 
+cuisine: 
 date: YYYY-MM-DD
 yield: 
 time: <N> hours

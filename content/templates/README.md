@@ -81,6 +81,7 @@ file, so typos can't slip through silently.
 | `title` | yes | |
 | `date` | yes | `YYYY-MM-DD` |
 | `categories` | yes | list of strings; e.g. `Baking`, `Vegetarian` |
+| `cuisine` | no | cuisine of origin, e.g. `Mexican`, `Danish`; SEO-only (schema.org `recipeCuisine`), not shown in the UI |
 | `time` | yes | e.g. `35 min` |
 | `yield` | yes | e.g. `Serves 4` |
 | `yieldLabel` | no | label shown before `yield`; defaults to `Makes`. Set `Serves` for dinners |
