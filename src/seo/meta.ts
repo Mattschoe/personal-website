@@ -79,6 +79,20 @@ export function buildSeo(input: SeoInput): SeoTags {
 // JSON-LD builders. Dates come straight from `item.date` (already a `YYYY-MM-DD`
 // ISO string), which schema.org accepts as an ISO 8601 date.
 
+/** Convert a free-text prep time (`"30 minutes"`, `"2 hours"`, `"1 hour 30 min"`,
+ *  `"1h 30m"`) into an ISO 8601 duration (`PT30M`, `PT2H`, `PT1H30M`) for
+ *  schema.org's `totalTime`, which rejects plain prose. Returns `undefined` when
+ *  no hour/minute component is found, so the caller omits the field rather than
+ *  emitting an invalid value. */
+export function iso8601Duration(time: string): string | undefined {
+  const hours = time.match(/(\d+)\s*(?:h\b|hours?|hrs?)/i);
+  const minutes = time.match(/(\d+)\s*(?:m\b|min(?:ute)?s?)/i);
+  if (!hours && !minutes) return undefined;
+  const h = hours ? `${Number(hours[1])}H` : '';
+  const m = minutes ? `${Number(minutes[1])}M` : '';
+  return `PT${h}${m}`;
+}
+
 /** schema.org `BlogPosting` for a blog post. */
 export function articleJsonLd(post: Post): Record<string, unknown> {
   return {
@@ -101,6 +115,8 @@ export function articleJsonLd(post: Post): Record<string, unknown> {
  *  and Vitest. `aggregateRating` is emitted **only** when there is at least one
  *  real rating — never fabricated, since Google penalises fake star data. */
 export function recipeJsonLd(recipe: Recipe, rating?: Rating): Record<string, unknown> {
+  const url = absoluteUrl(`/recipes/${recipe.slug}`);
+  const totalTime = iso8601Duration(recipe.time);
   return {
     '@context': 'https://schema.org',
     '@type': 'Recipe',
@@ -108,12 +124,14 @@ export function recipeJsonLd(recipe: Recipe, rating?: Rating): Record<string, un
     description: recipe.excerpt,
     datePublished: recipe.date,
     author: { '@type': 'Person', name: siteConfig.author },
-    url: absoluteUrl(`/recipes/${recipe.slug}`),
+    url,
     recipeCategory: recipe.categories.join(', '),
+    keywords: recipe.categories.join(', '),
     recipeYield: recipe.yield,
-    totalTime: recipe.time,
+    ...(totalTime ? { totalTime } : {}),
+    ...(recipe.cuisine ? { recipeCuisine: recipe.cuisine } : {}),
     recipeIngredient: recipe.ingredients.map((i) => `${i.amount} ${i.item}`.trim()),
-    recipeInstructions: recipe.steps.map((text) => ({ '@type': 'HowToStep', text })),
+    recipeInstructions: recipe.steps.map((text) => ({ '@type': 'HowToStep', text, url })),
     ...(recipe.hero ? { image: absoluteUrl(recipe.hero) } : {}),
     ...(rating && rating.count > 0
       ? {

@@ -81,6 +81,15 @@ describe('content schemas', () => {
     expect(recipeFrontmatter.safeParse({ ...validRecipe, hero: '' }).success).toBe(false);
   });
 
+  it('accepts an optional cuisine and rejects an empty one', () => {
+    const withCuisine = recipeFrontmatter.safeParse({ ...validRecipe, cuisine: 'Japanese' });
+    expect(withCuisine.success).toBe(true);
+    expect(withCuisine.success && withCuisine.data.cuisine).toBe('Japanese');
+    // Omitted is fine (optional); empty is a mistake.
+    expect(recipeFrontmatter.safeParse(validRecipe).success).toBe(true);
+    expect(recipeFrontmatter.safeParse({ ...validRecipe, cuisine: '' }).success).toBe(false);
+  });
+
   it('accepts an optional caption on every stream and normalises an empty one to undefined', () => {
     expect(
       recipeFrontmatter.safeParse({ ...validRecipe, caption: 'Smooth card line.' }).success,
