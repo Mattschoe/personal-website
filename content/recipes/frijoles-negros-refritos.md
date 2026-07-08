@@ -5,6 +5,7 @@ categories:
   - Mexican
   - Vegetarian
   - Beans
+cuisine: Mexican
 date: 2026-07-02
 yield: 4 full meals
 time: 3 hours

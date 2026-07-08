@@ -5,6 +5,7 @@ hero: /images/recipes/grilled_teriyaki_skewers.webp
 heroAlt: a platter of skewers with grilled chicken thigh and vegetables
 categories:
   - Grilling
+cuisine: Asian
 yield: Serves 2-3
 time: 2 hours
 pairsWith:
