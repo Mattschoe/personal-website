@@ -19,10 +19,10 @@ ingredients:
 steps:
   - Whisk the yeast into the water
   - Pour in the flour and salt
-  - Mix it all together and knead the dough by hand for 15-20 minutes until the dough is smooth and elastic. If you think its ready knead it for 5 more minutes. Take this as your daily workout, it will suck.
+  - Mix it all together and knead the dough by hand for 15-20 minutes until the dough is smooth and elastic. If you think it's ready, knead it for 5 more minutes. Take this as your daily workout, it will suck.
   - "If making pizza later today: Lightly cover the mixing bowl in olive oil, add the dough back and cover it lightly in olive oil. Let it rise for at minimum 4 hours at room temperature covered by a towel"
-  - "If making pizza tomorrow: Split the dough evenly into 4 parts, and add each to a seperate container and cover lightly in olive oil and store sealed in the fridge."
+  - "If making pizza tomorrow: Split the dough evenly into 4 parts, and add each to a separate container and cover lightly in olive oil and store sealed in the fridge."
 caption: A simple, clean pizza dough recipe.
 excerpt: A simple, clean pizza dough recipe.
 ---
-A simple, clean pizza dough recipe. While it is possible to make this on the same day, i highly recommend having this stored in the fridge the night over. 
+A simple, clean pizza dough recipe. While it is possible to make this on the same day, I highly recommend having this stored in the fridge the night over.
