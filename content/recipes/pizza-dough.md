@@ -6,6 +6,7 @@ categories:
 cuisine: Italian
 date: 2026-07-08
 yield: 4 pizzas
+yieldLabel: enough for
 time: 30 minutes
 ingredients:
   - amount: 662 g
