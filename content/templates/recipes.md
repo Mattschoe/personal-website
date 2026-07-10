@@ -1,7 +1,7 @@
 ---
 title:
 hero: /images/recipes/<IMG4:3>.webp
-category: 
+categories: 
 cuisine: 
 date: YYYY-MM-DD
 yield: 
