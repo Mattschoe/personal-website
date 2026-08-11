@@ -26,7 +26,6 @@ const projects: Project[] = [
     slug: 'this-site',
     summary: 'A personal site.',
     body: '',
-    status: 'Live',
     year: '2025',
     stack: ['React'],
   },

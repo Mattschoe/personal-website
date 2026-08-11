@@ -144,7 +144,6 @@ ingredients:
 | `title` | yes | |
 | `date` | yes | `YYYY-MM-DD` |
 | `summary` | yes | one-line description (used on cards and the feed) |
-| `status` | yes | e.g. `Active · v1.2 · MIT` |
 | `year` | yes | e.g. `2023 — present` |
 | `stack` | yes | list of strings (tech chips) |
 | `metrics` | no | e.g. `2.1k stars · 40k installs` |

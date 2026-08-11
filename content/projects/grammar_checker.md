@@ -3,7 +3,6 @@ title: LLM-powered Grammar Checker as a GitHub Action
 date: 2026-06-15
 summary: Over my 4th semester I found myself continuously using Git and GitHub for writing my reports. While it was great being back in control of my tools, I found myself constantly copying and pasting my work to have AI review it. Here's how I solved it using GitHub Workflows. 
 caption: Manually remembering to have an LLM reviewer go through your documentation and work can be tedious, here's how I found a way to automate the task.
-status: Active
 hero: /images/projects/grammar_checker_hero.webp
 year: 2026 - present
 stack:

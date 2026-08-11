@@ -45,7 +45,6 @@ export function Projects() {
               </div>
               <div className={styles.projBody}>
                 <div className={styles.projTop}>
-                  <span className={styles.status}>{project.status}</span>
                   <span className="card-meta">{project.year}</span>
                 </div>
                 <h3>{project.title}</h3>

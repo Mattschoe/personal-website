@@ -102,24 +102,6 @@
   align-items: center;
   gap: var(--s-3);
 }
-.status {
-  font-family: var(--font-mono);
-  font-size: var(--fs-meta);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45em;
-  color: var(--c-project);
-}
-.status::before {
-  content: '';
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  background: currentColor;
-}
-
 @media (max-width: 880px) {
   .proj,
   .proj:nth-child(even) {

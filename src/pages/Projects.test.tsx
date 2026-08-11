@@ -29,7 +29,6 @@ describe('Projects index', () => {
       const scope = within(row as HTMLElement);
       expect(scope.getByText(project.title)).toBeInTheDocument();
       expect(scope.getByText(project.summary)).toBeInTheDocument();
-      expect(scope.getByText(project.status)).toBeInTheDocument();
       expect(scope.getByText(String(project.year))).toBeInTheDocument();
       // One chip per stack entry.
       project.stack.forEach((tech) => {

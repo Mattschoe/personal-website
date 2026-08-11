@@ -15,7 +15,6 @@ const validProject = {
   title: 'Test Project',
   date: '2024-01-01',
   summary: 'A thing.',
-  status: 'Active',
   year: '2024',
   stack: ['Rust'],
 };
