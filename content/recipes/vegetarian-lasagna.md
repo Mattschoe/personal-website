@@ -45,13 +45,13 @@ ingredients:
 steps:
   - Dice the vegetables into small (about 1x1) cubes.
   - Heat a large pot with olive oil. Cook the carrots for about 2 minutes, then add the other vegetables. 
-  - After about 10 minutes the vegetables should have dropped most of their water. Add the tomato puré and caramalize it a bit.
+  - After about 10 minutes the vegetables should have dropped most of their water. Add the tomato puré and caramelize it a bit.
   - Add canned tomato, thyme, a bit of water, and salt and pepper to taste. The sauce should simmer for about 5 minutes or until it has the consistency of a normal meat-sauce.
   - "While it cooks, heat the oven to 180° convection, and make the pesto:"
-  - "For the pesto: Chop the parsley VERY fine and mix it with the parmasan and olive oil. The amount of olive oil i use depend on my mood that day, but expect to use more than listed. It should have the consistency of a normal pesto."
+  - "For the pesto: Chop the parsley VERY fine and mix it with the parmasan and olive oil. The amount of olive oil I use depends on my mood that day, but expect to use more than listed. It should have the consistency of a normal pesto."
   - "When the sauce is finished simmering, make the lasagna: Start with a thin layer of tomato sauce, then afterwards add the ingredients in the following order: Lasagna plates, tomato sauce, then spinach (in as many layers as you'd like). Finish the lasagna with a top layer of: Lasagna plates, tomato sauce, mozzeralla, pesto."
-  - The lasagna needs to bake for about 40 minutes in the oven. Poke the middle with a knife to see if its done. Let it rest for about 10 minutes, serve with basil and flaky salt. 
-caption: A delicious vegetarian lasagna we make atleast once a month. The top crust is to die for.
-excerpt: A delicious vegetarian lasagna we make atleast once a month. The top crust is to die for.
+  - The lasagna needs to bake for about 40 minutes in the oven. Poke the middle with a knife to see if it's done. Let it rest for about 10 minutes, serve with basil and flaky salt. 
+caption: A delicious vegetarian lasagna we make at least once a month. The top crust is to die for.
+excerpt: A delicious vegetarian lasagna we make at least once a month. The top crust is to die for.
 ---
-A delicious vegetarian lasagna we make atleast once a month. The top crust is to die for and it'll be excellent as leftovers over the week.
+A delicious vegetarian lasagna we make at least once a month. The top crust is to die for and it'll be excellent as leftovers over the week.

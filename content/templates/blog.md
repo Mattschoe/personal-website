@@ -1,3 +1,4 @@
+=== content/templates/blog.md ===
 ---
 title: 
 date: YYYY-MM-DD

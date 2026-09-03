@@ -1,7 +1,7 @@
 ---
 title: LLM-powered Grammar Checker as a GitHub Action
 date: 2026-06-15
-summary: Over my 4th semester I found myself continuously using Git and GitHub for writing my reports. While it was great being back in control of my tools, I found myself constantly copying and pasting my work to have AI review it. Here's how I solved it using GitHub Workflows. 
+summary: Over my 4th semester I found myself continuously using Git and GitHub for writing my reports. While it was great being back in control of my tools, I found myself constantly copying and pasting my work to have AI review it. Here's how I solved it using GitHub Workflows.
 caption: Manually remembering to have an LLM reviewer go through your documentation and work can be tedious, here's how I found a way to automate the task.
 hero: /images/projects/grammar_checker_hero.webp
 year: Summer 2026
@@ -12,8 +12,8 @@ links:
 ---
 Over my 4th semester I found myself continuously using Git and GitHub for writing my reports and documentation. 
 While it was great being back in control of my tools, I found myself constantly copying and pasting 
-my work to have AI review it. Claude Code certainly made it easier to quickly pop open an
-additional terminal and have it do review while I kept working, I still found myself multiple times 
+my work to have it reviewed by AI. Claude Code certainly made it easier to quickly pop open an
+additional terminal and have it do the review while I kept working, I still found myself multiple times 
 forgetting to review sections of reports for grammar errors and bad prose. So on a Monday morning 3 days 
 before an essay deadline I found myself procrastinating writing about philosophy and instead built this tool.
 
@@ -58,7 +58,7 @@ Do remember that this tool is purely for prose and grammar. It focuses on how th
 but nothing about the actual contents of the work. And how would it? Your arguments, discussions 
 and documentation all require context of what you are doing and why. 
 
-It should be said that this workflow, nor any other LLM based prose/grammar help, isn't a replacement for
+It should be said that this workflow, nor any other LLM-based prose/grammar help, isn't a replacement for
 checking your work yourself. I didn't use it as such and you would gain nothing from you doing so, because
 then it isn't your work, it's the LLM's. What you should use such a tool for is perspective. Writing an essay,
 report or documentation is hard, it's easy for you to bask in the glory of whatever you wrote while no one else
